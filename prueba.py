@@ -21,6 +21,8 @@ sql_query = '''
 	else name 
 end as nombre_variable,
 
+interval as intervalo,
+
 case 
 	when name like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
 	when name like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
@@ -38,7 +40,7 @@ from covariable
 
 df = pd.read_sql(sql_query, conn)
 
-# conn.close()
+conn.close()
 
 ### https://stackoverflow.com/questions/42516616/sort-dataframe-by-string-length
 # Importante ordenar las varibales de forma ascendente al número de niveles en el que están ubicadas.
@@ -115,10 +117,22 @@ for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key serí
     variables_lst = path_dict[path_key]['__variables__']
     # print(variables_lst)
     
-    for nombre_variable in variables_lst:
+    for idx, nombre_variable in enumerate(variables_lst):
         eval(structure_child_lst).append({'id': '*',    # Quiza este 'id' podría ser solo un número o clave
                                         'text': nombre_variable,
-                                        'children' : []})   # Si no incuimos los intervalos, 'children' puede quedar vacío o no incluirlo   
+                                        'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir   
+                                        })
+
+        last_structure_child_lst = structure_child_lst + str([idx]) + str(['children'])
+        
+        ser_nombre_variable = df_prueba[df_prueba['nombre_variable']==nombre_variable]['nombre_variable']
+        ser_intervalo = df_prueba[df_prueba['nombre_variable']==nombre_variable]['intervalo']
+
+        for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
+            eval(last_structure_child_lst).append({'id': '#',
+                                                   'text': str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
+
+
 # Hasta este punto tenemos:
 # {'id': ___, 
 #  'texto': ___, 
@@ -131,19 +145,8 @@ for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key serí
 #                  'children': []}], 
 # }
 
-sql_query = '''
-    select concat(name,', ',interval) as "variable_interval"
-    from covariable
-    where name in {}
-;
-'''.format(tuple(variables_lst))
 
-df_variable_interval = pd.read_sql(sql_query, conn)
-
-print(df_variable_interval.head(10).to_string())
-
-# print(structure_lst)
+print(structure_lst)
 
 
 # print(structure_child_lst)
-conn.close()
