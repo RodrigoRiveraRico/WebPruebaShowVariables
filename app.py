@@ -1,92 +1,84 @@
-from flask import Flask, render_template, request, jsonify
-from PyPostQL import pruebasPostgres, FinalDict, retrieve_cells
-import pandas as pd
-import numpy as np
-import random
-import json
-import conteos
-from Var_Clss_Construction import dict_construction, df_construction
-from config import fuente_de_datos_metadatos
+### 14/05/2024
 
-print(random.randint(0,9))
+
+from flask import Flask, render_template, request, jsonify
+from PyPostQL import pruebasPostgres
+from Var_Clss_Construction import dict_construction, df_construction
 
 app = Flask(__name__)
 
-data_bases = []
-for db_name in fuente_de_datos_metadatos:
-    data_bases.append(db_name)
-print("Bases de datos disponibles: {}".format(data_bases))
-
-# Diccionario predefinido
-# D_c = {'epi_puma_censo_inegi_2020': [1,2,3], 'epi_puma_worldclim':[4,5,6], 'DB_3': [7,8,9]}
-
+data_bases = ["epi_puma_censo_inegi_2020", "epi_puma_worldclim", "epi_puma_accidentes"]
 selected_names = []
+
+tree_data = [
+    {
+        "id": "Node 1",
+        "text": "epi_puma_censo_inegi_2020",
+        'state': {'opened': True},
+        "attr": {"nivel": "root", "type": 0},
+        "children": [
+            {"id": "node2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Hijo 2"}]},
+            {"id": "node3", "text": "Node 3", "children": [
+                {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
+                {"id": "Hijo6", "text": "Hijo 6", "children": [
+                    {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Hijo 6.12"}]}
+                ]}
+            ]}
+        ]
+    },
+    {
+        "id": "Node 4",
+        "text": "epi_puma_worldclim",
+        "children": [
+            {"id": "Hijo4", "text": "Annual Mean Temperature"},
+            {"id": "Hijo 42", "text": "Hijo 42"}
+        ]
+    }
+]
 
 @app.route('/')
 def index():
-    return render_template('index.html', selected_names=selected_names, suggestions = data_bases)
+    return render_template('index.html', selected_names=selected_names, suggestions=data_bases)
 
 @app.route('/add_name', methods=['POST'])
 def add_name():
     name = request.form.get('name')
-    if name not in selected_names:
+    if name and name not in selected_names:
         selected_names.append(name)
     return jsonify(selected_names=selected_names)
 
-# D_c = {}
-# for i in selected_names:
-#     D_c[i] = [1,random.randint(0,9),random.randint(0,9)]
-# print(pruebasPostgres.prove1())
-# print(selected_names)
-# D_c = {'epi_puma_censo_inegi_2020': [1,2,3], 'epi_puma_worldclim':[4,5,6], 'DB_3': [7,8,9]}
-
 @app.route('/process', methods=['POST'])
 def process():
-    D_c = {}
-    for i in selected_names:
-        # Obtenemos las variables de cada DB seleccionada y las agregamos a un diccionario.
-        L_v = pruebasPostgres.recolectar_variables(i)   # i es la base de datos (DB)
-        D_c[i] = L_v
-    # print(selected_names)
-    return render_template('results.html', selected_names=selected_names, D_c=D_c)
+    D_c = {i: pruebasPostgres.recolectar_variables(i) for i in selected_names}
+    return render_template('arbol.html', data=selected_names, D_c=D_c)
 
+@app.route('/tree_data')
+def get_tree_data():
+    return jsonify(tree_data)
 
 @app.route('/select_variables', methods=['POST'])
 def select_variables():
-    selected_values1 = request.form['selectedValues1']  # Variables
-    selected_values2 = request.form['selectedValues2']  # Clase
-
+    selected_values1 = request.form['selectedVariables1']
+    selected_values2 = request.form['selectedVariables2']
 
     list_db_var = selected_values1.split('\r\n')
-    list_db_clss = selected_values2.split('\r\n')
-
-#### Construcción árbol (dict) de variables ####
+    list_db_cov = selected_values2.split('\r\n')
 
     dict_db_variables = dict_construction(list_db_var)
-#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
+    dict_db_covariables = dict_construction(list_db_cov)
 
-#### Construcción árbol (dict) de clase ####
+    all_variables_data = df_construction(dict_db_variables, 'variables')
+    all_covariables_data = df_construction(dict_db_covariables, 'covariable')
 
-    dict_db_class = dict_construction(list_db_clss)
-#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
+    all_variables_data['N_v'] = list(map(lambda x: len(set(x)), all_variables_data.iloc[:, -1]))
+    all_variables_data['N_vnc'] = [conteo_interseccion(x, list(all_covariables_data.celdas)[0]) for x in list(all_variables_data.celdas)]
 
-#### Construcción DataFrame de variables y clase ####
-    df_all_variables_data = df_construction(dict_db_variables, 'variables')
-    df_all_class_data = df_construction(dict_db_class, 'clase')
+    noombre_clase = all_covariables_data.iloc[0, 0]
 
-    print(df_all_variables_data)
-    print(df_all_class_data)
+    return render_template('resDf.html', df_resultado=all_variables_data.to_html(), nombre_titulo=noombre_clase)
 
-    conteos.df_count_cells(df_all_variables_data, df_all_class_data)    # Esta línea modifica la tabla original df_all_variables_data
-
-    # Guardar en un archivo .csv
-    # df_all_variables_data.to_csv('TablaFinal.csv', index=False)
-
-    nombre_clase = df_all_class_data.iloc[0, 0]
-    
-    # return render_template('resDf.html', df_resultado=df_all_variables_data.to_html(),nombre_titulo=nombre_clase)
-    return str(dict_db_variables) + '~'*10 + str(dict_db_class)
-
+def conteo_interseccion(l_var, l_cov):
+    return sum(1 for var in l_var if var in l_cov)
 
 if __name__ == '__main__':
     app.run(debug=True)
