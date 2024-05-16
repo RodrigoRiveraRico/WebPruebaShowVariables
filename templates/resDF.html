@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados - {{ nombre_titulo }}</title>
+    <style>
+        .titulo-especial {
+            font-family: Arial, sans-serif; /* Cambia "Arial" al tipo de letra deseado */
+            /* Agrega cualquier otro estilo de letra deseado */
+        }
+    </style>
+</head>
+<body>
+    <h2>Resultados para la clase: <span class="titulo-especial">{{ nombre_titulo }}</span></h2>
+    {{ df_resultado | safe }}
+</body>
+</html>
