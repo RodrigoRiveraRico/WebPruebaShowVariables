@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <style>
+        .selected-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .remove-button {
+            margin-left: 10px;
+            cursor: pointer;
+            color: red;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: none;
+            font-size: 12px;
+            padding: 2px 5px;
+        }
+        textarea {
+            width: 30%;
+            height: 70px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Selección de variables y covariable:</h2>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <form id="selectVariablesForm" action="/select_variables" method="post">
+        <div>
+            <label>Selecciona las variables:</label>
+            <div id="tree"></div>
+            <div id="selectedNodesContainer1"></div>
+            <textarea name="selectedVariables1" id="selectedVariables1" readonly></textarea>
+        </div>
+        <div>
+            <label>Selecciona la covariable:</label>
+            <div id="tree2"></div>
+            <div id="selectedNodesContainer2"></div>
+            <textarea name="selectedVariables2" id="selectedVariables2" readonly></textarea>
+        </div>
+        <button id="sendButton" style="display:none;" type="submit">Enviar variables y covariable seleccionadas</button>
+    </form>
+    <script>
+        $(function () {
+            $.getJSON('/tree_data', function (data) {
+                $('#tree').jstree({ 'core': { 'data': data } });
+                $('#tree2').jstree({ 'core': { 'data': data } });
+            });
+        });
+
+        $(function () {
+            var selectedNodes = [];
+            var selectedNodes2 = [];
+
+            $('#tree').on('select_node.jstree', function (e, data) {
+                var node = data.node;
+                if (!node.children.length) {
+                    var parentNode = $('#tree').jstree().get_node(node.parent);
+                    var mainNodeName = getMainNodeName(parentNode);
+                    var fullName = mainNodeName + ':' + node.text;
+                    if (!selectedNodes.includes(fullName)) {
+                        selectedNodes.push(fullName);
+                        updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
+                    }
+                }
+            });
+
+            $('#tree2').on('select_node.jstree', function (e, data) {
+                var node = data.node;
+                if (!node.children.length) {
+                    var parentNode = $('#tree2').jstree().get_node(node.parent);
+                    var mainNodeName = getMainNodeName(parentNode);
+                    var fullName = mainNodeName + ':' + node.text;
+                    if (!selectedNodes2.includes(fullName)) {
+                        selectedNodes2.push(fullName);
+                        updateSelectedNodesContainer('#selectedNodesContainer2', selectedNodes2, '#selectedVariables2');
+                    }
+                }
+            });
+
+            function getMainNodeName(node) {
+                while (node.parent !== '#') {
+                    node = $('#tree').jstree().get_node(node.parent);
+                }
+                return node.text;
+            }
+
+            function updateSelectedNodesContainer(containerSelector, selectedNodes, inputSelector) {
+                var container = $(containerSelector);
+                container.empty();
+                selectedNodes.forEach(function (node, index) {
+                    var item = $('<div class="selected-item"></div>').text(node);
+                    var button = $('<button class="remove-button">x</button>').click(function () {
+                        selectedNodes.splice(index, 1);
+                        updateSelectedNodesContainer(containerSelector, selectedNodes, inputSelector);
+                    });
+                    item.append(button);
+                    container.append(item);
+                });
+                $(inputSelector).val(selectedNodes.join('\n'));
+            }
+
+            $('#sendButton').show();
+        });
+    </script>
+</body>
+</html>
+

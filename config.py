@@ -22,16 +22,16 @@ fuente_de_datos_metadatos = {
         'cells' : 'cells_mun',
         'interval' : 'interval'
     },
+     'epi_puma_accidentes' : {
+        'database' : 'epi_puma_accidentes',
+        'host' : 'fastdb.c3.unam.mx',
+        'user' : 'monitor',
+        'password' : 'monitor123',
+        'port' : '5433',
+        'lab_var' : 'name',
+        'col' : 'bin',
+        'cells' : 'cells_mun',
+        'interval' : 'interval'
+    }
 
-    # 'epi_puma_accidentes' : {
-    #     'database' : 'epi_puma_accidentes',
-    #     'host' : 'fastdb.c3.unam.mx',
-    #     'user' : 'monitor',
-    #     'password' : 'monitor123',
-    #     'port' : '5433',
-    #     'lab_var' : 'name',
-    #     'col' : 'bin',
-    #     'cells' : 'cells_mun',
-    #     'interval' : 'interval'
-    # }
 }
