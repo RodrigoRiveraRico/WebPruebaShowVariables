@@ -149,6 +149,8 @@ def creacion_ramas_arbol():
     # }
 
 
-    print(structure_lst)
+    # print(structure_lst)
 
     return structure_lst
+
+# print(creacion_ramas_arbol())
