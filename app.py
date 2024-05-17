@@ -4,12 +4,14 @@
 from flask import Flask, render_template, request, jsonify
 from PyPostQL import pruebasPostgres
 from Var_Clss_Construction import dict_construction, df_construction
+from prueba import creacion_ramas_arbol
 
 app = Flask(__name__)
 
 data_bases = ["epi_puma_censo_inegi_2020", "epi_puma_worldclim", "epi_puma_accidentes"]
 selected_names = []
 
+# tree_data = creacion_ramas_arbol()
 tree_data = [
     {
         "id": "Node 1",
@@ -49,8 +51,8 @@ def add_name():
 
 @app.route('/process', methods=['POST'])
 def process():
-    # D_c = {i: pruebasPostgres.recolectar_variables(i) for i in selected_names}
-    return render_template('arbol.html', data=selected_names)#, D_c=D_c)
+    D_c = {DB: pruebasPostgres.recolectar_variables(DB) for DB in selected_names}
+    return render_template('arbol.html', data=selected_names, D_c=D_c)
 
 @app.route('/tree_data')
 def get_tree_data():
