@@ -17,11 +17,11 @@ tree_data = [
         'state': {'opened': True},
         "attr": {"nivel": "root", "type": 0},
         "children": [
-            {"id": "node2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Hijo 2"}]},
+            {"id": "node2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Grado promedio de escolaridad, 0.00%:0.01%"}]},
             {"id": "node3", "text": "Node 3", "children": [
                 {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
                 {"id": "Hijo6", "text": "Hijo 6", "children": [
-                    {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Hijo 6.12"}]}
+                    {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Grado promedio de escolaridad de la población femenina, 0.12%:0.20%"}]}
                 ]}
             ]}
         ]
@@ -30,8 +30,8 @@ tree_data = [
         "id": "Node 4",
         "text": "epi_puma_worldclim",
         "children": [
-            {"id": "Hijo4", "text": "Annual Mean Temperature"},
-            {"id": "Hijo 42", "text": "Hijo 42"}
+            {"id": "Hijo4", "text": "Annual Mean Temperature, 2.050:13.525"},
+            {"id": "Hijo 42", "text": "Annual Mean Temperature, 13.525:15.225"}
         ]
     }
 ]
@@ -49,8 +49,8 @@ def add_name():
 
 @app.route('/process', methods=['POST'])
 def process():
-    D_c = {i: pruebasPostgres.recolectar_variables(i) for i in selected_names}
-    return render_template('arbol.html', data=selected_names, D_c=D_c)
+    # D_c = {i: pruebasPostgres.recolectar_variables(i) for i in selected_names}
+    return render_template('arbol.html', data=selected_names)#, D_c=D_c)
 
 @app.route('/tree_data')
 def get_tree_data():
@@ -75,7 +75,7 @@ def select_variables():
 
     noombre_clase = all_covariables_data.iloc[0, 0]
 
-    return render_template('resDf.html', df_resultado=all_variables_data.to_html(), nombre_titulo=noombre_clase)
+    return render_template('resDf.html', df_resultado=all_variables_data.to_html(classes="dataframe"), nombre_titulo=noombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)

@@ -17,13 +17,13 @@
             color: red;
             border: 1px solid #ccc;
             border-radius: 3px;
-            background: none;
+            background: blanchedalmond;
             font-size: 12px;
             padding: 2px 5px;
         }
         textarea {
-            width: 30%;
-            height: 70px;
+            /* width: 30%; */
+            /* height: 70px; */
             margin-top: 10px;
             margin-bottom: 15px;
         }
@@ -38,13 +38,13 @@
             <label>Selecciona las variables:</label>
             <div id="tree"></div>
             <div id="selectedNodesContainer1"></div>
-            <textarea name="selectedVariables1" id="selectedVariables1" readonly></textarea>
+            <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly></textarea>
         </div>
         <div>
             <label>Selecciona la covariable:</label>
             <div id="tree2"></div>
             <div id="selectedNodesContainer2"></div>
-            <textarea name="selectedVariables2" id="selectedVariables2" readonly></textarea>
+            <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly></textarea>
         </div>
         <button id="sendButton" style="display:none;" type="submit">Enviar variables y covariable seleccionadas</button>
     </form>

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selecciona Nombres</title>
+    <title>Selección -bases de datos</title>
 </head>
 <body>
-    <h2>Selecciona las bases de datos (DB):</h2>
-    <input type="text" id="nameInput" placeholder="Nombre" oninput="showSuggestions()">
+    <h2>Selecciona las bases de datos (DB) que vas a utilizar:</h2>
+    <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()">
     <div id="suggestions"></div>
     <button onclick="addName()">Agregar</button>
     <h3>DB seleccionadas:</h3>
@@ -22,6 +22,28 @@
     </form>
     <script>
         var selectedNames = [];
+        var N_sg = 6
+
+        function showSuggestionsClick() {
+            var input = document.getElementById("nameInput");
+            var value = input.value.trim().toLowerCase();
+            var suggestionsContainer = document.getElementById("suggestions");
+            suggestionsContainer.innerHTML = "";
+            var matches = {{ suggestions | tojson | safe }}.filter(function(suggestion) {
+                return suggestion.toLowerCase().startsWith(value);
+            }).slice(0, N_sg); // Limita a las primeras 3 sugerencias
+            // var matches = {{ suggestions | tojson | safe }}; // Get all suggestions
+
+            matches.forEach(function(suggestion) {
+                var suggestionElement = document.createElement("div");
+                suggestionElement.textContent = suggestion;
+                suggestionElement.onclick = function() {
+                    input.value = suggestion;
+                    suggestionsContainer.innerHTML = "";
+                };
+                suggestionsContainer.appendChild(suggestionElement);
+            });
+        }
 
         function showSuggestions() {
             var input = document.getElementById("nameInput");
@@ -33,7 +55,7 @@
 
             var matches = {{ suggestions | tojson | safe }}.filter(function(suggestion) {
                 return suggestion.toLowerCase().startsWith(value);
-            });
+            }).slice(0, N_sg); // Limita a las primeras 3 sugerencias
 
             matches.forEach(function(suggestion) {
                 var suggestionElement = document.createElement("div");

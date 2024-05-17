@@ -7,12 +7,20 @@
     <style>
         .titulo-especial {
             font-family: Arial, sans-serif; /* Cambia "Arial" al tipo de letra deseado */
-            /* Agrega cualquier otro estilo de letra deseado */
+            font-style: italic; /* Aplica cursivas */
+            color: rgb(169, 169, 169); /* Cambia el color a gris claro (RGB) */
+        }
+        .dataframe td:nth-last-child(1),
+        .dataframe td:nth-last-child(2),
+        .dataframe th:nth-last-child(1),
+        .dataframe th:nth-last-child(2) {
+            background-color: rgb(173, 216, 230); /* Azul claro */
         }
     </style>
 </head>
 <body>
-    <h2>Resultados para la clase: <span class="titulo-especial">{{ nombre_titulo }}</span></h2>
+    <h2>Resultados para la clase: <span class="titulo-especial">"{{ nombre_titulo }}"</span></h2>
+    <br>
     {{ df_resultado | safe }}
 </body>
 </html>
