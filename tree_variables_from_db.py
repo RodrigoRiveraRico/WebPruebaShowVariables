@@ -6,7 +6,8 @@ from config import fuente_de_datos_metadatos
 def creacion_ramas_arbol(DB:str):
     '''
     DB : str Nombre de la base de datos
-    Return : lst Lista para generar el árbol HTML
+    
+    return : lst Lista para generar el árbol HTML
     '''
     conn = psycopg2.connect(database = fuente_de_datos_metadatos[DB]['database'],
                             user = fuente_de_datos_metadatos[DB]['user'],
@@ -44,12 +45,12 @@ def creacion_ramas_arbol(DB:str):
     # '''
 
     sql_query = '''
-    select name as nombre_variable,
-    interval as intervalo,
-    'INEGI' as metadatos
+    select {} as nombre_variable,
+    {} as intervalo,
+    '{}' as metadatos
     from covariable
     ;
-    '''
+    '''.format(fuente_de_datos_metadatos[DB]['lab_var'], fuente_de_datos_metadatos[DB]['interval'], DB)
 
     df = pd.read_sql(sql_query, conn)
 
@@ -60,9 +61,6 @@ def creacion_ramas_arbol(DB:str):
     # El diccionario (árbol) se crea guardando las variables de más internas a más externas.
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
-
-    # https://stackoverflow.com/questions/33898929/create-jstree-hierarchy-from-parent-child-pair-from-table
-
 
     path_dict = arbol(df)    # Quizá un mejor nombre sería variables_categories
 
