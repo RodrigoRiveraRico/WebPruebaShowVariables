@@ -1,42 +1,44 @@
-### 14/05/2024
-
-
 from flask import Flask, render_template, request, jsonify
 from PyPostQL import pruebasPostgres
 from Var_Clss_Construction import dict_construction, df_construction
 from prueba import creacion_ramas_arbol
+from config import fuente_de_datos_metadatos
 
 app = Flask(__name__)
 
-data_bases = ["epi_puma_censo_inegi_2020", "epi_puma_worldclim", "epi_puma_accidentes"]
+data_bases = []
+for db_name in fuente_de_datos_metadatos:
+    data_bases.append(db_name)
+print("Bases de datos disponibles: {}".format(data_bases))
+
 selected_names = []
 
 # tree_data = creacion_ramas_arbol()
-# tree_data = [
-#     {
-#         "id": "Node 1",
-#         "text": "epi_puma_censo_inegi_2020",
-#         'state': {'opened': True},
-#         "attr": {"nivel": "root", "type": 0},
-#         "children": [
-#             {"id": "Node 2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Grado promedio de escolaridad, 0.00%:0.01%"}]},
-#             {"id": "node3", "text": "Node 3", "children": [
-#                 {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
-#                 {"id": "Hijo6", "text": "Hijo 6", "children": [
-#                     {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Grado promedio de escolaridad de la población femenina, 0.12%:0.20%"}]}
-#                 ]}
-#             ]}
-#         ]
-#     },
-#     {
-#         "id": "Node 4",
-#         "text": "epi_puma_worldclim",
-#         "children": [
-#             {"id": "Hijo4", "text": "Annual Mean Temperature, 2.050:13.525"},
-#             {"id": "Hijo 42", "text": "Annual Mean Temperature, 13.525:15.225"}
-#         ]
-#     }
-# ]
+tree_data = [
+    {
+        "id": "Node 1",
+        "text": "epi_puma_censo_inegi_2020",
+        'state': {'opened': True},
+        "attr": {"nivel": "root", "type": 0},
+        "children": [
+            {"id": "node2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Hijo 2"}]},
+            {"id": "node3", "text": "Node 3", "children": [
+                {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
+                {"id": "Hijo6", "text": "Hijo 6", "children": [
+                    {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Hijo 6.12"}]}
+                ]}
+            ]}
+        ]
+    },
+    {
+        "id": "Node 4",
+        "text": "epi_puma_worldclim",
+        "children": [
+            {"id": "Hijo4", "text": "Annual Mean Temperature"},
+            {"id": "Hijo 42", "text": "Hijo 42"}
+        ]
+    }
+]
 
 @app.route('/')
 def index():
@@ -89,24 +91,32 @@ def process():
 
 @app.route('/select_variables', methods=['POST'])
 def select_variables():
-    selected_values1 = request.form['selectedVariables1']
-    selected_values2 = request.form['selectedVariables2']
+    selected_values1 = request.form['selectedVariables1']   # Variables
+    selected_values2 = request.form['selectedVariables2']   # Clase
 
     list_db_var = selected_values1.split('\r\n')
-    list_db_cov = selected_values2.split('\r\n')
+    list_db_clss = selected_values2.split('\r\n')
+
+#### Construcción árbol (dict) de variables ####
 
     dict_db_variables = dict_construction(list_db_var)
-    dict_db_covariables = dict_construction(list_db_cov)
+#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
-    all_variables_data = df_construction(dict_db_variables, 'variables')
-    all_covariables_data = df_construction(dict_db_covariables, 'covariable')
+#### Construcción árbol (dict) de clase ####
 
-    all_variables_data['N_v'] = list(map(lambda x: len(set(x)), all_variables_data.iloc[:, -1]))
-    all_variables_data['N_vnc'] = [conteo_interseccion(x, list(all_covariables_data.celdas)[0]) for x in list(all_variables_data.celdas)]
+    dict_db_class = dict_construction(list_db_clss)
+#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
-    noombre_clase = all_covariables_data.iloc[0, 0]
+#### Construcción DataFrame de variables y clase ####
+    df_all_variables_data = df_construction(dict_db_variables, 'variables')
+    df_all_class_data = df_construction(dict_db_class, 'clase')
 
-    return render_template('resDf.html', df_resultado=all_variables_data.to_html(classes="dataframe"), nombre_titulo=noombre_clase)
+    df_all_variables_data['N_v'] = list(map(lambda x: len(set(x)), df_all_variables_data.iloc[:, -1]))
+    df_all_variables_data['N_vnc'] = [conteo_interseccion(x, list(df_all_class_data.celdas)[0]) for x in list(df_all_variables_data.celdas)]
+
+    nombre_clase = df_all_class_data.iloc[0, 0]
+
+    return render_template('resDf.html', df_resultado=all_variables_data.to_html(), nombre_titulo=noombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)

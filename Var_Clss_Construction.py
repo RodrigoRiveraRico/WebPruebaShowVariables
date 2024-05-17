@@ -53,8 +53,6 @@ def df_construction(dict_db_var:dict, column_name:str):
         variables_array = np.append(variables_array, array_1)
         cells_array = np.append(cells_array, array_2)
 
-        print(variables)
-
     # DataFrame con todas las variables seleccionadas    
     return pd.DataFrame({column_name : variables_array,
                         'celdas' : cells_array})

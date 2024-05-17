@@ -3,51 +3,54 @@ import pandas as pd
 from arbol_function import arbol
 from config import fuente_de_datos_metadatos
 
-def creacion_ramas_arbol():
-
-    db = 'epi_puma_censo_inegi_2020'
-    conn = psycopg2.connect(database = fuente_de_datos_metadatos[db]['database'],
-                            user = fuente_de_datos_metadatos[db]['user'],
-                            host = fuente_de_datos_metadatos[db]['host'],
-                            password = fuente_de_datos_metadatos[db]['password'],
-                            port = fuente_de_datos_metadatos[db]['port'])
-
-    sql_query = '''
-        select case
-        when name like 'Grado promedio%' then name
-        when name like '%afiliada%servicios%' then name
-        when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then name
-        when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then name
-        when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then name
-        when name like '%viviendas particulares%' then name
-        when name like '%viviendas particulares habitadas que no%' then name
-        else name 
-    end as nombre_variable,
-
-    interval as intervalo,
-
-    case 
-        when name like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
-        when name like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
-        when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then concat('salud',', ','discapacidad')
-        when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
-        when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then concat('personas',', ','genero')
-        when name like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
-        when name like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
-        else concat('categoria1')
-    end as metadatos
-
-    from covariable
-    ;
+def creacion_ramas_arbol(DB:str):
     '''
+    DB : str Nombre de la base de datos
+    
+    return : lst Lista para generar el árbol HTML
+    '''
+    conn = psycopg2.connect(database = fuente_de_datos_metadatos[DB]['database'],
+                            user = fuente_de_datos_metadatos[DB]['user'],
+                            host = fuente_de_datos_metadatos[DB]['host'],
+                            password = fuente_de_datos_metadatos[DB]['password'],
+                            port = fuente_de_datos_metadatos[DB]['port'])
 
     # sql_query = '''
-    # select name as nombre_variable,
+    #     select case
+    #     when name like 'Grado promedio%' then name
+    #     when name like '%afiliada%servicios%' then name
+    #     when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then name
+    #     when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then name
+    #     when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then name
+    #     when name like '%viviendas particulares%' then name
+    #     when name like '%viviendas particulares habitadas que no%' then name
+    #     else name 
+    # end as nombre_variable,
+
     # interval as intervalo,
-    # 'INEGI' as metadatos
+
+    # case 
+    #     when name like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
+    #     when name like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
+    #     when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then concat('salud',', ','discapacidad')
+    #     when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
+    #     when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then concat('personas',', ','genero')
+    #     when name like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
+    #     when name like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
+    #     else concat('categoria1')
+    # end as metadatos
+
     # from covariable
     # ;
     # '''
+
+    sql_query = '''
+    select {} as nombre_variable,
+    {} as intervalo,
+    '{}' as metadatos
+    from covariable
+    ;
+    '''.format(fuente_de_datos_metadatos[DB]['lab_var'], fuente_de_datos_metadatos[DB]['interval'], DB)
 
     df = pd.read_sql(sql_query, conn)
 
@@ -59,23 +62,12 @@ def creacion_ramas_arbol():
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
 
-    df_prueba = df#.head(10)
-    # print(arbol(df_prueba))
-    # print(df_prueba.to_string())
-
-    # https://stackoverflow.com/questions/33898929/create-jstree-hierarchy-from-parent-child-pair-from-table
-
-
-    path_dict = arbol(df_prueba)    # Quizá un mejor nombre sería variables_categories
+    path_dict = arbol(df)    # Quizá un mejor nombre sería variables_categories
 
     structure_lst = []
 
-    lst_prueba = ['personas, poblacion, algo1', 'salud', 'estudios, escolaridad', 'salud, discapacidad', 'categoria1, categoria2, categoria3']
-
     for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key sería categoría o level
-    # for path_key in lst_prueba:
         key_list = path_key.split(', ')
-        # print(key_list)
         for key_idx in range(len(key_list)):
             if key_idx == 0:
                 if structure_lst == []:
@@ -92,7 +84,6 @@ def creacion_ramas_arbol():
                         elif d['id'] == key_list[key_idx]:
                             break
                 structure_child_lst = 'structure_lst' + str([idx]) + str(['children'])
-                # print(structure_child_lst, key_list[key_idx])
 
             elif key_idx <= len(key_list) - 1:
                 if eval(structure_child_lst) == []:
@@ -109,7 +100,6 @@ def creacion_ramas_arbol():
                         elif d['id'] == key_list[key_idx]:
                             break    
                 structure_child_lst += str([idx]) + str(['children'])
-                # print(structure_child_lst, key_list[key_idx])
 
         # En el siguiente append agregamos el nivel donde se almecanarán las variables.
         eval(structure_child_lst).append({'id':'__variables__',
@@ -123,9 +113,7 @@ def creacion_ramas_arbol():
         # para ello requerimos acomodar los niveles de menos profundo a más profundo
         structure_child_lst += str([0]) + str(['children'])
 
-        # print(path_key)
         variables_lst = path_dict[path_key]['__variables__']
-        # print(variables_lst)
         
         for idx, nombre_variable in enumerate(variables_lst):
             eval(structure_child_lst).append({'id': nombre_variable,    # Quiza este 'id' podría ser solo un número o clave
@@ -135,8 +123,8 @@ def creacion_ramas_arbol():
 
             last_structure_child_lst = structure_child_lst + str([idx]) + str(['children'])
             
-            ser_nombre_variable = df_prueba[df_prueba['nombre_variable']==nombre_variable]['nombre_variable']
-            ser_intervalo = df_prueba[df_prueba['nombre_variable']==nombre_variable]['intervalo']
+            ser_nombre_variable = df[df['nombre_variable']==nombre_variable]['nombre_variable']
+            ser_intervalo = df[df['nombre_variable']==nombre_variable]['intervalo']
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
                 eval(last_structure_child_lst).append({'id': str(variable_intervalo),
@@ -155,9 +143,4 @@ def creacion_ramas_arbol():
     #                  'children': []}], 
     # }
 
-
-    # print(structure_lst)
-
     return structure_lst
-
-# print(creacion_ramas_arbol())
