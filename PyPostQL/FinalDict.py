@@ -23,4 +23,4 @@ def lista_a_diccionario(lista):
 # resultado = lista_a_diccionario(lista)
 # print(resultado)
 
-print(lista_a_diccionario(D_l))
+# print(lista_a_diccionario(D_l))

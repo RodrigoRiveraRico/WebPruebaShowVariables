@@ -3,12 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .titulo-especial {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            color: rgb(169, 169, 169);
+        }
+        .dataframe td:nth-last-child(1),
+        .dataframe td:nth-last-child(2),
+        .dataframe th:nth-last-child(1),
+        .dataframe th:nth-last-child(2) {
+            background-color: rgb(173, 216, 230);
+        }
+        .suggestions-container {
+            max-height: 150px; /* Ajusta la altura máxima según sea necesario */
+            overflow-y: auto; /* Habilita el scroll vertical */
+            border: 1px solid #ccc; /* Añade un borde para el contenedor */
+            padding: 10px;
+            margin-top: 4px;
+            margin-bottom: 6px;
+            width: 200px; /* Ajusta el ancho según sea necesario */
+            background-color: #fff; /* Fondo blanco para el contenedor */
+        }
+        .suggestions-container div {
+            padding: 5px;
+            cursor: pointer;
+        }
+        .suggestions-container div:hover {
+            background-color: #e0e0e0; /* Color de fondo cuando se pasa el ratón por encima */
+        }
+    </style>
+    
     <title>Selección -bases de datos</title>
 </head>
 <body>
     <h2>Selecciona las bases de datos (DB) que vas a utilizar:</h2>
     <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()">
-    <div id="suggestions"></div>
+    <!-- <div id="suggestions"></div> -->
+    <div id="suggestions" class="suggestions-container"></div>
     <button onclick="addName()">Agregar</button>
     <h3>DB seleccionadas:</h3>
     <ul id="selectedNames">
@@ -44,7 +76,6 @@
                 suggestionsContainer.appendChild(suggestionElement);
             });
         }
-
         function showSuggestions() {
             var input = document.getElementById("nameInput");
             var value = input.value.trim().toLowerCase();

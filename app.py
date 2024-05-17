@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from PyPostQL import pruebasPostgres
 from Var_Clss_Construction import dict_construction, df_construction
-from prueba import creacion_ramas_arbol
+from tree_variables_from_db import creacion_ramas_arbol
 from config import fuente_de_datos_metadatos
 
 app = Flask(__name__)
@@ -13,32 +13,7 @@ print("Bases de datos disponibles: {}".format(data_bases))
 
 selected_names = []
 
-# tree_data = creacion_ramas_arbol()
-tree_data = [
-    {
-        "id": "Node 1",
-        "text": "epi_puma_censo_inegi_2020",
-        'state': {'opened': True},
-        "attr": {"nivel": "root", "type": 0},
-        "children": [
-            {"id": "node2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Hijo 2"}]},
-            {"id": "node3", "text": "Node 3", "children": [
-                {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
-                {"id": "Hijo6", "text": "Hijo 6", "children": [
-                    {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Hijo 6.12"}]}
-                ]}
-            ]}
-        ]
-    },
-    {
-        "id": "Node 4",
-        "text": "epi_puma_worldclim",
-        "children": [
-            {"id": "Hijo4", "text": "Annual Mean Temperature"},
-            {"id": "Hijo 42", "text": "Hijo 42"}
-        ]
-    }
-]
+
 
 @app.route('/')
 def index():
@@ -54,35 +29,35 @@ def add_name():
 @app.route('/tree_data')
 def get_tree_data():
     # print("Aquiii =================***********************======")
-    # print(selected_names)
-    tree_data = [
-        {
-            "id": "Node 1",
-            "text": "epi_puma_censo_inegi_2020",
-            'state': {'opened': True},
-            "attr": {"nivel": "root", "type": 0},
-            "children": [
-                {"id": "Node 2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Grado promedio de escolaridad, 0.00%:0.01%"}]},
-                {"id": "node3", "text": "Node 3", "children": [
-                    {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
-                    {"id": "Hijo6", "text": "Hijo 6", "children": [
-                        {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Grado promedio de escolaridad de la población femenina, 0.12%:0.20%"}]}
-                    ]}
-                ]}
-            ]
-        },
-        {
-            "id": "Node 4",
-            "text": "epi_puma_worldclim",
-            "children": [
-                {"id": "Hijo4", "text": "Annual Mean Temperature, 2.050:13.525"},
-                {"id": "Hijo 42", "text": "Annual Mean Temperature, 13.525:15.225"}
-            ]
-        }
-    ]
-    # tree_data = [{"id": "DB",
-    #              "text": "DB", 
-    #              "children": functionR(DB)} for DB in selected_names]
+    # # print(selected_names)
+    # tree_data = [
+    #     {
+    #         "id": "Node 1",
+    #         "text": "epi_puma_censo_inegi_2020",
+    #         'state': {'opened': True},
+    #         "attr": {"nivel": "root", "type": 0},
+    #         "children": [
+    #             {"id": "Node 2", "text": "Node 2", "children": [{"id": "Hijo2", "text": "Grado promedio de escolaridad, 0.00%:0.01%"}]},
+    #             {"id": "node3", "text": "Node 3", "children": [
+    #                 {"id": "Hijo5", "text": "Hijo 5", "children": [{"id": "Hijo5.1", "text": "Población masculina"}]},
+    #                 {"id": "Hijo6", "text": "Hijo 6", "children": [
+    #                     {"id": "Hijo6.1", "text": "Hijo 6.1", "children": [{"id": "Hijo6.12", "text": "Grado promedio de escolaridad de la población femenina, 0.12%:0.20%"}]}
+    #                 ]}
+    #             ]}
+    #         ]
+    #     },
+    #     {
+    #         "id": "Node 4",
+    #         "text": "epi_puma_worldclim",
+    #         "children": [
+    #             {"id": "Hijo4", "text": "Annual Mean Temperature, 2.050:13.525"},
+    #             {"id": "Hijo 42", "text": "Annual Mean Temperature, 13.525:15.225"}
+    #         ]
+    #     }
+    # ]
+    tree_data = [{"id": DB+'3',
+                 "text": DB, 
+                 "children": creacion_ramas_arbol(DB)} for DB in selected_names]
     return jsonify(tree_data)
 
 @app.route('/process', methods=['POST'])
@@ -116,7 +91,7 @@ def select_variables():
 
     nombre_clase = df_all_class_data.iloc[0, 0]
 
-    return render_template('resDf.html', df_resultado=all_variables_data.to_html(), nombre_titulo=noombre_clase)
+    return render_template('resDf.html', df_resultado=df_all_variables_data.to_html(), nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)
