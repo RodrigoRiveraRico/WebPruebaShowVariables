@@ -7,7 +7,7 @@ def creacion_ramas_arbol(DB:str):
     '''
     DB : str Nombre de la base de datos
     
-    return : lst Lista para generar el árbol HTML
+    Return : lst Lista para generar el árbol HTML
     '''
     conn = psycopg2.connect(database = fuente_de_datos_metadatos[DB]['database'],
                             user = fuente_de_datos_metadatos[DB]['user'],
@@ -15,39 +15,10 @@ def creacion_ramas_arbol(DB:str):
                             password = fuente_de_datos_metadatos[DB]['password'],
                             port = fuente_de_datos_metadatos[DB]['port'])
 
-    # sql_query = '''
-    #     select case
-    #     when name like 'Grado promedio%' then name
-    #     when name like '%afiliada%servicios%' then name
-    #     when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then name
-    #     when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then name
-    #     when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then name
-    #     when name like '%viviendas particulares%' then name
-    #     when name like '%viviendas particulares habitadas que no%' then name
-    #     else name 
-    # end as nombre_variable,
-
-    # interval as intervalo,
-
-    # case 
-    #     when name like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
-    #     when name like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
-    #     when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then concat('salud',', ','discapacidad')
-    #     when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
-    #     when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then concat('personas',', ','genero')
-    #     when name like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
-    #     when name like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
-    #     else concat('categoria1')
-    # end as metadatos
-
-    # from covariable
-    # ;
-    # '''
-
     sql_query = '''
     select {} as nombre_variable,
     {} as intervalo,
-    '{}' as metadatos
+    '"{}"' as metadatos
     from covariable
     ;
     '''.format(fuente_de_datos_metadatos[DB]['lab_var'], fuente_de_datos_metadatos[DB]['interval'], DB)
@@ -62,7 +33,8 @@ def creacion_ramas_arbol(DB:str):
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
 
-    path_dict = arbol(df)    # Quizá un mejor nombre sería variables_categories
+    path_dict = arbol(df)   # Quizá un mejor nombre sería variables_categories
+                            # Al usar la función arbol ya no aparecen nombres de variables repetidas
 
     structure_lst = []
 
@@ -110,7 +82,7 @@ def creacion_ramas_arbol(DB:str):
 
 
         # Queremos que la estructura de variables sea el primer elemento
-        # para ello requerimos acomodar los niveles de menos profundo a más profundo
+        # por eso hicimos el acomodo de  los niveles de menos profundo a más profundo
         structure_child_lst += str([0]) + str(['children'])
 
         variables_lst = path_dict[path_key]['__variables__']
@@ -131,16 +103,21 @@ def creacion_ramas_arbol(DB:str):
                                                     'text': str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
 
 
-    # Hasta este punto tenemos:
+    # Obtenemos lo siguiente:
     # {'id': ___, 
     #  'texto': ___, 
     #  'children': [{'id': '__variables__',
     #                'text': 'variables',
     #                'children' : [{'id': ___,
-    #                               'text': ___}]},
+    #                               'text': nombre_variable,
+    #                               'children':[{'id': ___,
+    #                                            'texto': nombre_variable + intervalo},]
+    #                             },]
+    #                 },
     #                 {'id': ___,
-    #                  'text': ___,
-    #                  'children': []}], 
+    #                     'text': ___,
+    #                     'children': []},
+    #             ], 
     # }
 
     return structure_lst
