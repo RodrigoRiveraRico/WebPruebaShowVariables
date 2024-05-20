@@ -1,4 +1,3 @@
-### Definición de la función
 
 def arbol(df):
   """

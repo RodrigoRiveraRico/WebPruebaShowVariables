@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 from arbol_function import arbol
-from config import fuente_de_datos_metadatos
+from config import fuente_de_datos_metadatos, query_categorias
 
 def creacion_ramas_arbol(DB:str):
     '''
@@ -15,14 +15,8 @@ def creacion_ramas_arbol(DB:str):
                             password = fuente_de_datos_metadatos[DB]['password'],
                             port = fuente_de_datos_metadatos[DB]['port'])
 
-    sql_query = '''
-    select {} as nombre_variable,
-    {} as intervalo,
-    '"{}"' as metadatos
-    from covariable
-    ;
-    '''.format(fuente_de_datos_metadatos[DB]['lab_var'], fuente_de_datos_metadatos[DB]['interval'], DB)
-
+    sql_query = query_categorias[DB]
+    
     df = pd.read_sql(sql_query, conn)
 
     conn.close()
