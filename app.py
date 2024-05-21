@@ -62,7 +62,7 @@ def select_variables():
 
     nombre_clase = df_all_class_data.iloc[0, 0]
 
-    return render_template('resDf.html', df_resultado=df_all_variables_data.to_html(), nombre_titulo=nombre_clase)
+    return render_template('resDF.html', df_resultado=df_all_variables_data.to_html(), nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)
