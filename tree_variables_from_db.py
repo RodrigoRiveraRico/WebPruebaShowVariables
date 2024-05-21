@@ -16,7 +16,7 @@ def creacion_ramas_arbol(DB:str):
                             port = fuente_de_datos_metadatos[DB]['port'])
 
     sql_query = query_categorias[DB]
-    
+
     df = pd.read_sql(sql_query, conn)
 
     conn.close()
@@ -68,7 +68,7 @@ def creacion_ramas_arbol(DB:str):
                 structure_child_lst += str([idx]) + str(['children'])
 
         # En el siguiente append agregamos el nivel donde se almecanarán las variables.
-        eval(structure_child_lst).append({'id':'__variables__',
+        eval(structure_child_lst).append({'id':'__variables__' + path_key,
                                         'text':'variables',
                                         'children':[]})
         # Ahora a hacer un ciclo for para almacenar las variables :D
@@ -100,7 +100,7 @@ def creacion_ramas_arbol(DB:str):
     # Obtenemos lo siguiente:
     # {'id': ___, 
     #  'texto': ___, 
-    #  'children': [{'id': '__variables__',
+    #  'children': [{'id': '__variables__' + path_key,
     #                'text': 'variables',
     #                'children' : [{'id': ___,
     #                               'text': nombre_variable,
