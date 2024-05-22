@@ -28,7 +28,7 @@ def add_name():
 
 @app.route('/tree_data')
 def get_tree_data():
-    tree_data = [{"id": DB+'3',
+    tree_data = [{"id": DB,
                  "text": DB, 
                  "children": creacion_ramas_arbol(DB)} for DB in selected_names]
     return jsonify(tree_data)
@@ -70,4 +70,4 @@ def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)
 
 if __name__ == '__main__':
-    app.run(debug=True, port = 0.0)
+    app.run(debug=True)
