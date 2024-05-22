@@ -27,6 +27,8 @@ def creacion_ramas_arbol(DB:str):
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
 
+    df = df.head(100)   # Solo consideramos 100 datos de cada base de datos
+
     path_dict = arbol(df)   # Quizá un mejor nombre sería variables_categories
                             # Al usar la función arbol ya no aparecen nombres de variables repetidas
 

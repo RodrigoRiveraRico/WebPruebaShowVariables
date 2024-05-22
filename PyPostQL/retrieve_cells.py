@@ -35,8 +35,6 @@ def recolectar_celdas(DB:str, variables:str):
     from data 
     where variable in {3};
     '''.format(col_names, col_interval, col_cells, variables)
-    
-    print(sql_query)
 
     # Ejecutar la consulta y leer los resultados en un DataFrame
     df = pd.read_sql(sql_query, conn)   # Cada registro del df es una lista de celdas
