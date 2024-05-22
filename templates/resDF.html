@@ -16,11 +16,27 @@
         .dataframe th:nth-last-child(2) {
             background-color: rgb(173, 216, 230); /* Azul claro */
         }
+        .dataframe {
+        width: 80%; /* Cambia el tamaño de la tabla */
+        max-width: 100%; /* Asegura que no exceda el ancho del viewport */
+        }
+        .dataframe th {
+            text-align: left; /* Para alinear el texto */
+        }
+
+        .dataframe th:first-child,
+        .dataframe td:first-child {
+            display: none; /* Oculta la primera columna */
+        }
+
     </style>
 </head>
 <body>
-    <h2>Resultados para la clase: <span class="titulo-especial">"{{ nombre_titulo }}"</span></h2>
+    <h2>Resultados para la clase <span class="titulo-especial">"{{ nombre_titulo }}"</span>:</h2>
     <br>
-    {{ df_resultado | safe }}
+    <center>
+        {{ df_resultado | safe }}
+    </center>
+    <br>
 </body>
 </html>

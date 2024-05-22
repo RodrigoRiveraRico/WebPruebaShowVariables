@@ -56,7 +56,7 @@ def select_variables():
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
 #### Construcción DataFrame de variables y clase ####
-    df_all_variables_data = df_construction(dict_db_variables, 'covariables')
+    df_all_variables_data = df_construction(dict_db_variables, 'Covariables')
     df_all_class_data = df_construction(dict_db_class, 'clase')
 
     df_all_variables_data['N_v'] = list(map(lambda x: len(set(x)), df_all_variables_data.iloc[:, -1]))
@@ -64,7 +64,11 @@ def select_variables():
 
     nombre_clase = df_all_class_data.iloc[0, 0]
 
-    return render_template('resDf.html', df_resultado=df_all_variables_data.to_html(), nombre_titulo=nombre_clase)
+    df_final = df_all_variables_data.drop(['celdas'], axis=1)
+
+
+
+    return render_template('resDf.html', df_resultado=df_final.to_html(), nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)

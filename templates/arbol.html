@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selección</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default-dark/style.min.css" />
     <style>
         .selected-item {
             display: flex;
@@ -27,21 +28,27 @@
             margin-top: 10px;
             margin-bottom: 15px;
         }
+        .covariables {
+            color: rgb(37, 172, 187);
+        }
+        .clase {
+            color: rgb(216, 82, 33);
+        }
     </style>
 </head>
 <body>
-    <h2>Selección de variables y covariable:</h2>
+    <h2>Selección de <span class="covariables">covariables</span> y <span class="clase">clase</span>:</h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <form id="selectVariablesForm" action="/select_variables" method="post">
         <div>
-            <label>Selecciona las covariables:</label>
+            <label>Selecciona las <span class="covariables">covariables</span>:</label>
             <div id="tree"></div>
             <div id="selectedNodesContainer1"></div>
             <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly></textarea>
         </div>
         <div>
-            <label>Selecciona la clase:</label>
+            <label>Selecciona la <span class = "clase">clase</span>:</label>
             <div id="tree2"></div>
             <div id="selectedNodesContainer2"></div>
             <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly></textarea>
@@ -51,8 +58,18 @@
     <script>
         $(function () {
             $.getJSON('/tree_data', function (data) {
-                $('#tree').jstree({ 'core': { 'data': data } });
-                $('#tree2').jstree({ 'core': { 'data': data } });
+                $('#tree').jstree({ 'core': { 'data': data, 
+                                            'themes': {   /// Cambiar el tema
+                                                'name': 'default', // nombre del tema
+                                                'dots': true, // mostrar puntos entre nodos
+                                                'icons': false // mostrar iconos junto a los nodos
+                                            } } });
+                $('#tree2').jstree({ 'core': { 'data': data,
+                                            'themes': {   /// Cambiar el tema
+                                                'name': 'default', // nombre del tema
+                                                'dots': true, // mostrar puntos entre nodos
+                                                'icons': false // mostrar iconos junto a los nodos
+                                            } } });
             });
         });
 
@@ -79,12 +96,41 @@
                     var parentNode = $('#tree2').jstree().get_node(node.parent);
                     var mainNodeName = getMainNodeName(parentNode);
                     var fullName = mainNodeName + ':' + node.text;
-                    if (!selectedNodes2.includes(fullName)) {
+                    if (!selectedNodes2.includes(fullName) && selectedNodes2.length < 1) {
                         selectedNodes2.push(fullName);
                         updateSelectedNodesContainer('#selectedNodesContainer2', selectedNodes2, '#selectedVariables2');
                     }
                 }
             });
+
+        /*  ------------------ */
+        //  $(function () {
+        
+        //     $("#toggle_dots, #toggle_icons").click(function () {
+        
+        //         $("#demo1").jstree(this.value);
+        
+        //     });
+        
+        //     $("#set_theme1").click(function () {
+        
+        //         $("#demo1").jstree("set_theme","apple");
+        //     });
+        //     $("#set_theme2").click(function () {
+        //         $("#demo1").jstree("set_theme","default");
+        //     });
+        //     $("#demo1").jstree({
+        //         "themes" : {
+        //             "theme" : "default",
+        //             "dots" : false,
+        //             "icons" : false
+        //         },
+        //         "plugins" : [ "themes", "html_data" ]
+        //     });
+        // });
+        /*  ------------------ */
+
+
 
             function getMainNodeName(node) {
                 while (node.parent !== '#') {
