@@ -41,7 +41,7 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'especievalida',
         'cells' : 'cells_mun',
-        'interval' : 'id'
+        'interval' : 'nspn'
     }
 }
 
@@ -91,10 +91,18 @@ query_categorias = {
         ;
         ''',
 
+    # 'newspecies' : '''
+    #     select especievalida as nombre_variable,
+    #     id as intervalo,
+    #     '"especies"' as metadatos
+    #     from covariable
+    #     ;
+    #     '''
+
     'newspecies' : '''
         select especievalida as nombre_variable,
-        id as intervalo,
-        '"especies"' as metadatos
+        nspn as intervalo,
+        concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
         from covariable
         ;
         '''
