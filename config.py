@@ -91,14 +91,6 @@ query_categorias = {
         ;
         ''',
 
-    # 'newspecies' : '''
-    #     select especievalida as nombre_variable,
-    #     id as intervalo,
-    #     '"especies"' as metadatos
-    #     from covariable
-    #     ;
-    #     '''
-
     'newspecies' : '''
         select especievalida as nombre_variable,
         nspn as intervalo,
