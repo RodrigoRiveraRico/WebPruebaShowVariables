@@ -32,8 +32,17 @@ fuente_de_datos_metadatos = {
         'lab_var' : 'name',
         'cells' : 'cells_mun',
         'interval' : 'interval'
+    },
+     'newspecies' : {
+        'database' : 'newspecies',
+        'host' : 'fastdb.c3.unam.mx',
+        'user' : 'monitor',
+        'password' : 'monitor123',
+        'port' : '5433',
+        'lab_var' : 'especievalida',
+        'cells' : 'cells_mun',
+        'interval' : 'id'
     }
-
 }
 
 query_categorias = {
@@ -78,6 +87,14 @@ query_categorias = {
         select name as nombre_variable,
         interval as intervalo,
         '"epi_puma_accidentes"' as metadatos
+        from covariable
+        ;
+        ''',
+
+    'newspecies' : '''
+        select especievalida as nombre_variable,
+        id as intervalo,
+        '"especies"' as metadatos
         from covariable
         ;
         '''
