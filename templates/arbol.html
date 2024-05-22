@@ -35,18 +35,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <form id="selectVariablesForm" action="/select_variables" method="post">
         <div>
-            <label>Selecciona las variables:</label>
+            <label>Selecciona las covariables:</label>
             <div id="tree"></div>
             <div id="selectedNodesContainer1"></div>
             <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly></textarea>
         </div>
         <div>
-            <label>Selecciona la covariable:</label>
+            <label>Selecciona la clase:</label>
             <div id="tree2"></div>
             <div id="selectedNodesContainer2"></div>
             <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly></textarea>
         </div>
-        <button id="sendButton" style="display:none;" type="submit">Enviar variables y covariable seleccionadas</button>
+        <button id="sendButton" style="display:none;" type="submit">Enviar covariables y clase seleccionadas</button>
     </form>
     <script>
         $(function () {

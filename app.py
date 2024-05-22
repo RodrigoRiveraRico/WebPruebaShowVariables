@@ -37,7 +37,7 @@ def process():
 
 @app.route('/select_variables', methods=['POST'])
 def select_variables():
-    selected_values1 = request.form['selectedVariables1']   # Variables
+    selected_values1 = request.form['selectedVariables1']   # Covariables
     selected_values2 = request.form['selectedVariables2']   # Clase
 
     list_db_var = selected_values1.split('\r\n')
@@ -54,7 +54,7 @@ def select_variables():
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
 #### Construcción DataFrame de variables y clase ####
-    df_all_variables_data = df_construction(dict_db_variables, 'variables')
+    df_all_variables_data = df_construction(dict_db_variables, 'covariables')
     df_all_class_data = df_construction(dict_db_class, 'clase')
 
     df_all_variables_data['N_v'] = list(map(lambda x: len(set(x)), df_all_variables_data.iloc[:, -1]))
