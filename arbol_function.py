@@ -1,10 +1,9 @@
-### Definición de la función
 
 def arbol(df):
   """
   df : pd.dataframe
        Columnas: | nombre_variable | metadatos | plataforma |
-       Ordernar las variables de forma ascendente al número de niveles en el que están ubicadas.
+       Nota: Ordernar las variables de forma ascendente al número de niveles en el que están ubicadas.
 
   Return : dict
   """

@@ -1,18 +1,16 @@
 from flask import Flask, render_template, request, jsonify
-from PyPostQL import pruebasPostgres
 from Var_Clss_Construction import dict_construction, df_construction
 from tree_variables_from_db import creacion_ramas_arbol
 from config import fuente_de_datos_metadatos
 
 app = Flask(__name__)
 
+selected_names = []
+
 data_bases = []
 for db_name in fuente_de_datos_metadatos:
     data_bases.append(db_name)
 print("Bases de datos disponibles: {}".format(data_bases))
-
-selected_names = []
-
 
 
 @app.route('/')
@@ -64,7 +62,7 @@ def select_variables():
 
     nombre_clase = df_all_class_data.iloc[0, 0]
 
-    return render_template('resDf.html', df_resultado=df_all_variables_data.to_html(), nombre_titulo=nombre_clase)
+    return render_template('resDF.html', df_resultado=df_all_variables_data.to_html(), nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)
