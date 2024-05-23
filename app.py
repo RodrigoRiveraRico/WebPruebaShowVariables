@@ -64,13 +64,18 @@ def select_variables():
 
     nombre_clase = df_all_class_data.iloc[0, 0]
 
-    # Unnest the nested columns
+    # Creamos un nuevo DataFrame con las celdas desanidadas.
     df_all_cells_data = df_all_variables_data.explode('celdas')
-    df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})    # Cada registro es la columna 'celda' es solo una celda. Cambiamos el nombre por congruencia.
-    df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg('<br>'.join).reset_index()
-    df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})  # Cada registro es la columna 'Covariables' es una lista de covariables. Cambiamos el nombre por congruencia.
-    print(df_all_cells_data.info(verbose=False))
 
+    # Cambiamos el nombre de la columna 'celdas' por 'celda' para indicar que cada registro corresponde a una única celda.
+    df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})
+
+    # Agrupamos por 'celda' y concatenamos los valores de 'Covariable' correspondientes.
+    # Utilizamos '<br>' para generar el salto de línea en HTML
+    df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg('<br>'.join).reset_index()
+
+    # Renombramos la columna 'Covariable' por 'Covariables' para indicar que cada registro corresponde a una o varias covariables.
+    df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})
 
     return render_template('resDf.html', 
                            df_resultado = df_all_variables_data.drop(['celdas'],axis=1).to_html(), 

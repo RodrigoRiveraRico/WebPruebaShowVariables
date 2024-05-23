@@ -34,7 +34,7 @@ def creacion_ramas_arbol(DB:str):
 
     structure_lst = []
 
-    for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key sería categoría o level
+    for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key sería categorías o levels
         key_list = path_key.split(', ')
         for key_idx in range(len(key_list)):
             if key_idx == 0:
