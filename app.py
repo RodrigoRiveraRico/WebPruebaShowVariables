@@ -56,7 +56,7 @@ def select_variables():
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
 #### Construcción DataFrame de variables y clase ####
-    df_all_variables_data = df_construction(dict_db_variables, 'Covariables')
+    df_all_variables_data = df_construction(dict_db_variables, 'Covariable')
     df_all_class_data = df_construction(dict_db_class, 'clase')
 
     df_all_variables_data['N_v'] = list(map(lambda x: len(set(x)), df_all_variables_data.iloc[:, -1]))
@@ -64,10 +64,15 @@ def select_variables():
 
     nombre_clase = df_all_class_data.iloc[0, 0]
 
-    df_final = df_all_variables_data.drop(['celdas'], axis=1)
+    # Unnest the nested columns
+    df_all_cells_data = df_all_variables_data.explode('celdas')
+    df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})    # Cada registro es la columna 'celda' es solo una celda. Cambiamos el nombre por congruencia.
+    df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg(', '.join).reset_index()
+    df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})  # Cada registro es la columna 'Covariables' es una lista de covariables. Cambiamos el nombre por congruencia.
 
-
-    return render_template('resDf.html', df_resultado=df_final.to_html(), nombre_titulo=nombre_clase)
+    return render_template('resDf.html', 
+                           df_resultado=df_all_variables_data.drop(['celdas'],axis=1).to_html(), 
+                           nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
     return sum(1 for var in l_var if var in l_cov)
