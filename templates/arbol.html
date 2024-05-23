@@ -73,22 +73,56 @@
             });
         });
 
+
+
         $(function () {
             var selectedNodes = [];
             var selectedNodes2 = [];
 
             $('#tree').on('select_node.jstree', function (e, data) {
-                var node = data.node;
-                if (!node.children.length) {
-                    var parentNode = $('#tree').jstree().get_node(node.parent);
-                    var mainNodeName = getMainNodeName(parentNode);
-                    var fullName = mainNodeName + ':' + node.text;
-                    if (!selectedNodes.includes(fullName)) {
-                        selectedNodes.push(fullName);
-                        updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
+            var node = data.node;
+            var tree = $('#tree').jstree();
+            
+            if (node.children.length) {
+                // El nodo tiene hijos, verifica si es penúltimo nivel
+                node.children.forEach(function (childId) {
+                    var childNode = tree.get_node(childId);
+                    if (!childNode.children.length) {
+                        // Si el hijo no tiene más hijos, entonces es penúltimo nodo
+                        var parentNode = tree.get_node(node.parent);
+                        var mainNodeName = getMainNodeName(parentNode);
+                        var fullName = mainNodeName + ':' + childNode.text;
+                        if (!selectedNodes.includes(fullName)) {
+                            selectedNodes.push(fullName);
+                        }
                     }
+                });
+                // Actualizar contenedor después de agregar todos los hijos del penúltimo nodo.
+                updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
+            } else {
+                // Si el nodo no tiene hijos, se tiene el comportamiento original. 
+                var parentNode = tree.get_node(node.parent);
+                var mainNodeName = getMainNodeName(parentNode);
+                var fullName = mainNodeName + ':' + node.text;
+                if (!selectedNodes.includes(fullName)) {
+                    selectedNodes.push(fullName);
+                    updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
                 }
+            }
             });
+
+            // $('#tree').on('select_node.jstree', function (e, data) {
+            //     var node = data.node;
+            //     if (!node.children.length) {
+            //         var parentNode = $('#tree').jstree().get_node(node.parent);
+            //         var mainNodeName = getMainNodeName(parentNode);
+            //         var fullName = mainNodeName + ':' + node.text;
+            //         if (!selectedNodes.includes(fullName)) {
+            //             selectedNodes.push(fullName);
+            //             updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
+            //         }
+            //     }
+            // });
 
             $('#tree2').on('select_node.jstree', function (e, data) {
                 var node = data.node;

@@ -67,7 +67,6 @@ def select_variables():
     df_final = df_all_variables_data.drop(['celdas'], axis=1)
 
 
-
     return render_template('resDf.html', df_resultado=df_final.to_html(), nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
