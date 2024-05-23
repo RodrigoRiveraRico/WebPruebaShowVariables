@@ -67,11 +67,14 @@ def select_variables():
     # Unnest the nested columns
     df_all_cells_data = df_all_variables_data.explode('celdas')
     df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})    # Cada registro es la columna 'celda' es solo una celda. Cambiamos el nombre por congruencia.
-    df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg(', '.join).reset_index()
+    df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg('<br>'.join).reset_index()
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})  # Cada registro es la columna 'Covariables' es una lista de covariables. Cambiamos el nombre por congruencia.
+    print(df_all_cells_data.info(verbose=False))
+
 
     return render_template('resDf.html', 
-                           df_resultado=df_all_variables_data.drop(['celdas'],axis=1).to_html(), 
+                           df_resultado = df_all_variables_data.drop(['celdas'],axis=1).to_html(), 
+                           df_resultado2 = df_all_cells_data.to_html(escape=False),
                            nombre_titulo=nombre_clase)
 
 def conteo_interseccion(l_var, l_cov):
