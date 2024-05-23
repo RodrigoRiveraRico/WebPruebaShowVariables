@@ -27,6 +27,7 @@ def dict_construction(list_db_var:list):
     return arbol(df)
 
 
+
 def df_construction(dict_db_var:dict, column_name:str):
     '''
     dict_db_var : dict
