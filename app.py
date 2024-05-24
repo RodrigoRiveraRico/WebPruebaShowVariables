@@ -67,6 +67,8 @@ def select_variables():
 
 #### Contamos el número de celdas de variables y clase ####
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)    # Esta línea modifica la tabla original df_all_variables_data
+    conteos.epsilon(df_all_variables_data)
+    conteos.score(df_all_variables_data)
 
     # Creamos un nuevo DataFrame con las celdas desanidadas.
     df_all_cells_data = df_all_variables_data.explode('celdas')
