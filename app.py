@@ -36,7 +36,7 @@ def get_tree_data():
 
 @app.route('/process', methods=['POST'])
 def process():
-    return render_template('arbol.html')#, data=selected_names, D_c=D_c)
+    return render_template('arbol.html')
 
 @app.route('/select_variables', methods=['POST'])
 def select_variables():
@@ -66,7 +66,8 @@ def select_variables():
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
 #### Contamos el número de celdas de variables y clase ####
-    conteos.df_count_cells(df_all_variables_data, df_all_class_data)    # Esta línea modifica la tabla original df_all_variables_data
+    # Las siguientes líneas modifican la tabla original df_all_variables_data
+    conteos.df_count_cells(df_all_variables_data, df_all_class_data)
     conteos.epsilon(df_all_variables_data)
     conteos.score(df_all_variables_data)
 
@@ -76,16 +77,15 @@ def select_variables():
     # Cambiamos el nombre de la columna 'celdas' por 'celda' para indicar que cada registro corresponde a una única celda.
     df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})
 
-    # Agrupamos por 'celda' y concatenamos los valores de 'Covariable' correspondientes.
+    # Definimos las funciones de agregación para cada columna
     # Utilizamos '<br>' para generar el salto de línea en HTML
-    # Definir las funciones de agregación para cada columna
     aggregations = {
         'Covariable': '<br>'.join,
         'epsilon': 'sum',
         'score': 'sum'
-    }
+        }
+    # Aplicamos groupby con agg
     df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
-    # df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg('<br>'.join).reset_index()
 
     # Renombramos la columna 'Covariable' por 'Covariables' para indicar que cada registro corresponde a una o varias covariables.
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})
