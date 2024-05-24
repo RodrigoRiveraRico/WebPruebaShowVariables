@@ -13,7 +13,8 @@ fuente_de_datos_metadatos = {
         'cells' : 'cells_mun',
         'interval' : 'interval',
         'resolution' : {'mun' : 'cells_mun',
-                        'state' : 'cells_state'
+                        'state' : 'cells_state',
+                        'ageo' : 'cells_ageo'
                         }
     },
     'epi_puma_worldclim' : {
