@@ -51,7 +51,7 @@ def calcular_score(row):
     '''
     Función que se aplicará a cada fila del DataFrame para calcular el score.
     '''
-    if row['N_v'] == row['N_vnc']:  # Evitar división por cero.
+    if row['N_v'] == row['N_vnc'] or row['N_vnc'] == 0:  # Evitar división por cero o que el argumento de log sea cero.
         return float('inf')  # O algún valor que se considere adecuado para este caso.
     score = math.log(row['N_vnc'] / (row['N_v'] - row['N_vnc']))
     return round(score,2)
