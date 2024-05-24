@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, jsonify
-from PyPostQL import pruebasPostgres
 from Var_Clss_Construction import dict_construction, df_construction
 from tree_variables_from_db import creacion_ramas_arbol
 import conteos
