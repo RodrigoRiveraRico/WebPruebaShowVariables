@@ -16,12 +16,5 @@ def df_count_cells(df_var:pd.DataFrame, df_clss:pd.DataFrame):
 
     return df_var
 
-
-
 def conteo_interseccion(l_var, l_cov):
-        count = 0
-        for var in l_var:
-            for covar in l_cov:
-                if var == covar:
-                    count += 1
-        return count
+    return sum(1 for var in l_var if var in l_cov)
