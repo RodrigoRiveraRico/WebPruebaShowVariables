@@ -8,6 +8,10 @@ def df_count_cells(df_var:pd.DataFrame, df_clss:pd.DataFrame):
     df_clss : pd.DataFrame clase
 
     Return : None
+
+    La función obtiene el número de celdas:
+    - de las variables: N_v
+    - de la intersección de cada variable con la clase: N_vnc
     '''
     df_var['N_v'] = list(map(lambda x: len(set(x)),df_var.iloc[:,-1]))  # Agrega la columna de N por variable
     df_var['N_vnc'] = [conteo_interseccion(x, list(df_clss.celdas)[0]) for x in list(df_var.celdas)] # Cuenta las intersecciones de la clase con las demás variables
