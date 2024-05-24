@@ -11,7 +11,10 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'name',
         'cells' : 'cells_mun',
-        'interval' : 'interval'
+        'interval' : 'interval',
+        'resolution' : {'mun' : 'cells_mun',
+                        'state' : 'cells_state'
+                        }
     },
     'epi_puma_worldclim' : {
         'host' : 'fastdb.c3.unam.mx',
@@ -20,7 +23,10 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'label',
         'cells' : 'cells_mun',
-        'interval' : 'interval'
+        'interval' : 'interval',
+        'resolution' :{'mun' : 'cells_mun',
+                       'state' : 'cells_state'
+                       }
     },
      'epi_puma_accidentes' : {
         'host' : 'fastdb.c3.unam.mx',
@@ -29,7 +35,8 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'name',
         'cells' : 'cells_mun',
-        'interval' : 'interval'
+        'interval' : 'interval',
+        'resolution' : {'mun' : 'cells_mun'}
     },
      'newspecies' : {
         'host' : 'fastdb.c3.unam.mx',
@@ -38,7 +45,10 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'especievalida',
         'cells' : 'cells_mun',
-        'interval' : 'nspn'
+        'interval' : 'nspn',
+        'resolution' :{'mun' : 'cells_mun',
+                       'state' : 'cells_state'
+                       }
     }
 }
 
