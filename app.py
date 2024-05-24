@@ -15,7 +15,7 @@ print("Bases de datos disponibles: {}".format(data_bases))
 selected_names = []
 
 
-
+# 1.- =============== Página principal (Seleccionar DBs) ----------
 @app.route('/')
 def index():
     return render_template('index.html', selected_names=selected_names, suggestions=data_bases)
@@ -27,6 +27,30 @@ def add_name():
         selected_names.append(name)
     return jsonify(selected_names=selected_names)
 
+
+# 2.- =============== Seleccionar resoluciones compatibles de las DBs -------
+@app.route('/res_db', methods=['POST'])
+def res_db():
+    Dict_res = {}
+
+    # for i in selected_names:
+    #     # Obtenemos las variables de cada DB seleccionada y las agregamos a un diccionario.
+    #     L_v = pruebasPostgres.recolectar_variables(i)
+    #     Dict_res[i] = L_v
+    # print(selected_names)
+    return render_template('resDB.html', Dict_res = Dict_res)
+
+
+### pendiente .. 
+
+
+
+
+
+
+
+
+# 3.- =============== Seleccionar los conjuntos de covariables y la clase (Árbol) -------
 @app.route('/tree_data')
 def get_tree_data():
     tree_data = [{"id": DB,
@@ -38,6 +62,8 @@ def get_tree_data():
 def process():
     return render_template('arbol.html')#, data=selected_names, D_c=D_c)
 
+
+# 4.- =============== Desplegar las tablas con los cáclulos de Score y epsilon (pág. final) -------
 @app.route('/select_variables', methods=['POST'])
 def select_variables():
     selected_values1 = request.form['selectedVariables1']   # Covariables

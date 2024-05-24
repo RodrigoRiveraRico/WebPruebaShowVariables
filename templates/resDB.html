@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolución DBs</title>
+</head>
+<body>
+    <h1>Resolución de las DB</h1>
+    <form id="selectDB_re" action="/res_db" method="post">
+
+        <label for="res_selector">Selecciona la resolución para mostrar las bases de datos: <br></label>
+        <select name="Res_selector" id="res_selector" onchange="updateDbSelect()">
+            {% for key in Dict_res.keys() %}
+                <option value="{{ key }}">{{ key }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="res_DB" id="res_db" multiple> <!-- Mostrar el recuadro con las bases de datos para la resolución dada -->
+        </select>
+
+        <button type="button" onclick="addSelected_res_DB()">Agregar DB seleccionada</button>
+        <br>
+
+        <textarea name="selected_res_DB" id="selected_res_DB" rows="4" cols="50" readonly></textarea>
+
+        <input type="hidden" name="selectedRes" id="selectedRes1">
+
+        <!-- Botón de envío -->
+        <button type="submit">Enviar bases de datos seleccionadas</button>
+    </form>
+
+
+    <script>
+
+        function updateDbSelect() {
+            var selectedKey = document.getElementById("res_selector").value;
+
+            var variablesSelect = document.getElementById("res_db");
+            variablesSelect.innerHTML = "";
+
+            Dict_res[selectedKey].forEach(function(variable) {
+                var option = document.createElement("option");
+                option.value = variable;
+                option.text = variable;
+                variablesSelect.appendChild(option);
+            });
+        }
+
+
+        function addSelected_res_DB(){
+            var selectedKey = document.getElementById("res_selector").value;
+
+            var variablesSelect = document.getElementById("res_db");
+
+            // var keySelect = document.getElementById("keySelect" + formIndex);
+            // var selectedKey = keySelect.value;
+            // var variablesSelect = document.getElementById("variablesSelect" + formIndex);
+            var selectedVariables = [];
+            for (var i = 0; i < variablesSelect.options.length; i++) {
+                if (variablesSelect.options[i].selected) {
+                    selectedVariables.push(variablesSelect.options[i].value);
+                }
+            }
+            var selectedValuesTextarea = document.getElementById("selected_res_DB");
+            var currentValue = selectedValuesTextarea.value;
+            if (currentValue) {
+                currentValue += "\n";
+            }
+            currentValue += selectedKey + ":" + selectedVariables.join(", ");
+            selectedValuesTextarea.value = currentValue;
+        }
+
+    </script>
+
+</body>
+</html>
