@@ -41,5 +41,5 @@ def calcular_score(row):
     return math.log(row['N_vnc'] / (row['N_v'] - row['N_vnc']))
 
 def score(df_var:pd.DataFrame):
-    df_var['Score'] = df_var.apply(calcular_score, axis=1)
+    df_var['score'] = df_var.apply(calcular_score, axis=1)
     return 0

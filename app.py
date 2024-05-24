@@ -78,7 +78,14 @@ def select_variables():
 
     # Agrupamos por 'celda' y concatenamos los valores de 'Covariable' correspondientes.
     # Utilizamos '<br>' para generar el salto de línea en HTML
-    df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg('<br>'.join).reset_index()
+    # Definir las funciones de agregación para cada columna
+    aggregations = {
+        'Covariable': '<br>'.join,
+        'epsilon': 'sum',
+        'score': 'sum'
+    }
+    df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
+    # df_all_cells_data = df_all_cells_data.groupby('celda')['Covariable'].agg('<br>'.join).reset_index()
 
     # Renombramos la columna 'Covariable' por 'Covariables' para indicar que cada registro corresponde a una o varias covariables.
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})
