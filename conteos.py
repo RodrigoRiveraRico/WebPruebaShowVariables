@@ -35,9 +35,12 @@ def calcular_epsilon(row):
     '''
     Función que se aplicará a cada fila del DataFrame para calcular el epsilon.
     '''
+    if row['N_v'] == 0: # Evitar división por cero.
+        return float('inf') # O algún valor que se considere adecuado para este caso.
+    
     N_c_over_N = row['N_c'] / N
     epsilon = (row['N_vnc'] - row['N_v'] * N_c_over_N) / math.sqrt(row['N_v'] * N_c_over_N * (1 - N_c_over_N))
-    return round(epsilon,2)
+    return round(epsilon, 2)
 
 def epsilon(df_var:pd.DataFrame):
     '''
@@ -53,8 +56,9 @@ def calcular_score(row):
     '''
     if row['N_v'] == row['N_vnc'] or row['N_vnc'] == 0:  # Evitar división por cero o que el argumento de log sea cero.
         return float('inf')  # O algún valor que se considere adecuado para este caso.
+    
     score = math.log(row['N_vnc'] / (row['N_v'] - row['N_vnc']))
-    return round(score,2)
+    return round(score, 2)
 
 def score(df_var:pd.DataFrame):
     '''
