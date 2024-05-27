@@ -43,4 +43,4 @@ def recolectar_celdas(DB:str, variables:str):
     # Cerrar la conexión con la base de datos
     conn.close()
 
-    return df['variable'].to_numpy(), df['cells_mun'].to_numpy()
+    return df['variable'].to_numpy(), df[col_cells].to_numpy()
