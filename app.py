@@ -64,6 +64,17 @@ def select_variables():
     nombre_clase = df_all_class_data.iloc[0, 0]
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
 
+#### Nos interesan los datos que tengan registros distintos a None o NaN ####
+    # Nota: Hay que excluir los registros que tienen None.
+    # Valdría la pena indicar cuáles registros tienen None.
+    df_all_variables_data_notnull = df_all_variables_data[df_all_variables_data['celdas'].notnull()]
+    df_all_variables_data = df_all_variables_data_notnull
+
+    df_all_class_data_notnull = df_all_class_data[df_all_class_data['celdas'].notnull()]
+    df_all_class_data = df_all_class_data_notnull
+#### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
+    print(df_all_class_data)
+
 #### Contamos el número de celdas de variables y clase ####
     # Las siguientes líneas modifican la tabla original df_all_variables_data
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
