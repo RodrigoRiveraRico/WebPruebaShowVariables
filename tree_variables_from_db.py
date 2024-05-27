@@ -9,7 +9,7 @@ def creacion_ramas_arbol(DB:str):
     
     Return : lst Lista para generar el árbol HTML
     '''
-    conn = psycopg2.connect(database = fuente_de_datos_metadatos[DB]['database'],
+    conn = psycopg2.connect(database = DB,
                             user = fuente_de_datos_metadatos[DB]['user'],
                             host = fuente_de_datos_metadatos[DB]['host'],
                             password = fuente_de_datos_metadatos[DB]['password'],

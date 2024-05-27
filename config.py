@@ -1,47 +1,55 @@
+
 # lab_var es la columna donde están los nombres de la variables
 # cells es la columna donde están las celdas.
 # interval es la columna donde están los intervalos
 
 fuente_de_datos_metadatos = {
     'epi_puma_censo_inegi_2020' : {
-        'database' : 'epi_puma_censo_inegi_2020',
         'host' : 'fastdb.c3.unam.mx',
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'name',
         'cells' : 'cells_mun',
-        'interval' : 'interval'
+        'interval' : 'interval',
+        'resolution' : {'mun' : 'cells_mun',
+                        'state' : 'cells_state',
+                        'ageo' : 'cells_ageo'
+                        }
     },
     'epi_puma_worldclim' : {
-        'database' : 'epi_puma_worldclim',
         'host' : 'fastdb.c3.unam.mx',
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'label',
         'cells' : 'cells_mun',
-        'interval' : 'interval'
+        'interval' : 'interval',
+        'resolution' :{'mun' : 'cells_mun',
+                       'state' : 'cells_state'
+                       }
     },
      'epi_puma_accidentes' : {
-        'database' : 'epi_puma_accidentes',
         'host' : 'fastdb.c3.unam.mx',
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'name',
         'cells' : 'cells_mun',
-        'interval' : 'interval'
+        'interval' : 'interval',
+        'resolution' : {'mun' : 'cells_mun'}
     },
      'newspecies' : {
-        'database' : 'newspecies',
         'host' : 'fastdb.c3.unam.mx',
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'especievalida',
         'cells' : 'cells_mun',
-        'interval' : 'nspn'
+        'interval' : 'nspn',
+        'resolution' :{'mun' : 'cells_mun',
+                       'state' : 'cells_state'
+                       }
     }
 }
 
