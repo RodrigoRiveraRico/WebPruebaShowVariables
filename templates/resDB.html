@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Resolución de las DB</h1>
-    <form id="selectDB_re" action="/res_db" method="post">
+    <form id="selectDB_re" action="/process" method="post">
 
         <label for="res_selector">Selecciona la resolución para mostrar las bases de datos: <br></label>
         <select name="Res_selector" id="res_selector" onchange="updateDbSelect()">
@@ -16,10 +16,11 @@
             {% endfor %}
         </select>
 
-        <select name="res_DB" id="res_db" multiple> <!-- Mostrar el recuadro con las bases de datos para la resolución dada -->
+        <select name="res_DB" id="res_db" multiple> 
+            <!-- Mostrar el recuadro con las bases de datos para la resolución dada con JS ** -->
         </select>
 
-        <button type="button" onclick="addSelected_res_DB()">Agregar DB seleccionada</button>
+        <button type="button" onclick="addSelected_res_DB()">Agregar BD</button>
         <br>
 
         <textarea name="selected_res_DB" id="selected_res_DB" rows="4" cols="50" readonly></textarea>
@@ -32,6 +33,8 @@
 
 
     <script>
+        var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
+        var K = 0;  // contador aux.
 
         function updateDbSelect() {
             var selectedKey = document.getElementById("res_selector").value;
@@ -39,7 +42,7 @@
             var variablesSelect = document.getElementById("res_db");
             variablesSelect.innerHTML = "";
 
-            Dict_res[selectedKey].forEach(function(variable) {
+            Dict_res[selectedKey].forEach(function(variable) {   // Esto muestra las BD de cada resolución elegida (selectedKey) **
                 var option = document.createElement("option");
                 option.value = variable;
                 option.text = variable;
@@ -50,25 +53,30 @@
 
         function addSelected_res_DB(){
             var selectedKey = document.getElementById("res_selector").value;
-
             var variablesSelect = document.getElementById("res_db");
-
-            // var keySelect = document.getElementById("keySelect" + formIndex);
-            // var selectedKey = keySelect.value;
-            // var variablesSelect = document.getElementById("variablesSelect" + formIndex);
             var selectedVariables = [];
+
             for (var i = 0; i < variablesSelect.options.length; i++) {
                 if (variablesSelect.options[i].selected) {
                     selectedVariables.push(variablesSelect.options[i].value);
+
                 }
             }
+
             var selectedValuesTextarea = document.getElementById("selected_res_DB");
             var currentValue = selectedValuesTextarea.value;
-            if (currentValue) {
-                currentValue += "\n";
+
+            if (K < 1 || currentValue.includes(selectedKey)){  // Esto es para que se puedan seleccionar bases de datos de una sola resolución una vez escogido el primero.
+                if (currentValue) {            // En esta parte se van agregando las bases de datos con su resolución al hacer click el botón de "Agregar BD".
+                    currentValue += "\n";
+                }
+                K +=1;
+                currentValue += selectedKey + ":" + selectedVariables.join(", ");
+                selectedValuesTextarea.value = currentValue;
             }
-            currentValue += selectedKey + ":" + selectedVariables.join(", ");
-            selectedValuesTextarea.value = currentValue;
+            else{
+                alert(`No puedes mezclar resoluciones distintas, intentalo de nuevo.`)
+            }
         }
 
     </script>
