@@ -89,7 +89,7 @@ def select_variables():
     # Renombramos la columna 'Covariable' por 'Covariables' para indicar que cada registro corresponde a una o varias covariables.
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable':'Covariables'})
 
-    return render_template('resDf.html', 
+    return render_template('resDF.html', 
                            df_resultado = df_all_variables_data.drop(['celdas'],axis=1).to_html(), 
                            df_resultado2 = df_all_cells_data.to_html(escape=False),
                            nombre_titulo = nombre_clase)
