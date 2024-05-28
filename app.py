@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from Var_Clss_Construction import dict_construction, df_construction
 from tree_variables_from_db import creacion_ramas_arbol
+from Resolucion import ditc_res_DBs_list
 import conteos
 from config import fuente_de_datos_metadatos
 
@@ -14,7 +15,7 @@ print("Bases de datos disponibles: {}".format(data_bases))
 selected_names = []
 
 
-
+# 1.- =============== Página principal (Seleccionar DBs) ----------
 @app.route('/')
 def index():
     return render_template('index.html', selected_names=selected_names, suggestions=data_bases)
@@ -26,17 +27,38 @@ def add_name():
         selected_names.append(name)
     return jsonify(selected_names=selected_names)
 
-@app.route('/tree_data')
-def get_tree_data():
-    tree_data = [{"id": DB,
-                 "text": DB, 
-                 "children": creacion_ramas_arbol(DB)} for DB in selected_names]
-    return jsonify(tree_data)
+
+# 2.- =============== Seleccionar resoluciones compatibles de las DBs -------
+@app.route('/res_db', methods=['POST'])
+def res_db():
+    Dict_res = ditc_res_DBs_list(selected_names)
+    return render_template('resDB.html', Dict_res = Dict_res)
+
+
+
+# 3.- =============== Seleccionar los conjuntos de covariables y la clase (Árbol) -------
+selected_names_res = []     # Nuevo selected names actualizado, con otro nombre.
+res = ''   # nombre de la resolución escogida
 
 @app.route('/process', methods=['POST'])
 def process():
+    global selected_names_res   # Para que se actualice también en /tree_data
+    selected_dbS = request.form['selected_res_DB']   # Llamamos el textarea.
+    list_res_db = selected_dbS.split('\r\n')  # es de la forma [res:db1, res:bd2]
+    selected_names_res = [i.split(':')[1] for i in list_res_db]      #Selected names actualizado
+    global res
+    res += list_res_db[0].split(':')[0]  #actualización de res.
     return render_template('arbol.html')
 
+@app.route('/tree_data')   # Formar el arbol que se muestra
+def get_tree_data():
+    tree_data = [{"id": DB,
+                 "text": DB, 
+                 "children": creacion_ramas_arbol(DB)} for DB in selected_names_res]
+    return jsonify(tree_data)
+
+
+# 4.- =============== Desplegar las tablas con los cáclulos de Score y epsilon (pág. final) -------
 @app.route('/select_variables', methods=['POST'])
 def select_variables():
     selected_values1 = request.form['selectedVariables1']   # Covariables
