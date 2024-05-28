@@ -5,7 +5,7 @@ from config import fuente_de_datos_metadatos
 # Esta función tiene como objetivo devolver una lista con las celdas
 # donde las variables seleccionadas tienen presencia.
 # Nota: una lista de celdas por cada base de datos.
-def recolectar_celdas(DB:str, variables:str):
+def recolectar_celdas(DB:str, variables:str, res:str):
     conn = psycopg2.connect(database = DB, 
                             user = fuente_de_datos_metadatos[DB]['user'], 
                             host= fuente_de_datos_metadatos[DB]['host'],
@@ -14,7 +14,7 @@ def recolectar_celdas(DB:str, variables:str):
                             )
     
     # Columna donde están almacenadas las celdas
-    col_cells = fuente_de_datos_metadatos[DB]['cells']
+    col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
 
     # Columna donde están almacenadas los nombres de las variables
     col_names = fuente_de_datos_metadatos[DB]['lab_var']

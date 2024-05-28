@@ -37,8 +37,8 @@ def res_db():
 
 
 # 3.- =============== Seleccionar los conjuntos de covariables y la clase (Árbol) -------
-selected_names_res = []     # Nuevo selected names actualizado, con otro nombre.
-res = ''   # nombre de la resolución escogida
+# selected_names_res = []     # Nuevo selected names actualizado, con otro nombre.
+# res = ''   # nombre de la resolución escogida
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -47,7 +47,7 @@ def process():
     list_res_db = selected_dbS.split('\r\n')  # es de la forma [res:db1, res:bd2]
     selected_names_res = [i.split(':')[1] for i in list_res_db]      #Selected names actualizado
     global res
-    res += list_res_db[0].split(':')[0]  #actualización de res.
+    res = list_res_db[0].split(':')[0]  #actualización de res.
     return render_template('arbol.html')
 
 @app.route('/tree_data')   # Formar el arbol que se muestra
@@ -79,8 +79,8 @@ def select_variables():
 
 #### Construcción DataFrame de variables y clase ####
 
-    df_all_variables_data = df_construction(dict_db_variables, 'Covariable')
-    df_all_class_data = df_construction(dict_db_class, 'clase')
+    df_all_variables_data = df_construction(dict_db_variables, 'Covariable', res)
+    df_all_class_data = df_construction(dict_db_class, 'clase', res)
 
     # Extraemos el nombre de la clase
     nombre_clase = df_all_class_data.iloc[0, 0]
@@ -95,7 +95,7 @@ def select_variables():
     df_all_class_data_notnull = df_all_class_data[df_all_class_data['celdas'].notnull()]
     df_all_class_data = df_all_class_data_notnull
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
-    print(df_all_class_data)
+    # print(df_all_class_data)
 
 #### Contamos el número de celdas de variables y clase ####
     # Las siguientes líneas modifican la tabla original df_all_variables_data

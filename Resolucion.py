@@ -1,7 +1,5 @@
 from config import fuente_de_datos_metadatos
 
-bases1 = ['epi_puma_censo_inegi_2020', 'epi_puma_worldclim', 'epi_puma_accidentes']
-
 def ditc_res_DBs_list(bases):
     dic = {}    # Diccionario a construir. Resolucion : [base de datos]
     
@@ -13,4 +11,3 @@ def ditc_res_DBs_list(bases):
             dic[key].append(db) # Añadimos la base de datos a la resolución
 
     return dic
-print(ditc_res_DBs_list(bases1))
