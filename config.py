@@ -57,54 +57,62 @@ fuente_de_datos_metadatos = {
 query_categorias = {
     'epi_puma_censo_inegi_2020' : '''
         select case
-        when name like 'Grado promedio%' then name
-        when name like '%afiliada%servicios%' then name
-        when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then name
-        when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then name
-        when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then name
-        when name like '%viviendas particulares%' then name
-        when name like '%viviendas particulares habitadas que no%' then name
-        else name 
+        when {lab_var} like 'Grado promedio%' then {lab_var}
+        when {lab_var} like '%afiliada%servicios%' then {lab_var}
+        when {lab_var} like '%condici_n mental%' or {lab_var} like '%discapacidad%' or {lab_var} like '%limitaci_n%' then {lab_var}
+        when {lab_var} like '%censales%referencia%' or {lab_var} like '%viviendas particulares%' or {lab_var} like '%religi_n%' or {lab_var} like '%a_os%' or {lab_var} like '%poblaci_n nacida%entidad%' then {lab_var}
+        when {lab_var} like '%poblaci_n femeninca%' or {lab_var} like '%pobalci_n masculina' then {lab_var}
+        when {lab_var} like '%viviendas particulares%' then {lab_var}
+        when {lab_var} like '%viviendas particulares habitadas que no%' then {lab_var}
+        else {lab_var} 
     end as nombre_variable,
 
-    interval as intervalo,
+    {interval} as intervalo,
 
     case 
-        when name like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
-        when name like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
-        when name like '%condici_n mental%' or name like '%discapacidad%' or name like '%limitaci_n%' then concat('salud',', ','discapacidad')
-        when name like '%censales%referencia%' or name like '%viviendas particulares%' or name like '%religi_n%' or name like '%a_os%' or name like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
-        when name like '%poblaci_n femeninca%' or name like '%pobalci_n masculina' then concat('personas',', ','genero')
-        when name like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
-        when name like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
+        when {lab_var} like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
+        when {lab_var} like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
+        when {lab_var} like '%condici_n mental%' or {lab_var} like '%discapacidad%' or {lab_var} like '%limitaci_n%' then concat('salud',', ','discapacidad')
+        when {lab_var} like '%censales%referencia%' or {lab_var} like '%viviendas particulares%' or {lab_var} like '%religi_n%' or {lab_var} like '%a_os%' or {lab_var} like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
+        when {lab_var} like '%poblaci_n femeninca%' or {lab_var} like '%pobalci_n masculina' then concat('personas',', ','genero')
+        when {lab_var} like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
+        when {lab_var} like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
         else concat('Otros')
     end as metadatos
 
-    from covariable
+    from {table}
     ;
-    ''' ,
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'],
+               interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['interval'],
+               table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table']),
 
     'epi_puma_worldclim' : '''
-        select label as nombre_variable,
-        interval as intervalo,
+        select {lab_var} as nombre_variable,
+        {interval} as intervalo,
         '"epi_puma_worldclim"' as metadatos
-        from covariable
+        from {table}
         ;
-    ''',
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_worldclim']['lab_var'],
+               interval = fuente_de_datos_metadatos['epi_puma_worldclim']['interval'],
+               table = fuente_de_datos_metadatos['epi_puma_worldclim']['table']),
 
     'epi_puma_accidentes' : '''
-        select name as nombre_variable,
-        interval as intervalo,
+        select {lab_var} as nombre_variable,
+        {interval} as intervalo,
         '"epi_puma_accidentes"' as metadatos
-        from covariable
+        from {table}
         ;
-        ''',
+        '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_accidentes']['lab_var'],
+               interval = fuente_de_datos_metadatos['epi_puma_accidentes']['interval'],
+               table = fuente_de_datos_metadatos['epi_puma_accidentes']['table']),
 
     'newspecies' : '''
-        select especievalida as nombre_variable,
-        nspn as intervalo,
+        select {lab_var} as nombre_variable,
+        {interval} as intervalo,
         concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
-        from covariable
+        from {table}
         ;
-        '''
+        '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
+               interval = fuente_de_datos_metadatos['newspecies']['interval'],
+               table = fuente_de_datos_metadatos['newspecies']['table'])
 }
