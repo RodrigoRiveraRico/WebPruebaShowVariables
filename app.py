@@ -3,7 +3,7 @@ from Var_Clss_Construction import dict_construction, df_construction
 from tree_variables_from_db import creacion_ramas_arbol
 from Resolucion import ditc_res_DBs_list
 import conteos
-from config import fuente_de_datos_metadatos
+from config import fuente_de_datos_metadatos, plataforma
 
 app = Flask(__name__)
 
@@ -12,13 +12,15 @@ for db_name in fuente_de_datos_metadatos:
     data_bases.append(db_name)
 print("Bases de datos disponibles: {}".format(data_bases))
 
+nombre_plataforma = plataforma['name']
+
 selected_names = []
 
 
 # 1.- =============== Página principal (Seleccionar DBs) ----------
 @app.route('/')
 def index():
-    return render_template('index.html', selected_names=selected_names, suggestions=data_bases)
+    return render_template('index.html', selected_names=selected_names, suggestions=data_bases, etiqueta_h=nombre_plataforma)
 
 @app.route('/add_name', methods=['POST'])
 def add_name():
@@ -32,7 +34,7 @@ def add_name():
 @app.route('/res_db', methods=['POST'])
 def res_db():
     Dict_res = ditc_res_DBs_list(selected_names)
-    return render_template('resDB.html', Dict_res = Dict_res)
+    return render_template('resDB.html', Dict_res = Dict_res, etiqueta_h=nombre_plataforma)
 
 
 
@@ -48,7 +50,7 @@ def process():
     selected_names_res = [i.split(':')[1] for i in list_res_db]      #Selected names actualizado
     global res
     res = list_res_db[0].split(':')[0]  #actualización de res.
-    return render_template('arbol.html')
+    return render_template('arbol.html',  etiqueta_h=nombre_plataforma)
 
 @app.route('/tree_data')   # Formar el arbol que se muestra
 def get_tree_data():
@@ -125,7 +127,8 @@ def select_variables():
     return render_template('resDF.html', 
                            df_resultado = df_all_variables_data.drop(['celdas'],axis=1).to_html(), 
                            df_resultado2 = df_all_cells_data.to_html(escape=False),
-                           nombre_titulo = nombre_clase)
+                           nombre_titulo = nombre_clase,
+                           etiqueta_h=nombre_plataforma)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,7 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados - {{ nombre_titulo }}</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
+        .header {
+            background-color: #445769;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 1.3em;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 3px 2px -2px gray;
+        }
         .titulo-especial {
             font-family: Arial, sans-serif; /* Cambia "Arial" al tipo de letra deseado */
             font-style: italic; /* Aplica cursivas */
@@ -49,6 +59,11 @@
 </head>
 
 <body>
+
+    <div class="header">
+        {{etiqueta_h}}
+    </div>
+    
     <h2>Resultados para la clase <span class="titulo-especial">"{{ nombre_titulo }}"</span>:</h2>
     <br>
     <center class="df1">

@@ -4,6 +4,8 @@
 # interval es la columna donde están los intervalos
 # table es la tabla donde están almacenados los datos
 
+plataforma = {'name' : 'Plataforma 1'}
+
 fuente_de_datos_metadatos = {
     'epi_puma_censo_inegi_2020' : {
         'host' : 'fastdb.c3.unam.mx',

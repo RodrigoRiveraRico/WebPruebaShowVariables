@@ -3,7 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selección -bases de datos</title>
+    <link rel="stylesheet" href="styles.css">
+
     <style>
+
+        .header {
+            background-color: #445769;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 1.3em;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 3px 2px -2px gray;
+        }
+
+
         .titulo-especial {
             font-family: Arial, sans-serif;
             font-style: italic;
@@ -33,10 +48,14 @@
             background-color: #e0e0e0; /* Color de fondo cuando se pasa el ratón por encima */
         }
     </style>
-    
-    <title>Selección -bases de datos</title>
+
 </head>
 <body>
+
+    <div class="header">
+        {{etiqueta_h}}
+    </div>
+    
     <h2>Selecciona las bases de datos (DB) que vas a utilizar:</h2>
     <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()">
     <!-- <div id="suggestions"></div> -->
