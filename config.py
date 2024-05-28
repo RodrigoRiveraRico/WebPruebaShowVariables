@@ -1,6 +1,6 @@
 
 # lab_var es la columna donde están los nombres de la variables
-# cells es la columna donde están las celdas.
+# resolution indica la columna donde están las celdas para cada resolución del ensamble.
 # interval es la columna donde están los intervalos
 
 fuente_de_datos_metadatos = {
@@ -10,7 +10,6 @@ fuente_de_datos_metadatos = {
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'name',
-        'cells' : 'cells_mun',
         'interval' : 'interval',
         'resolution' : {'mun' : 'cells_mun',
                         'state' : 'cells_state',
@@ -23,7 +22,6 @@ fuente_de_datos_metadatos = {
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'label',
-        'cells' : 'cells_mun',
         'interval' : 'interval',
         'resolution' :{'mun' : 'cells_mun',
                        'state' : 'cells_state'
@@ -35,7 +33,6 @@ fuente_de_datos_metadatos = {
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'name',
-        'cells' : 'cells_mun',
         'interval' : 'interval',
         'resolution' : {'mun' : 'cells_mun'}
     },
@@ -45,7 +42,6 @@ fuente_de_datos_metadatos = {
         'password' : 'monitor123',
         'port' : '5433',
         'lab_var' : 'especievalida',
-        'cells' : 'cells_mun',
         'interval' : 'nspn',
         'resolution' :{'mun' : 'cells_mun',
                        'state' : 'cells_state'
