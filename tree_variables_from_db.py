@@ -39,14 +39,14 @@ def creacion_ramas_arbol(DB:str):
         for key_idx in range(len(key_list)):
             if key_idx == 0:
                 if structure_lst == []:
-                    structure_lst.append({'id': key_list[key_idx],
+                    structure_lst.append({'id': DB + key_list[key_idx],
                                         'text': key_list[key_idx],
                                         'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(structure_lst):
                         if d['id'] != key_list[key_idx] and idx == len(structure_lst) - 1:
-                            structure_lst.append({'id': key_list[key_idx],
+                            structure_lst.append({'id': DB + key_list[key_idx],
                                                 'text': key_list[key_idx],
                                                 'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for         
                         elif d['id'] == key_list[key_idx]:
@@ -55,14 +55,14 @@ def creacion_ramas_arbol(DB:str):
 
             elif key_idx <= len(key_list) - 1:
                 if eval(structure_child_lst) == []:
-                    eval(structure_child_lst).append({'id': key_list[key_idx],
+                    eval(structure_child_lst).append({'id': DB + key_list[key_idx],
                                                 'text': key_list[key_idx],
                                                 'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(eval(structure_child_lst)):
                         if d['id'] != key_list[key_idx] and idx == len(eval(structure_child_lst)) - 1:
-                            eval(structure_child_lst).append({'id': key_list[key_idx],
+                            eval(structure_child_lst).append({'id': DB + key_list[key_idx],
                                                             'text': key_list[key_idx],
                                                             'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for   
                         elif d['id'] == key_list[key_idx]:
@@ -70,7 +70,7 @@ def creacion_ramas_arbol(DB:str):
                 structure_child_lst += str([idx]) + str(['children'])
 
         # En el siguiente append agregamos el nivel donde se almecanarán las variables.
-        eval(structure_child_lst).append({'id':'__variables__' + path_key,
+        eval(structure_child_lst).append({'id': DB + '__variables__' + path_key,
                                         'text':'variables',
                                         'children':[]})
         # Ahora a hacer un ciclo for para almacenar las variables :D
@@ -84,7 +84,7 @@ def creacion_ramas_arbol(DB:str):
         variables_lst = path_dict[path_key]['__variables__']
         
         for idx, nombre_variable in enumerate(variables_lst):
-            eval(structure_child_lst).append({'id': nombre_variable,    # Quiza este 'id' podría ser solo un número o clave
+            eval(structure_child_lst).append({'id': DB + nombre_variable,    # Quiza este 'id' podría ser solo un número o clave
                                             'text': nombre_variable,
                                             'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir   
                                             })
@@ -95,7 +95,7 @@ def creacion_ramas_arbol(DB:str):
             ser_intervalo = df[df['nombre_variable']==nombre_variable]['intervalo']
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
-                eval(last_structure_child_lst).append({'id': str(variable_intervalo),
+                eval(last_structure_child_lst).append({'id': DB + str(variable_intervalo),
                                                     'text': str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
 
 
