@@ -2,6 +2,7 @@
 # lab_var es la columna donde están los nombres de la variables
 # resolution indica la columna donde están las celdas para cada resolución del ensamble.
 # interval es la columna donde están los intervalos
+# table es la tabla donde están almacenados los datos
 
 fuente_de_datos_metadatos = {
     'epi_puma_censo_inegi_2020' : {
@@ -11,6 +12,7 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'name',
         'interval' : 'interval',
+        'table' : 'covariable',
         'resolution' : {'mun' : 'cells_mun',
                         'state' : 'cells_state',
                         'ageb' : 'cells_ageb'
@@ -23,6 +25,7 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'label',
         'interval' : 'interval',
+        'table' : 'covariable',
         'resolution' :{'mun' : 'cells_mun',
                        'state' : 'cells_state'
                        }
@@ -34,6 +37,7 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'name',
         'interval' : 'interval',
+        'table' : 'covariable',
         'resolution' : {'mun' : 'cells_mun'}
     },
      'newspecies' : {
@@ -43,6 +47,7 @@ fuente_de_datos_metadatos = {
         'port' : '5433',
         'lab_var' : 'especievalida',
         'interval' : 'nspn',
+        'table' : 'covariable',
         'resolution' :{'mun' : 'cells_mun',
                        'state' : 'cells_state'
                        }
