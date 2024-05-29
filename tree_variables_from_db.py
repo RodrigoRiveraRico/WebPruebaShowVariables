@@ -37,35 +37,36 @@ def creacion_ramas_arbol(DB:str):
     for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key sería categorías o levels
         key_list = path_key.split(', ')
         for key_idx in range(len(key_list)):
+            id_tag = DB + key_list[key_idx]
             if key_idx == 0:
                 if structure_lst == []:
-                    structure_lst.append({'id': DB + key_list[key_idx],
-                                        'text': DB + key_list[key_idx],
+                    structure_lst.append({'id': id_tag,
+                                        'text': id_tag,
                                         'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(structure_lst):
-                        if d['id'] != DB + key_list[key_idx] and idx == len(structure_lst) - 1:
-                            structure_lst.append({'id': DB + key_list[key_idx],
-                                                'text': DB + key_list[key_idx],
+                        if d['id'] != id_tag and idx == len(structure_lst) - 1:
+                            structure_lst.append({'id': id_tag,
+                                                'text': id_tag,
                                                 'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for         
-                        elif d['id'] == DB + key_list[key_idx]:
+                        elif d['id'] == id_tag:
                             break
                 structure_child_lst = 'structure_lst' + str([idx]) + str(['children'])
 
             elif key_idx <= len(key_list) - 1:
                 if eval(structure_child_lst) == []:
-                    eval(structure_child_lst).append({'id': DB + key_list[key_idx],
-                                                    'text': DB + key_list[key_idx],
+                    eval(structure_child_lst).append({'id': id_tag,
+                                                    'text': id_tag,
                                                     'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(eval(structure_child_lst)):
-                        if d['id'] != DB + key_list[key_idx] and idx == len(eval(structure_child_lst)) - 1:
-                            eval(structure_child_lst).append({'id': DB + key_list[key_idx],
-                                                            'text': DB + key_list[key_idx],
+                        if d['id'] != id_tag and idx == len(eval(structure_child_lst)) - 1:
+                            eval(structure_child_lst).append({'id': id_tag,
+                                                            'text': id_tag,
                                                             'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for   
-                        elif d['id'] == DB + key_list[key_idx]:
+                        elif d['id'] == id_tag:
                             break    
                 structure_child_lst += str([idx]) + str(['children'])
 
