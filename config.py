@@ -39,6 +39,15 @@ fuente_de_datos_metadatos = {
         'lab_var' : 'especievalida',
         'cells' : 'cells_mun',
         'interval' : 'nspn'
+    },
+    'epi_puma_hospederos' : {
+        'host' : 'fastdb.c3.unam.mx',
+        'user' : 'monitor',
+        'password' : 'monitor123',
+        'port' : '5433',
+        'lab_var' : 'nombrecientifico',
+        'cells' : 'cells_mun',
+        'interval' : 'id'
     }
 }
 
@@ -92,6 +101,14 @@ query_categorias = {
         select especievalida as nombre_variable,
         nspn as intervalo,
         concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
+        from covariable
+        ;
+        ''',
+
+    'epi_puma_hospederos' : '''
+        select nombrecientifico as nombre_variable,
+        id as intervalo,
+        concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
         from covariable
         ;
         '''
