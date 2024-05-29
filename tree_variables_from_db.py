@@ -37,19 +37,19 @@ def creacion_ramas_arbol(DB:str):
     for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key sería categorías o levels
         key_list = path_key.split(', ')
         for key_idx in range(len(key_list)):
-            id_tag = DB + key_list[key_idx]
+            id_tag = DB + ' '  + ' ' + key_list[key_idx]
             if key_idx == 0:
                 if structure_lst == []:
                     structure_lst.append({'id': id_tag,
-                                        'text': id_tag,
-                                        'children':[]})
+                                          'text': id_tag,
+                                          'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(structure_lst):
                         if d['id'] != id_tag and idx == len(structure_lst) - 1:
                             structure_lst.append({'id': id_tag,
-                                                'text': id_tag,
-                                                'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for         
+                                                  'text': id_tag,
+                                                  'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for         
                         elif d['id'] == id_tag:
                             break
                 structure_child_lst = 'structure_lst' + str([idx]) + str(['children'])
@@ -57,23 +57,23 @@ def creacion_ramas_arbol(DB:str):
             elif key_idx <= len(key_list) - 1:
                 if eval(structure_child_lst) == []:
                     eval(structure_child_lst).append({'id': id_tag,
-                                                    'text': id_tag,
-                                                    'children':[]})
+                                                      'text': id_tag,
+                                                      'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(eval(structure_child_lst)):
                         if d['id'] != id_tag and idx == len(eval(structure_child_lst)) - 1:
                             eval(structure_child_lst).append({'id': id_tag,
-                                                            'text': id_tag,
-                                                            'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for   
+                                                              'text': id_tag,
+                                                              'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for   
                         elif d['id'] == id_tag:
                             break    
                 structure_child_lst += str([idx]) + str(['children'])
 
         # En el siguiente append agregamos el nivel donde se almecanarán las variables.
         eval(structure_child_lst).append({'id': DB + '__variables__' + path_key,
-                                        'text':'variables',
-                                        'children':[]})
+                                          'text':'variables',
+                                          'children':[]})
         # En las líneas siguientes se almacenan las variables dentro de este último diccionario creado.
         # Dado que se empleó la función 'arbol(df)' para construir el diccionario path_key, las variables a almacenar no están repetidas.
 
@@ -85,9 +85,9 @@ def creacion_ramas_arbol(DB:str):
         
         for idx, nombre_variable in enumerate(variables_lst):
             eval(structure_child_lst).append({'id': DB + nombre_variable,
-                                            'text': DB + nombre_variable,
-                                            'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir y el código subsecuente no se incluiría.  
-                                            })
+                                              'text': DB + nombre_variable,
+                                              'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir y el código subsecuente no se incluiría.  
+                                              })
 
             last_structure_child_lst = structure_child_lst + str([idx]) + str(['children'])
             
@@ -96,7 +96,7 @@ def creacion_ramas_arbol(DB:str):
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
                 eval(last_structure_child_lst).append({'id': DB + str(variable_intervalo),
-                                                    'text': DB + str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
+                                                       'text': DB + str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
 
 
     # Obtenemos lo siguiente:
