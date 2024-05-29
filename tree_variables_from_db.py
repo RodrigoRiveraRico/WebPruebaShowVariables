@@ -30,7 +30,7 @@ def creacion_ramas_arbol(DB:str):
     # df = df.head(100)   # Solo consideramos 100 datos de cada base de datos
 
     path_dict = arbol(df)   # Quizá un mejor nombre sería variables_categories
-                            # Al usar la función arbol ya no aparecen nombres de variables repetidas
+                            # Al usar la función arbol ya no aparecen nombres de variables repetidas, si es que las hay.
 
     structure_lst = []
 
@@ -40,32 +40,32 @@ def creacion_ramas_arbol(DB:str):
             if key_idx == 0:
                 if structure_lst == []:
                     structure_lst.append({'id': DB + key_list[key_idx],
-                                        'text': key_list[key_idx],
+                                        'text': DB + key_list[key_idx],
                                         'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(structure_lst):
-                        if d['id'] != key_list[key_idx] and idx == len(structure_lst) - 1:
+                        if d['id'] != DB + key_list[key_idx] and idx == len(structure_lst) - 1:
                             structure_lst.append({'id': DB + key_list[key_idx],
-                                                'text': key_list[key_idx],
+                                                'text': DB + key_list[key_idx],
                                                 'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for         
-                        elif d['id'] == key_list[key_idx]:
+                        elif d['id'] == DB + key_list[key_idx]:
                             break
                 structure_child_lst = 'structure_lst' + str([idx]) + str(['children'])
 
             elif key_idx <= len(key_list) - 1:
                 if eval(structure_child_lst) == []:
                     eval(structure_child_lst).append({'id': DB + key_list[key_idx],
-                                                'text': key_list[key_idx],
-                                                'children':[]})
+                                                    'text': DB + key_list[key_idx],
+                                                    'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(eval(structure_child_lst)):
-                        if d['id'] != key_list[key_idx] and idx == len(eval(structure_child_lst)) - 1:
+                        if d['id'] != DB + key_list[key_idx] and idx == len(eval(structure_child_lst)) - 1:
                             eval(structure_child_lst).append({'id': DB + key_list[key_idx],
-                                                            'text': key_list[key_idx],
+                                                            'text': DB + key_list[key_idx],
                                                             'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for   
-                        elif d['id'] == key_list[key_idx]:
+                        elif d['id'] == DB + key_list[key_idx]:
                             break    
                 structure_child_lst += str([idx]) + str(['children'])
 
@@ -73,20 +73,19 @@ def creacion_ramas_arbol(DB:str):
         eval(structure_child_lst).append({'id': DB + '__variables__' + path_key,
                                         'text':'variables',
                                         'children':[]})
-        # Ahora a hacer un ciclo for para almacenar las variables :D
-        # Valdría la pena revisar si la variable a almacenar ya está incluida
+        # En las líneas siguientes se almacenan las variables dentro de este último diccionario creado.
+        # Dado que se empleó la función 'arbol(df)' para construir el diccionario path_key, las variables a almacenar no están repetidas.
 
-
-        # Queremos que la estructura de variables sea el primer elemento
-        # por eso hicimos el acomodo de  los niveles de menos profundo a más profundo
+        # Queremos que el diccionario en donde se almacenarán las variables sea el primer elemento de la lista de diccionarios de structure_child_lst,
+        # por eso hicimos el acomodo de  los niveles de menos profundo a más profundo.
         structure_child_lst += str([0]) + str(['children'])
 
         variables_lst = path_dict[path_key]['__variables__']
         
         for idx, nombre_variable in enumerate(variables_lst):
-            eval(structure_child_lst).append({'id': DB + nombre_variable,    # Quiza este 'id' podría ser solo un número o clave
-                                            'text': nombre_variable,
-                                            'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir   
+            eval(structure_child_lst).append({'id': DB + nombre_variable,
+                                            'text': DB + nombre_variable,
+                                            'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir y el código subsecuente no se incluiría.  
                                             })
 
             last_structure_child_lst = structure_child_lst + str([idx]) + str(['children'])
@@ -96,21 +95,21 @@ def creacion_ramas_arbol(DB:str):
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
                 eval(last_structure_child_lst).append({'id': DB + str(variable_intervalo),
-                                                    'text': str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
+                                                    'text': DB + str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
 
 
     # Obtenemos lo siguiente:
-    # {'id': ___, 
+    # {'id': DB + ___, 
     #  'texto': ___, 
-    #  'children': [{'id': '__variables__' + path_key,
+    #  'children': [{'id': DB +'__variables__' + path_key,
     #                'text': 'variables',
-    #                'children' : [{'id': ___,
+    #                'children' : [{'id': DB + ___,
     #                               'text': nombre_variable,
-    #                               'children':[{'id': ___,
+    #                               'children':[{'id': DB + ___,
     #                                            'texto': nombre_variable + intervalo},]
     #                             },]
     #                 },
-    #                 {'id': ___,
+    #                 {'id': DB + ___,
     #                     'text': ___,
     #                     'children': []},
     #             ], 
