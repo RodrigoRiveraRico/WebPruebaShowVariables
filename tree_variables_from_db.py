@@ -26,6 +26,8 @@ def creacion_ramas_arbol(DB:str):
     # El diccionario (árbol) se crea guardando las variables de más internas a más externas.
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
+    filter = df['nombre_variable'] == 'Mus musculus'
+    print(df.where(filter, inplace=False).to_string())
 
     # df = df.head(100)   # Solo consideramos 100 datos de cada base de datos
 
@@ -91,8 +93,8 @@ def creacion_ramas_arbol(DB:str):
 
             last_structure_child_lst = structure_child_lst + str([idx]) + str(['children'])
             
-            ser_nombre_variable = df[df['nombre_variable']==nombre_variable]['nombre_variable']
-            ser_intervalo = df[df['nombre_variable']==nombre_variable]['intervalo']
+            ser_nombre_variable = df[(df['nombre_variable']==nombre_variable) & (df['metadatos']==path_key)]['nombre_variable']
+            ser_intervalo = df[(df['nombre_variable']==nombre_variable) & (df['metadatos']==path_key)]['intervalo']
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
                 eval(last_structure_child_lst).append({'id': DB + str(variable_intervalo),
