@@ -26,6 +26,8 @@ def creacion_ramas_arbol(DB:str):
     # El diccionario (árbol) se crea guardando las variables de más internas a más externas.
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
+    df['metadatos'] = df['metadatos'].str.strip()   # Quitamos espacios en blanco ubicados al inicio y final de cada registro de 'metadatos'.
+    
     filter = df['nombre_variable'] == 'Mus musculus'
     print(df.where(filter, inplace=False).to_string())
 
