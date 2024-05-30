@@ -105,4 +105,12 @@ query_categorias = {
     '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
             interval = fuente_de_datos_metadatos['newspecies']['interval'],
             table = fuente_de_datos_metadatos['newspecies']['table'])
+
+    # 'epi_puma_hospederos' : '''
+    #     select nombrecientifico as nombre_variable,
+    #     id as intervalo,
+    #     concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
+    #     from covariable
+    #     ;
+    #     '''
 }
