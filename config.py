@@ -1,4 +1,6 @@
 
+# En plataforma se inidica un nombre para la misma
+
 # lab_var es la columna donde están los nombres de la variables
 # resolution indica la columna donde están las celdas para cada resolución del ensamble.
 # interval es la columna donde están los intervalos
