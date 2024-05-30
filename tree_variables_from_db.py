@@ -26,11 +26,9 @@ def creacion_ramas_arbol(DB:str):
     # El diccionario (árbol) se crea guardando las variables de más internas a más externas.
     new_index = df['metadatos'].str.len().sort_values().index
     df = df.reindex(new_index)
-    df['metadatos'] = df['metadatos'].str.strip()   # Quitamos espacios en blanco ubicados al inicio y final de cada registro de 'metadatos'.
     
-    filter = df['nombre_variable'] == 'Mus musculus'
-    print(df.where(filter, inplace=False).to_string())
-
+    # df['metadatos'] = df['metadatos'].str.strip()   # Quitamos espacios en blanco ubicados al inicio y final de cada registro de 'metadatos'.
+    
     # df = df.head(100)   # Solo consideramos 100 datos de cada base de datos
 
     path_dict = arbol(df)   # Quizá un mejor nombre sería variables_categories
@@ -46,14 +44,14 @@ def creacion_ramas_arbol(DB:str):
             if key_idx == 0:
                 if structure_lst == []:
                     structure_lst.append({'id': id_tag,
-                                          'text': id_tag,
+                                          'text': key_list[key_idx],
                                           'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(structure_lst):
                         if d['id'] != id_tag and idx == len(structure_lst) - 1:
                             structure_lst.append({'id': id_tag,
-                                                  'text': id_tag,
+                                                  'text': key_list[key_idx],
                                                   'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for         
                         elif d['id'] == id_tag:
                             break
@@ -62,14 +60,14 @@ def creacion_ramas_arbol(DB:str):
             elif key_idx <= len(key_list) - 1:
                 if eval(structure_child_lst) == []:
                     eval(structure_child_lst).append({'id': id_tag,
-                                                      'text': id_tag,
+                                                      'text': key_list[key_idx],
                                                       'children':[]})
                     idx = 0
                 else:
                     for idx, d in enumerate(eval(structure_child_lst)):
                         if d['id'] != id_tag and idx == len(eval(structure_child_lst)) - 1:
                             eval(structure_child_lst).append({'id': id_tag,
-                                                              'text': id_tag,
+                                                              'text': key_list[key_idx],
                                                               'children':[]}) # Al hacer este append, añadimos una vuelta más al ciclo for   
                         elif d['id'] == id_tag:
                             break    
@@ -90,7 +88,7 @@ def creacion_ramas_arbol(DB:str):
         
         for idx, nombre_variable in enumerate(variables_lst):
             eval(structure_child_lst).append({'id': DB + ' ' + path_key + ' ' + nombre_variable,
-                                              'text': DB + ' ' + path_key + ' ' + nombre_variable,
+                                              'text': nombre_variable,
                                               'children' : []   # Si no incuimos los intervalos, 'children' puede quedar vacío o no existir y el código subsecuente no se incluiría.  
                                               })
 
@@ -101,7 +99,7 @@ def creacion_ramas_arbol(DB:str):
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
                 eval(last_structure_child_lst).append({'id': DB + ' ' + path_key + ' ' + str(variable_intervalo),
-                                                       'text': DB + ' ' + path_key + ' ' + str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
+                                                       'text': str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
 
 
     # Obtenemos lo siguiente:
