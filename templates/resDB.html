@@ -3,10 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resolución DBs</title>
+    <title>Resolución BD</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .header {
+            background-color: #445769;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 10px;
+            font-size: 1.3em;
+            font-family: 'Arial', sans-serif;
+            box-shadow: 0 3px 2px -2px gray;
+        }
+    </style>
 </head>
 <body>
-    <h1>Resolución de las DB</h1>
+
+    <div class="header">
+        {{etiqueta_h}}
+    </div>
+    
+    <h1>Resolución de las BD</h1>
     <form id="selectDB_re" action="/process" method="post">
 
         <label for="res_selector">Selecciona la resolución para mostrar las bases de datos: <br></label>
