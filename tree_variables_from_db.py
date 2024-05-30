@@ -38,11 +38,11 @@ def creacion_ramas_arbol(DB:str):
 
     structure_lst = []
 
-    # NOTA: Falta resolver el problema con los id's. Ejemplo Mus <- genero
     for path_key in path_dict.keys():   # Quizá un mejor nombre para path_key sería categorías o levels
         key_list = path_key.split(', ')
+        id_tag = DB + ' '   # Id de cada rama antes de llegar a la rama de variables.
         for key_idx in range(len(key_list)):
-            id_tag = DB + ' '  + ' ' + key_list[key_idx]
+            id_tag += key_list[key_idx] + ' '   # El id se va construyendo por cada nivel.
             if key_idx == 0:
                 if structure_lst == []:
                     structure_lst.append({'id': id_tag,
