@@ -51,7 +51,18 @@ fuente_de_datos_metadatos = {
         'resolution' :{'mun' : 'cells_mun',
                        'state' : 'cells_state'
                        }
-    }
+    },
+     'epi_puma_hospederos' : {
+         'host' : 'fastdb.c3.unam.mx',
+         'user' : 'monitor',
+         'password' : 'monitor123',
+         'port' : '5433',
+         'lab_var' : 'nombrecientifico',
+         'interval' : 'id',
+         'table' : 'covariable',
+         'resolution' : {'mun' : 'cells_mun',
+                         'state' : 'cells_state'}
+     }
 }
 
 query_categorias = {
@@ -104,13 +115,15 @@ query_categorias = {
         ;
     '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
             interval = fuente_de_datos_metadatos['newspecies']['interval'],
-            table = fuente_de_datos_metadatos['newspecies']['table'])
+            table = fuente_de_datos_metadatos['newspecies']['table']),
 
-    # 'epi_puma_hospederos' : '''
-    #     select nombrecientifico as nombre_variable,
-    #     id as intervalo,
-    #     concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
-    #     from covariable
-    #     ;
-    #     '''
+    'epi_puma_hospederos' : '''
+        select {lab_var} as nombre_variable,
+        {interval} as intervalo,
+        concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
+        from {table}
+        ;
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_hospederos']['lab_var'],
+            interval = fuente_de_datos_metadatos['epi_puma_hospederos']['interval'],
+            table = fuente_de_datos_metadatos['epi_puma_hospederos']['table'])
 }
