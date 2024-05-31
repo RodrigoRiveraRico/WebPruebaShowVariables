@@ -1,0 +1,19 @@
+header {
+    background-color: #cbcc94;
+    color: #3b3b3b;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.3em;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 3px 2px -2px gray;
+}
+
+body {
+    background-image: url("imgC3.png");
+    background-repeat: no-repeat;
+    background-size: 62px;
+    /* position: absolute; */
+    background-position: right top;
+    margin-right: 65px;
+    background-attachment: scroll;
+  }
