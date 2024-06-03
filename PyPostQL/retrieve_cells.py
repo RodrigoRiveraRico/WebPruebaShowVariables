@@ -22,6 +22,9 @@ def recolectar_celdas(DB:str, variables:str, res:str):
     # Columna donde están almacenados los intervalos de las variables
     col_interval = fuente_de_datos_metadatos[DB]['interval']
 
+    # Nombre de la tabla
+    table = fuente_de_datos_metadatos[DB]['table']
+
     # Consulta
     sql_query = '''
     with data as (
@@ -29,12 +32,12 @@ def recolectar_celdas(DB:str, variables:str, res:str):
         {2},
         {0},
         {1}
-        from public.covariable
+        from {3}
         )
     select variable, {2} 
     from data 
-    where variable in {3};
-    '''.format(col_names, col_interval, col_cells, variables)
+    where variable in {4};
+    '''.format(col_names, col_interval, col_cells, table, variables)
 
     # Ejecutar la consulta y leer los resultados en un DataFrame
     df = pd.read_sql(sql_query, conn)   # Cada registro del df es una lista de celdas
