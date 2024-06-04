@@ -14,12 +14,11 @@ print("Bases de datos disponibles: {}".format(data_bases))
 
 nombre_plataforma = plataforma['name']
 
-selected_names = []
-
-
 # 1.- =============== Página principal (Seleccionar DBs) ----------
 @app.route('/')
 def index():
+    global selected_names
+    selected_names = []
     return render_template('index.html', selected_names=selected_names, suggestions=data_bases, etiqueta_h=nombre_plataforma)
 
 @app.route('/add_name', methods=['POST'])

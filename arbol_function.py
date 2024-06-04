@@ -2,7 +2,7 @@
 def arbol(df):
   """
   df : pd.dataframe
-       Columnas: | nombre_variable | metadatos | plataforma |
+       Columnas: | nombre_variable | metadatos
        Nota: Ordernar las variables de forma ascendente al número de niveles en el que están ubicadas.
 
   Return : dict
