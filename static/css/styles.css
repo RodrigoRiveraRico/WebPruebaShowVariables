@@ -1,0 +1,67 @@
+header {
+    background-color: #cbcc94;
+    color: #3b3b3b;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.3em;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 0 3px 2px -2px gray;
+}
+
+body {
+    background-image: url("imgC3.png");
+    background-repeat: no-repeat;
+    background-size: 62px;
+    /* position: absolute; */
+    background-position: right top;
+    margin-right: 65px;
+    background-attachment: scroll;
+  }
+
+/* .suggestions-container {
+    display: none;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: #fff;
+    position: absolute;
+    z-index: 1000;
+}
+.suggestions-container div {
+    padding: 8px;
+    cursor: pointer;
+}
+.suggestions-container div:hover {
+    background-color: #f0f0f0;
+} */
+
+
+.suggestions-container {
+    max-height: 100px; /* Ajusta la altura máxima según sea necesario */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    border: 1px solid #ccc; /* Añade un borde para el contenedor */
+    padding: 10px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    width: 200px; /* Ajusta el ancho según sea necesario */
+    background-color: #fff; /* Fondo blanco para el contenedor */
+}
+.suggestions-container div {
+    padding: 5px;
+    cursor: pointer;
+}
+.suggestions-container div:hover {
+    background-color: #e0e0e0; /* Color de fondo cuando se pasa el ratón por encima */
+}
+
+#suggestions {
+    max-height: 100px; /* Ajusta la altura máxima según sea necesario */
+    overflow-y: auto; /* Habilita el scroll vertical */
+    display: none; /* Inicialmente oculto */
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    width: 200px; /* Ajusta el ancho según sea necesario */
+    background-color: #fff; /* Fondo blanco para el contenedor */
+}

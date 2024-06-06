@@ -4,24 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resolución BD</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        .header {
-            background-color: #445769;
-            color: #ecf0f1;
-            text-align: center;
-            padding: 10px;
-            font-size: 1.3em;
-            font-family: 'Arial', sans-serif;
-            box-shadow: 0 3px 2px -2px gray;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
 
-    <div class="header">
-        {{etiqueta_h}}
-    </div>
+    <header>    {{etiqueta_h}}     </header>
     
     <h1>Resolución de las BD</h1>
     <form id="selectDB_re" action="/process" method="post">
@@ -50,6 +37,9 @@
 
 
     <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+        updateDbSelect();
+        });
         var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
         var K = 0;  // contador aux.
 
@@ -84,12 +74,15 @@
             var currentValue = selectedValuesTextarea.value;
 
             if (K < 1 || currentValue.includes(selectedKey)){  // Esto es para que se puedan seleccionar bases de datos de una sola resolución una vez escogido el primero.
+                new_element = selectedKey + ":" + selectedVariables.join(", ")
                 if (currentValue) {            // En esta parte se van agregando las bases de datos con su resolución al hacer click el botón de "Agregar BD".
-                    currentValue += "\n";
+                currentValue += "\n";
                 }
-                K +=1;
-                currentValue += selectedKey + ":" + selectedVariables.join(", ");
-                selectedValuesTextarea.value = currentValue;
+                if(!currentValue.includes(new_element)){
+                    K +=1;
+                    currentValue += new_element;
+                    selectedValuesTextarea.value = currentValue;
+                }
             }
             else{
                 alert(`No puedes mezclar resoluciones distintas, intentalo de nuevo.`)

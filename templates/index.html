@@ -4,20 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selección -bases de datos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
     <style>
-
-        .header {
-            background-color: #445769;
-            color: #ecf0f1;
-            text-align: center;
-            padding: 10px;
-            font-size: 1.3em;
-            font-family: 'Arial', sans-serif;
-            box-shadow: 0 3px 2px -2px gray;
-        }
-
 
         .titulo-especial {
             font-family: Arial, sans-serif;
@@ -30,36 +19,19 @@
         .dataframe th:nth-last-child(2) {
             background-color: rgb(173, 216, 230);
         }
-        .suggestions-container {
-            max-height: 150px; /* Ajusta la altura máxima según sea necesario */
-            overflow-y: auto; /* Habilita el scroll vertical */
-            border: 1px solid #ccc; /* Añade un borde para el contenedor */
-            padding: 10px;
-            margin-top: 4px;
-            margin-bottom: 6px;
-            width: 200px; /* Ajusta el ancho según sea necesario */
-            background-color: #fff; /* Fondo blanco para el contenedor */
-        }
-        .suggestions-container div {
-            padding: 5px;
-            cursor: pointer;
-        }
-        .suggestions-container div:hover {
-            background-color: #e0e0e0; /* Color de fondo cuando se pasa el ratón por encima */
-        }
+
     </style>
 
 </head>
 <body>
 
-    <div class="header">
-        {{etiqueta_h}}
-    </div>
+    <header>    {{etiqueta_h}}     </header>
     
     <h2>Selecciona las bases de datos (DB) que vas a utilizar:</h2>
-    <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()">
+    <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()" >
     <!-- <div id="suggestions"></div> -->
-    <div id="suggestions" class="suggestions-container"></div>
+    <!-- <div id="suggestions" class="suggestions-container"></div> -->
+    <div id="suggestions"></div>
     <button onclick="addName()">Agregar</button>
     <h3>DB seleccionadas:</h3>
     <ul id="selectedNames">
@@ -94,7 +66,10 @@
                 };
                 suggestionsContainer.appendChild(suggestionElement);
             });
+            document.getElementById('suggestions').style.display = 'block';
         }
+
+
         function showSuggestions() {
             var input = document.getElementById("nameInput");
             var value = input.value.trim().toLowerCase();
@@ -116,6 +91,7 @@
                 };
                 suggestionsContainer.appendChild(suggestionElement);
             });
+            document.getElementById('suggestions').style.display = 'block';
         }
 
         function addName() {
