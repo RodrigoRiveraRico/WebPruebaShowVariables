@@ -2,7 +2,7 @@ import pandas as pd
 import math
 
 # Número de municipios en la República Mexicana
-N = 2446.
+N = 1057
 
 # Esta función altera al DataFrame original.
 # Si se quiere evitar lo anterior: hay que hacer una copia del original e indicarlo en el Return.
