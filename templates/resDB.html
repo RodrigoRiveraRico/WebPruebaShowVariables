@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-
     <header>    {{etiqueta_h}}     </header>
     
     <h1>Resolución de las BD</h1>
@@ -37,9 +36,11 @@
 
 
     <script>
+        // Esto es para que se carguen las opciones desde que se carga la página --
         document.addEventListener('DOMContentLoaded', (event) => {
         updateDbSelect();
         });
+        //--
         var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
         var K = 0;  // contador aux.
 
