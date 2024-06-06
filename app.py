@@ -97,7 +97,7 @@ def select_variables():
     df_all_class_data_notnull = df_all_class_data[df_all_class_data['celdas'].notnull()]
     df_all_class_data = df_all_class_data_notnull
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
-    print(df_all_variables_data)
+    print(df_all_variables_data.dtypes)
 
 #### Contamos el número de celdas de variables y clase ####
     # Las siguientes líneas modifican la tabla original df_all_variables_data
