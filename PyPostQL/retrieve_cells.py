@@ -43,7 +43,7 @@ def recolectar_celdas(DB:str, variables:str, res:str):
     df = pd.read_sql(sql_query, conn)   # Cada registro del df es una lista de celdas
     df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
     df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
-    print(df)
+    # print(df)
 
     # Cerrar la conexión con la base de datos
     conn.close()
