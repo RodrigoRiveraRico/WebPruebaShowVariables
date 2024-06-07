@@ -12,14 +12,13 @@ for db_name in fuente_de_datos_metadatos:
     data_bases.append(db_name)
 print("Bases de datos disponibles: {}".format(data_bases))
 
-selected_names = []
 nombre_plataforma = plataforma['name']
 
 # 1.- =============== Página principal (Seleccionar DBs) ----------
 @app.route('/')
 def index():
-    # global selected_names
-    # selected_names = []
+    global selected_names
+    selected_names = []
     return render_template('index.html', selected_names=selected_names, suggestions=data_bases, etiqueta_h=nombre_plataforma)
 
 @app.route('/add_name', methods=['POST'])
