@@ -3,6 +3,15 @@ import pandas as pd
 from arbol_function import arbol
 from config import fuente_de_datos_metadatos, query_categorias
 
+# Función para contar el número de elementos separados por coma
+def count_elements(metadata):
+    '''
+    La columna 'metadatos' tiene a las categorías separadas por coma.
+    Categorías más internas tienen más elementos.
+    Categorías menos internas tienen menos elementos.
+    '''
+    return len(metadata.split(','))
+
 def creacion_ramas_arbol(DB:str):
     '''
     DB : str Nombre de la base de datos
@@ -21,14 +30,16 @@ def creacion_ramas_arbol(DB:str):
 
     conn.close()
 
-    ### https://stackoverflow.com/questions/42516616/sort-dataframe-by-string-length
-    # Importante ordenar las varibales de forma ascendente al número de niveles en el que están ubicadas.
-    # El diccionario (árbol) se crea guardando las variables de más internas a más externas.
-    new_index = df['metadatos'].str.len().sort_values().index
-    df = df.reindex(new_index)
-    
-    # df['metadatos'] = df['metadatos'].str.strip()   # Quitamos espacios en blanco ubicados al inicio y final de cada registro de 'metadatos'.
-    
+    ### Importante ordenar las varibales de forma ascendente al número de niveles en el que están ubicadas.
+    ### El diccionario (árbol) se crea guardando las variables de más internas a más externas.
+    # Crear una nueva columna temporal con el conteo de elementos.
+    df['element_count'] = df['metadatos'].apply(count_elements)
+
+    # Ordenar el DataFrame
+    df = df.sort_values(
+        by=['element_count', 'metadatos', 'nombre_variable', 'intervalo']   # Hay que ordenar primero por 'element_count'.
+        ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
+
     # df = df.head(100)   # Solo consideramos 100 datos de cada base de datos
 
     path_dict = arbol(df)   # Quizá un mejor nombre sería variables_categories
