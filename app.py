@@ -3,6 +3,7 @@ from Var_Clss_Construction import dict_construction, df_construction
 from tree_variables_from_db import creacion_ramas_arbol
 from Resolucion import ditc_res_DBs_list
 import conteos
+import pandas as pd
 from config import fuente_de_datos_metadatos, plataforma
 
 app = Flask(__name__)
@@ -99,9 +100,14 @@ def select_variables():
     # print(df_all_class_data)
 
 #### Contamos el número de celdas de variables y clase ####
+    # Leemos el catálogo de resoluciones
+    df_resolutions = pd.read_csv('Catalogos/catalogo_resoluciones.csv').set_index('resolution')
+    # Obtenemos la N del ensamble
+    N = df_resolutions.loc[res]['N']
+
     # Las siguientes líneas modifican la tabla original df_all_variables_data
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
-    conteos.epsilon(df_all_variables_data)
+    conteos.epsilon(df_all_variables_data, N)
     conteos.score(df_all_variables_data)
 
     # Creamos un nuevo DataFrame con las celdas desanidadas.
