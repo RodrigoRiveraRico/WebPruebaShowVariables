@@ -40,7 +40,7 @@ def res_db():
 
 # 3.- =============== Seleccionar los conjuntos de covariables y la clase (Árbol) -------
 # selected_names_res = []     # Nuevo selected names actualizado, con otro nombre.
-# res = ''   # nombre de la resolución escogida
+res = ''   # nombre de la resolución escogida
 
 @app.route('/process', methods=['POST'])
 def process():
