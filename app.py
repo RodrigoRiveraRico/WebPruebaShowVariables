@@ -111,7 +111,8 @@ def select_variables():
     conteos.score(df_all_variables_data)
 
     # Creamos un nuevo DataFrame con las celdas desanidadas.
-    df_all_cells_data = df_all_variables_data.explode('celdas')
+    # Este DataFrame ya no emplea la columna 'score'.
+    df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['score'])
 
     # Cambiamos el nombre de la columna 'celdas' por 'celda' para indicar que cada registro corresponde a una única celda.
     df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})
@@ -120,8 +121,7 @@ def select_variables():
     # Utilizamos '<br>' para generar el salto de línea en HTML
     aggregations = {
         'Covariable': '<br>'.join,
-        'epsilon': 'sum',
-        'score': 'sum'
+        'epsilon': 'sum'
         }
     # Aplicamos groupby con agg
     df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
