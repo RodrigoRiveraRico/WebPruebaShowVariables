@@ -1,9 +1,6 @@
 import pandas as pd
 import math
 
-# Número de municipios en la República Mexicana
-N = 2446.
-
 # Esta función altera al DataFrame original.
 # Si se quiere evitar lo anterior: hay que hacer una copia del original e indicarlo en el Return.
 def df_count_cells(df_var:pd.DataFrame, df_clss:pd.DataFrame):
@@ -31,22 +28,22 @@ def conteo_interseccion(l_var, l_clss):
     '''
     return sum(1 for var in l_var if var in l_clss)
 
-def calcular_epsilon(row):
-    '''
-    Función que se aplicará a cada fila del DataFrame para calcular el epsilon.
-    '''
-    if row['N_v'] == 0: # Evitar división por cero.
-        return float('inf') # O algún valor que se considere adecuado para este caso.
-    
-    N_c_over_N = row['N_c'] / N
-    epsilon = (row['N_vnc'] - row['N_v'] * N_c_over_N) / math.sqrt(row['N_v'] * N_c_over_N * (1 - N_c_over_N))
-    return round(epsilon, 2)
-
-def epsilon(df_var:pd.DataFrame):
+def epsilon(df_var: pd.DataFrame, N: int):
     '''
     Aplica la función 'calcular_epsilon' a cada fila del DataFrame.
     Se modifica el DataFrame original, por lo que se regresa None.
     '''
+    def calcular_epsilon(row):
+        '''
+        Función que se aplicará a cada fila del DataFrame para calcular el epsilon.
+        '''
+        if row['N_v'] == 0: # Evitar división por cero.
+            return float('inf') # O algún valor que se considere adecuado para este caso.
+
+        N_c_over_N = row['N_c'] / N
+        epsilon = (row['N_vnc'] - row['N_v'] * N_c_over_N) / math.sqrt(row['N_v'] * N_c_over_N * (1 - N_c_over_N))
+        return round(epsilon, 2)
+
     df_var['epsilon'] = df_var.apply(calcular_epsilon, axis=1)
     return None
 

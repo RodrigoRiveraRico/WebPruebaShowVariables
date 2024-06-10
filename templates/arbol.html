@@ -65,8 +65,39 @@
             var node = data.node;
             var tree = $('#tree').jstree();
             
+
+            // Intentos para ir formando la función: ---------------=
+            // function from_all_nodes(node) {
+            //     while (node.children.children.length) {
+            //         node = $('#tree').jstree().get_node(node.children);
+            //     }
+            //     // var parentNode = tree.get_node(node.parent);
+            //     var mainNodeName = getMainNodeName(node);
+            //     var fullName = mainNodeName + ':' + childNode.text;
+            //     if (!selectedNodes.includes(fullName)) {
+            //         selectedNodes.push(fullName);
+            //     }
+            // }
+            // function from_all_nodes(node){
+            //     node.children.forEach(function (childId) {
+            //         var childNode = tree.get_node(childId);
+            //         if (!childNode.children.length) {
+            //             // Si el hijo no tiene más hijos, entonces es penúltimo nodo
+            //             var parentNode = tree.get_node(node.parent);
+            //             var mainNodeName = getMainNodeName(parentNode);
+            //             var fullName = mainNodeName + ':' + childNode.text;
+            //             if (!selectedNodes.includes(fullName)) {
+            //                 selectedNodes.push(fullName);
+            //             }
+            //         }
+            //     });
+            // };
+            // =======-
+
             if (node.children.length) {
                 // El nodo tiene hijos, verifica si es penúltimo nivel
+                // from_all_nodes(node, selectedNodes);   // con la función. (no funcionó)-
+
                 node.children.forEach(function (childId) {
                     var childNode = tree.get_node(childId);
                     if (!childNode.children.length) {
@@ -76,9 +107,10 @@
                         var fullName = mainNodeName + ':' + childNode.text;
                         if (!selectedNodes.includes(fullName)) {
                             selectedNodes.push(fullName);
-                        }
-                    }
+                        };
+                    };
                 });
+
                 // Actualizar contenedor después de agregar todos los hijos del penúltimo nodo.
                 updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
             } else {
@@ -146,8 +178,23 @@
         // });
         /*  ------------------ */
 
+            // Intento con la función (pero no funcionó)::::
+            // function from_all_nodes(node, selectedNodes){
+            //     node.children.forEach(function (childId) {
+            //         var childNode = tree.get_node(childId);
+            //         if (!childNode.children.length) {
+            //             // Si el hijo no tiene más hijos, entonces es penúltimo nodo
+            //             var parentNode = tree.get_node(node.parent);
+            //             var mainNodeName = getMainNodeName(parentNode);
+            //             var fullName = mainNodeName + ':' + childNode.text;
+            //             if (!selectedNodes.includes(fullName)) {
+            //                 selectedNodes.push(fullName);
+            //             };
+            //         };
+            //     });
+            //     updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
+            // };
 
-            
             function getMainNodeName(node) {
                 while (node.parent !== '#') {
                     node = $('#tree').jstree().get_node(node.parent);

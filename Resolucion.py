@@ -15,5 +15,5 @@ def ditc_res_DBs_list(bases):
             if key not in dic:  # Si la resolucion no está en el diccionario
                 dic.update({key:[]})    # Agregamos la resolución faltante cuyos valores será una lista de bases de datos
             dic[key].append(db) # Añadimos la base de datos a la resolución
-    print(dic)
+    # print(dic)
     return dic

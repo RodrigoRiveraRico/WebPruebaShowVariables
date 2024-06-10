@@ -41,9 +41,14 @@ def recolectar_celdas(DB:str, variables:str, res:str):
 
     # Ejecutar la consulta y leer los resultados en un DataFrame
     df = pd.read_sql(sql_query, conn)   # Cada registro del df es una lista de celdas
-    # print(df) 
- 
+    df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
+    df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
+    # print(df)
+
     # Cerrar la conexión con la base de datos
     conn.close()
 
     return df['variable'].to_numpy(), df[col_cells].to_numpy()
+
+# recolectar_celdas('Personas', "('id_dep, 152.0')", 'UNAM_1057')
+# recolectar_celdas('epi_puma_worldclim', "('Mean Diurnal Range (Mean of monthly (max temp - min temp)), 6.275:10.608')", 'mun')

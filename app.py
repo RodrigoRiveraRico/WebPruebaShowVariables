@@ -3,6 +3,7 @@ from Var_Clss_Construction import dict_construction, df_construction
 from tree_variables_from_db import creacion_ramas_arbol
 from Resolucion import ditc_res_DBs_list
 import conteos
+import pandas as pd
 from config import fuente_de_datos_metadatos, plataforma
 
 app = Flask(__name__)
@@ -39,7 +40,7 @@ def res_db():
 
 # 3.- =============== Seleccionar los conjuntos de covariables y la clase (Árbol) -------
 # selected_names_res = []     # Nuevo selected names actualizado, con otro nombre.
-# res = ''   # nombre de la resolución escogida
+res = ''   # nombre de la resolución escogida
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -96,16 +97,22 @@ def select_variables():
     df_all_class_data_notnull = df_all_class_data[df_all_class_data['celdas'].notnull()]
     df_all_class_data = df_all_class_data_notnull
 #### ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ####
-    # print(df_all_class_data)
+    # print(df_all_variables_data.dtypes)
 
 #### Contamos el número de celdas de variables y clase ####
+    # Leemos el catálogo de resoluciones
+    df_resolutions = pd.read_csv('Catalogos/catalogo_resoluciones.csv').set_index('resolution')
+    # Obtenemos la N del ensamble
+    N = df_resolutions.loc[res]['N']
+
     # Las siguientes líneas modifican la tabla original df_all_variables_data
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
-    conteos.epsilon(df_all_variables_data)
+    conteos.epsilon(df_all_variables_data, N)
     conteos.score(df_all_variables_data)
 
     # Creamos un nuevo DataFrame con las celdas desanidadas.
-    df_all_cells_data = df_all_variables_data.explode('celdas')
+    # Este DataFrame ya no emplea la columna 'score'.
+    df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['score'])
 
     # Cambiamos el nombre de la columna 'celdas' por 'celda' para indicar que cada registro corresponde a una única celda.
     df_all_cells_data = df_all_cells_data.rename(columns={'celdas':'celda'})
@@ -114,8 +121,7 @@ def select_variables():
     # Utilizamos '<br>' para generar el salto de línea en HTML
     aggregations = {
         'Covariable': '<br>'.join,
-        'epsilon': 'sum',
-        'score': 'sum'
+        'epsilon': 'sum'
         }
     # Aplicamos groupby con agg
     df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
