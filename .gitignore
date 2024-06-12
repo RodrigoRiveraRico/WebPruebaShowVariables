@@ -1,7 +1,2 @@
-__pycache__
-/PyPostQL/__pycache__
+__pycache__/
 .venvWeb/
-config.py
-New_DB_Personas.csv
-prueba_regex.py
-buscar.py
