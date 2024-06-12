@@ -1,12 +1,11 @@
-from flask import Flask, render_template, request, jsonify
+from flask import render_template, request, jsonify
+from app import app
 from app.Var_Clss_Construction import dict_construction, df_construction
 from app.tree_variables_from_db import creacion_ramas_arbol
 from app.Resolucion import ditc_res_DBs_list
 import app.conteos as conteos
 import pandas as pd
 from config.config import fuente_de_datos_metadatos, plataforma
-
-app = Flask(__name__)
 
 data_bases = []
 for db_name in fuente_de_datos_metadatos:
@@ -134,6 +133,3 @@ def select_variables():
                            df_resultado2 = df_all_cells_data.to_html(escape=False),
                            nombre_titulo = nombre_clase,
                            etiqueta_h=nombre_plataforma)
-
-if __name__ == '__main__':
-    app.run(debug=True)
