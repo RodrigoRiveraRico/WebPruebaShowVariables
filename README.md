@@ -1,4 +1,4 @@
-Ejecución: python run.py --port=4000 --host=0.0.0.0
+Ejecución: flask --app run run --port=4000 --host=0.0.0.0
 
 Ejemplo del archivo config.py
     
