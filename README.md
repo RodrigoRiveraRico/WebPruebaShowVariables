@@ -1,4 +1,11 @@
-Ejecución: flask --app run run --port=4000 --host=0.0.0.0
+Ejecución: 
+- WINDOWS:
+$ set FLASK_CONFIG_FIILE = configuraciones_db/config_1.py
+$ flask --app run run --port=4000 --host=0.0.0.0
+
+- LINUX: 
+$ export FLASK_CONFIG_FILE = configuraciones_db/config_1.py 
+$ flask --app run run --port=4000 --host=0.0.0.0
 
 Ejemplo del archivo config.py
     
