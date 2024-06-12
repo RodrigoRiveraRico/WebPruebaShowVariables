@@ -100,7 +100,7 @@ def select_variables():
 
 #### Contamos el número de celdas de variables y clase ####
     # Leemos el catálogo de resoluciones
-    df_resolutions = pd.read_csv('Catalogos/catalogo_resoluciones.csv').set_index('resolution')
+    df_resolutions = pd.read_csv('catalogos/catalogo_resoluciones.csv').set_index('resolution')
     # Obtenemos la N del ensamble
     N = df_resolutions.loc[res]['N']
 
