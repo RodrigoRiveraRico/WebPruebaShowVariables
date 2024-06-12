@@ -4,6 +4,7 @@ from app.tree_variables_from_db import creacion_ramas_arbol
 from app.Resolucion import ditc_res_DBs_list
 import app.conteos as conteos
 import pandas as pd
+import os
 
 main_bp = Blueprint('main', __name__)
 
@@ -71,7 +72,8 @@ def select_variables():
     df_all_class_data_notnull = df_all_class_data[df_all_class_data['celdas'].notnull()]
     df_all_class_data = df_all_class_data_notnull
 
-    df_resolutions = pd.read_csv('app/catalogos/catalogo_resolcuiones.csv').set_index('resolution')
+    csv_path = os.path.join(os.path.dirname(__file__), '..', '..', 'catalogos', 'catalogo_resoluciones.csv')
+    df_resolutions = pd.read_csv(csv_path).set_index('resolution')
     N = df_resolutions.loc[res]['N']
 
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)

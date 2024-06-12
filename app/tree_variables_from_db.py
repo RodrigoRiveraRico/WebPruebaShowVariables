@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 from app.arbol_function import arbol
-from configuraciones_db.config_3 import fuente_de_datos_metadatos, query_categorias
+from flask import current_app
 
 # Función para contar el número de elementos separados por coma
 def count_elements(metadata):
@@ -18,6 +18,8 @@ def creacion_ramas_arbol(DB:str):
     
     Return : lst Lista para generar el árbol HTML
     '''
+    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
+    query_categorias = current_app.config['QUERY_CATEGORIAS']
     conn = psycopg2.connect(database = DB,
                             user = fuente_de_datos_metadatos[DB]['user'],
                             host = fuente_de_datos_metadatos[DB]['host'],
