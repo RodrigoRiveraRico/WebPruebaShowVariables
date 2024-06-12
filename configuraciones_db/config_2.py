@@ -5,7 +5,7 @@
 # interval es la columna donde están los intervalos
 # table es la tabla donde están almacenados los datos
 
-plataforma = {'name' : 'Personas'}
+plataforma = {'name' : 'Personas y ecologia'}
 
 fuente_de_datos_metadatos = {
         'Personas' : {

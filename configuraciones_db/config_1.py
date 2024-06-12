@@ -5,9 +5,9 @@
 # interval es la columna donde están los intervalos
 # table es la tabla donde están almacenados los datos
 
-PLATAFORMA = {'name' : 'Plataforma 1'}
+plataforma = {'name' : 'INEGI y especies'}
 
-FUENTE_DE_DATOS_METADATOS = {
+fuente_de_datos_metadatos = {
     'epi_puma_censo_inegi_2020' : {
         'host' : 'fastdb.c3.unam.mx',
         'user' : 'monitor',
@@ -68,7 +68,7 @@ FUENTE_DE_DATOS_METADATOS = {
         }
 }
 
-QUERY_CATEGORIAS = {
+query_categorias = {
     'epi_puma_censo_inegi_2020' : '''
         select {lab_var} as nombre_variable,
         {interval} as intervalo,
@@ -86,9 +86,9 @@ QUERY_CATEGORIAS = {
 
         from {table}
         ;
-    '''.format(lab_var = FUENTE_DE_DATOS_METADATOS['epi_puma_censo_inegi_2020']['lab_var'],
-            interval = FUENTE_DE_DATOS_METADATOS['epi_puma_censo_inegi_2020']['interval'],
-            table = FUENTE_DE_DATOS_METADATOS['epi_puma_censo_inegi_2020']['table']),
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'],
+            interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['interval'],
+            table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table']),
 
     'epi_puma_worldclim' : '''
         select {lab_var} as nombre_variable,
@@ -96,9 +96,9 @@ QUERY_CATEGORIAS = {
         '"epi_puma_worldclim"' as metadatos
         from {table}
         ;
-    '''.format(lab_var = FUENTE_DE_DATOS_METADATOS['epi_puma_worldclim']['lab_var'],
-                interval = FUENTE_DE_DATOS_METADATOS['epi_puma_worldclim']['interval'],
-                table = FUENTE_DE_DATOS_METADATOS['epi_puma_worldclim']['table']),
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_worldclim']['lab_var'],
+                interval = fuente_de_datos_metadatos['epi_puma_worldclim']['interval'],
+                table = fuente_de_datos_metadatos['epi_puma_worldclim']['table']),
 
     'epi_puma_accidentes' : '''
         select {lab_var} as nombre_variable,
@@ -106,9 +106,9 @@ QUERY_CATEGORIAS = {
         '"epi_puma_accidentes"' as metadatos
         from {table}
         ;
-    '''.format(lab_var = FUENTE_DE_DATOS_METADATOS['epi_puma_accidentes']['lab_var'],
-            interval = FUENTE_DE_DATOS_METADATOS['epi_puma_accidentes']['interval'],
-            table = FUENTE_DE_DATOS_METADATOS['epi_puma_accidentes']['table']),
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_accidentes']['lab_var'],
+            interval = fuente_de_datos_metadatos['epi_puma_accidentes']['interval'],
+            table = fuente_de_datos_metadatos['epi_puma_accidentes']['table']),
 
     'newspecies' : '''
         select {lab_var} as nombre_variable,
@@ -116,9 +116,9 @@ QUERY_CATEGORIAS = {
         concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
         from {table}
         ;
-    '''.format(lab_var = FUENTE_DE_DATOS_METADATOS['newspecies']['lab_var'],
-            interval = FUENTE_DE_DATOS_METADATOS['newspecies']['interval'],
-            table = FUENTE_DE_DATOS_METADATOS['newspecies']['table']),
+    '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
+            interval = fuente_de_datos_metadatos['newspecies']['interval'],
+            table = fuente_de_datos_metadatos['newspecies']['table']),
 
     'epi_puma_hospederos' : '''
         select {lab_var} as nombre_variable,
@@ -126,7 +126,7 @@ QUERY_CATEGORIAS = {
         concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
         from {table}
         ;
-    '''.format(lab_var = FUENTE_DE_DATOS_METADATOS['epi_puma_hospederos']['lab_var'],
-            interval = FUENTE_DE_DATOS_METADATOS['epi_puma_hospederos']['interval'],
-            table = FUENTE_DE_DATOS_METADATOS['epi_puma_hospederos']['table'])
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_hospederos']['lab_var'],
+            interval = fuente_de_datos_metadatos['epi_puma_hospederos']['interval'],
+            table = fuente_de_datos_metadatos['epi_puma_hospederos']['table'])
 }
