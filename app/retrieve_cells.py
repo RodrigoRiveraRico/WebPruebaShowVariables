@@ -1,6 +1,6 @@
 import psycopg2
 import pandas as pd
-from config import fuente_de_datos_metadatos
+from config.config import fuente_de_datos_metadatos
 
 # Esta función tiene como objetivo devolver una lista con las celdas
 # donde las variables seleccionadas tienen presencia.

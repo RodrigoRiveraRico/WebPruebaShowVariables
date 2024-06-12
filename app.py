@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, jsonify
-from Var_Clss_Construction import dict_construction, df_construction
-from tree_variables_from_db import creacion_ramas_arbol
-from Resolucion import ditc_res_DBs_list
-import conteos
+from app.Var_Clss_Construction import dict_construction, df_construction
+from app.tree_variables_from_db import creacion_ramas_arbol
+from app.Resolucion import ditc_res_DBs_list
+import app.conteos as conteos
 import pandas as pd
-from config import fuente_de_datos_metadatos, plataforma
+from config.config import fuente_de_datos_metadatos, plataforma
 
 app = Flask(__name__)
 
