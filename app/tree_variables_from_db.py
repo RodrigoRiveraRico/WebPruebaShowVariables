@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 from app.arbol_function import arbol
-from config.config import fuente_de_datos_metadatos, query_categorias
+from configuraciones_db.config_3 import fuente_de_datos_metadatos, query_categorias
 
 # Función para contar el número de elementos separados por coma
 def count_elements(metadata):

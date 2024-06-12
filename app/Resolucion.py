@@ -1,4 +1,4 @@
-from config.config import fuente_de_datos_metadatos
+from configuraciones_db.config_3 import fuente_de_datos_metadatos
 
 def ditc_res_DBs_list(bases):
     '''

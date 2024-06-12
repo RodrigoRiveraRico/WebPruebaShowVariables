@@ -5,7 +5,7 @@ from app.tree_variables_from_db import creacion_ramas_arbol
 from app.Resolucion import ditc_res_DBs_list
 import app.conteos as conteos
 import pandas as pd
-from config.config import fuente_de_datos_metadatos, plataforma
+from configuraciones_db.config_3 import fuente_de_datos_metadatos, plataforma
 
 data_bases = []
 for db_name in fuente_de_datos_metadatos:
