@@ -1,11 +1,12 @@
 import psycopg2
 import pandas as pd
-from config import fuente_de_datos_metadatos
+from flask import current_app
 
 # Esta función tiene como objetivo devolver una lista con las celdas
 # donde las variables seleccionadas tienen presencia.
 # Nota: una lista de celdas por cada base de datos.
 def recolectar_celdas(DB:str, variables:str, res:str):
+    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
     conn = psycopg2.connect(database = DB, 
                             user = fuente_de_datos_metadatos[DB]['user'], 
                             host= fuente_de_datos_metadatos[DB]['host'],

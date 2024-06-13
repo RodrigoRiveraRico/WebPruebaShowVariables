@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
-from arbol_function import arbol
-from PyPostQL import retrieve_cells
+from app.arbol_function import arbol
+from app import retrieve_cells
 
 def dict_construction(list_db_var:list):
     '''

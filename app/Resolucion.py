@@ -1,4 +1,4 @@
-from config import fuente_de_datos_metadatos
+from flask import current_app
 
 def ditc_res_DBs_list(bases):
     '''
@@ -8,6 +8,7 @@ def ditc_res_DBs_list(bases):
     Return : dict {'resolución1' : [DB1, DB2,], 'resolución2' : [DB1, DB3,],}
     '''
     dic = {}    # Diccionario a construir.
+    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
     
     for db in bases:    # Para cada base de las seleccionadas
         res_dict = fuente_de_datos_metadatos[db]['resolution']  # Se asigna el diccionario de resolucion de cada base
