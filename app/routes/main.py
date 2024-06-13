@@ -90,6 +90,9 @@ def select_variables():
     df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable': 'Covariables'})
 
+    df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
+    df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
+
     return render_template('resDF.html', 
                            df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
                            df_resultado2=df_all_cells_data.to_html(escape=False),
