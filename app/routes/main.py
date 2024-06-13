@@ -80,12 +80,12 @@ def select_variables():
     conteos.epsilon(df_all_variables_data, N)
     conteos.score(df_all_variables_data)
 
-    df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['score'])
+    df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['epsilon'])
     df_all_cells_data = df_all_cells_data.rename(columns={'celdas': 'celda'})
 
     aggregations = {
         'Covariable': '<br>'.join,
-        'epsilon': 'sum'
+        'score': 'sum'
     }
     df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable': 'Covariables'})
