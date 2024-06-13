@@ -14,7 +14,7 @@ def setup():
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
     plataforma = current_app.config['PLATAFORMA']
     data_bases = [db_name for db_name in fuente_de_datos_metadatos]
-    print("Bases de datos disponibles: {}".format(data_bases))
+    # print("Bases de datos disponibles: {}".format(data_bases))
     nombre_plataforma = plataforma['name']
 
 @main_bp.route('/')
