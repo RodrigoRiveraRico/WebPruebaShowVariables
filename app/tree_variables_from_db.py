@@ -111,7 +111,7 @@ def creacion_ramas_arbol(DB:str):
             ser_intervalo = df[(df['nombre_variable']==nombre_variable) & (df['metadatos']==path_key)]['intervalo']
 
             for variable_intervalo in zip(ser_nombre_variable,ser_intervalo):
-                eval(last_structure_child_lst).append({'id': DB + ' ' + path_key + ' ' + str(variable_intervalo),
+                eval(last_structure_child_lst).append({'id': '__' + DB + '__' + ' ' + path_key + ' ' + str(variable_intervalo),
                                                        'text': str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1])})
 
 
