@@ -122,7 +122,7 @@ def creacion_ramas_arbol(DB:str):
     #                'text': 'variables',
     #                'children' : [{'id': DB + ___,
     #                               'text': nombre_variable,
-    #                               'children':[{'id': DB + ___,
+    #                               'children':[{'id': __DB__ + ___,
     #                                            'texto': nombre_variable + intervalo},]
     #                             },]
     #                 },
