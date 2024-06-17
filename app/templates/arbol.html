@@ -91,7 +91,7 @@
 
             function cualquier_rama(node, tree, selectedNodes) {
                 if (!node.children.length) {
-                    var fullName = getFullName(node, tree)
+                    var fullName = getFullName(node, tree);
                     agregar_nodo(fullName, selectedNodes);
                     updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');  // Habría que cambiar los hashtag de aquí y agregarlos como parámetros para incorporar esto a la selección de la clase (o clases).
                 }
@@ -106,11 +106,13 @@
 
 
             function getFullName(node, tree, n2 = node) {
-                var pNode = tree.get_node(node.parent);
-                while (pNode.parent !== '#') { // mientras tenga padre, se va actualizando el nodo al padre ...
-                    pNode = tree.get_node(pNode.parent);
-                }
-                var mainNodeName = pNode.text
+                // var pNode = tree.get_node(node.parent);
+                // while (pNode.parent !== '#') { // mientras tenga padre, se va actualizando el nodo al padre ...
+                //     pNode = tree.get_node(pNode.parent);
+                // }
+                // var mainNodeName = pNode.text
+                var Id_n = node.id;
+                var mainNodeName  = Id_n.match("__(.+)__")[1];
                 var fullName = mainNodeName + ':' + n2.text;
                 return fullName;
             }
