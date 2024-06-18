@@ -1,18 +1,20 @@
-import psycopg2
 import pandas as pd
 from flask import current_app
+from sqlalchemy import create_engine, text
 
 # Esta función tiene como objetivo devolver una lista con las celdas
 # donde las variables seleccionadas tienen presencia.
 # Nota: una lista de celdas por cada base de datos.
 def recolectar_celdas(DB:str, variables:str, res:str):
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-    conn = psycopg2.connect(database = DB, 
-                            user = fuente_de_datos_metadatos[DB]['user'], 
-                            host= fuente_de_datos_metadatos[DB]['host'],
-                            password = fuente_de_datos_metadatos[DB]['password'],
-                            port = fuente_de_datos_metadatos[DB]['port']
-                            )
+    user = fuente_de_datos_metadatos[DB]['user']
+    host = fuente_de_datos_metadatos[DB]['host']
+    password = fuente_de_datos_metadatos[DB]['password']
+    port = fuente_de_datos_metadatos[DB]['port']
+    database = DB
+    database_url = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
+
+    engine = create_engine(database_url)
     
     # Columna donde están almacenadas las celdas
     col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
@@ -27,27 +29,33 @@ def recolectar_celdas(DB:str, variables:str, res:str):
     table = fuente_de_datos_metadatos[DB]['table']
 
     # Consulta
-    sql_query = '''
+    sql_query = text(f'''
     with data as (
-        select concat({0},', ',{1}) as variable,
-        {2},
-        {0},
-        {1}
-        from {3}
+        select concat({col_names},', ',{col_interval}) as variable,
+        {col_cells},
+        {col_names},
+        {col_interval}
+        from {table}
         )
-    select variable, {2} 
+    select variable, {col_cells} 
     from data 
-    where variable in {4};
-    '''.format(col_names, col_interval, col_cells, table, variables)
+    where variable in :variables;
+    ''')
+
+    # Convertir la lista de variables a una tupla
+    variables_tuple = tuple(variables)
+
+    # Imprimir la consulta SQL y los parámetros
+    # print("Consulta SQL:", sql_query)
+    # print("Parámetros:", {'variables': variables_tuple})
 
     # Ejecutar la consulta y leer los resultados en un DataFrame
-    df = pd.read_sql(sql_query, conn)   # Cada registro del df es una lista de celdas
+    with engine.connect() as connection:
+        df = pd.read_sql(sql_query, connection, params={'variables': variables_tuple}) # Cada registro del df es una lista de celdas
+         
     df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
     df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
     # print(df)
-
-    # Cerrar la conexión con la base de datos
-    conn.close()
 
     return df['variable'].to_numpy(), df[col_cells].to_numpy()
 
