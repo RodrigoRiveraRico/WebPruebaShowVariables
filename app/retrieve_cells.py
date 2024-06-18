@@ -59,5 +59,7 @@ def recolectar_celdas(DB:str, variables:str, res:str):
 
     return df['variable'].to_numpy(), df[col_cells].to_numpy()
 
-# recolectar_celdas('Personas', "('id_dep, 152.0')", 'UNAM_1057')
-# recolectar_celdas('epi_puma_worldclim', "('Mean Diurnal Range (Mean of monthly (max temp - min temp)), 6.275:10.608')", 'mun')
+# Ejemplo de uso
+# variables = ['Annual Mean Temperature, 13.525:15.225', 'Annual Mean Temperature, 15.225:16.146', ...]
+# recolectar_celdas('Personas', variables, 'UNAM_1057')
+# recolectar_celdas('epi_puma_worldclim', variables, 'mun')
