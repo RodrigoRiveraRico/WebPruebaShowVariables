@@ -93,7 +93,7 @@ def select_variables():
     df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
     df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
 
-    return render_template('resDF.html', 
+    return render_template('ScEp.html', 
                            df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
                            df_resultado2=df_all_cells_data.to_html(escape=False),
                            nombre_titulo=nombre_clase,

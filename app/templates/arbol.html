@@ -58,17 +58,22 @@
 
 
         $(function () {
-            var selectedNodes = [];
-            var selectedNodes2 = [];
+            let selectedNodes = new Set();
+            let selectedNodes2 = new Set();
 
             // Árbol 1 (de las covariables)
             $('#tree').on('select_node.jstree', function (e, data) {
-            
-            // var node = data.node;
-            var node = data.node;
-            var tree = $('#tree').jstree();
 
-                cualquier_rama(node, tree, selectedNodes) 
+                let node = data.node;
+                let tree = $('#tree').jstree();
+
+                // Medir el tiempo de ejecución de la función processNode:
+                let startTime = performance.now();
+                    processNode(node, tree, selectedNodes);
+                let endTime = performance.now();
+                console.log('Tiempo de ejecución de processNode:', endTime - startTime, 'ms');
+
+                updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
 
             });
 
@@ -80,8 +85,9 @@
 
                 if (!node.children.length) {
                     var fullName = getFullName(node, tree)
-                    if (selectedNodes2.length <1){  // Para que solo se pueda agregar una clase, por ahora.
-                        agregar_nodo(fullName, selectedNodes2)
+
+                    if (selectedNodes2.size < 1) {   // Para que solo se pueda agregar una clase, por ahora.
+                        selectedNodes2.add(fullName);
                         updateSelectedNodesContainer('#selectedNodesContainer2', selectedNodes2, '#selectedVariables2');
                     }
                 }
@@ -89,54 +95,39 @@
 
             // Funciones:
 
-            function cualquier_rama(node, tree, selectedNodes) {
+            function processNode(node, tree, selectedNodes) {  // Renombramiento de 'cualquier_rama()'--
                 if (!node.children.length) {
-                    var fullName = getFullName(node, tree);
-                    agregar_nodo(fullName, selectedNodes);
-                    updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');  // Habría que cambiar los hashtag de aquí y agregarlos como parámetros para incorporar esto a la selección de la clase (o clases).
-                }
-                else{
+                    let fullName = getFullName(node, tree);
+                    selectedNodes.add(fullName);
+                } else {
                     node.children.forEach(function (childId) {
-
-                    var childNode = tree.get_node(childId);
-                    cualquier_rama(childNode,tree, selectedNodes)
+                        let childNode = tree.get_node(childId);
+                        processNode(childNode, tree, selectedNodes);
                     });
                 }
             }
 
-
-            function getFullName(node, tree, n2 = node) {
-                // var pNode = tree.get_node(node.parent);
-                // while (pNode.parent !== '#') { // mientras tenga padre, se va actualizando el nodo al padre ...
-                //     pNode = tree.get_node(pNode.parent);
-                // }
-                // var mainNodeName = pNode.text
-                var Id_n = node.id;
-                var mainNodeName  = Id_n.match("__(.+)__")[1];
-                var fullName = mainNodeName + ':' + n2.text;
-                return fullName;
-            }
             
-            function agregar_nodo(fullName, varSelVec) {
-                if (!varSelVec.includes(fullName)) {
-                    varSelVec.push(fullName);
-                }
+            function getFullName(node, tree, n2 = node) {
+                let Id_n = node.id;
+                let mainNodeName = Id_n.match("__(.+)__")[1];
+                return mainNodeName + ':' + n2.text;
             }
 
 
             function updateSelectedNodesContainer(containerSelector, selectedNodes, inputSelector) {
-                var container = $(containerSelector);
+                let container = $(containerSelector);
                 container.empty();
                 selectedNodes.forEach(function (node, index) {
-                    var item = $('<div class="selected-item"></div>').text(node);
-                    var button = $('<button class="remove-button">x</button>').click(function () {
-                        selectedNodes.splice(index, 1);
+                    let item = $('<div class="selected-item"></div>').text(node);
+                    let button = $('<button class="remove-button">x</button>').click(function () {
+                        selectedNodes.delete(node);
                         updateSelectedNodesContainer(containerSelector, selectedNodes, inputSelector);
                     });
                     item.append(button);
                     container.append(item);
                 });
-                $(inputSelector).val(selectedNodes.join('\n'));
+                $(inputSelector).val(Array.from(selectedNodes).join('\n'));
             }
 
             $('#sendButton').show();
