@@ -50,8 +50,18 @@ def get_tree_data():
     tree_data = [{"id": DB, "text": DB, "children": creacion_ramas_arbol(DB)} for DB in selected_names_res]
     return jsonify(tree_data)
 
+# Para almacenar las variables que usaremos en los siguientes dos procesos de abajo:
+df_filtros = pd.DataFrame()
+df_cells = pd.DataFrame()
+nombre_clase = ''
+
 @main_bp.route('/select_variables', methods=['POST'])
 def select_variables():
+
+    global df_filtros
+    global df_cells
+    global nombre_clase
+
     selected_values1 = request.form['selectedVariables1']
     selected_values2 = request.form['selectedVariables2']
 
@@ -93,8 +103,28 @@ def select_variables():
     df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
     df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
 
+    # Guardamos los df para utilizarlos en el sig. proceso:
+    df_filtros = df_all_variables_data
+    df_cells = df_all_cells_data
+
     return render_template('ScEp.html', 
                            df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
                            df_resultado2=df_all_cells_data.to_html(escape=False),
                            nombre_titulo=nombre_clase,
+                           etiqueta_h=nombre_plataforma)
+
+#-- Rutas para poder filtrar los epsilons más significativos:
+@main_bp.route('/ScoreEps', methods=['GET', 'POST'])
+def ScoreEps():
+    filter_value = request.args.get('filter', 'all')
+
+    if filter_value == 'E_signif':
+        filtered_df = df_filtros[df_filtros['epsilon'].abs() > 2]
+    # elif filter_value == 'gt2':  # Esto para agregar otros rangos de epsilons
+    #     filtered_df = df_filtros[df_filtros['epsilon'].abs() < 1]
+    else:
+        filtered_df = df_filtros
+
+    return render_template('ScEp.html', df_resultado=filtered_df.drop(['celdas'], axis=1).to_html(), 
+                           df_resultado2=df_cells.to_html(escape=False), nombre_titulo=nombre_clase,
                            etiqueta_h=nombre_plataforma)

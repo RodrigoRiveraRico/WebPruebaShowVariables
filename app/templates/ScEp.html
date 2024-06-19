@@ -5,48 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados - {{ nombre_titulo }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        .titulo-especial {
-            font-family: Arial, sans-serif; /* Cambia "Arial" al tipo de letra deseado */
-            font-style: italic; /* Aplica cursivas */
-            color: rgb(169, 169, 169); /* Cambia el color a gris claro (RGB) */
-        }
-        .df1 .dataframe td:nth-last-child(1),
-        .df1 .dataframe td:nth-last-child(2),
-        .df1 .dataframe th:nth-last-child(1),
-        .df1 .dataframe th:nth-last-child(2) {
-            background-color: rgb(173, 216, 230); /* Azul claro */
-        }
-        .df1 .dataframe {
-        width: 80%; /* Cambia el tamaño de la tabla */
-        max-width: 100%; /* Asegura que no exceda el ancho del viewport */
-        }
-        .df1 .dataframe th {
-            text-align: left; /* Para alinear el texto */
-        }
-
-        .df1 .dataframe th:first-child,
-        .df1 .dataframe td:first-child {
-            display: none; /* Oculta la primera columna */
-        }
-
-        .df2 .dataframe td {
-            text-align: left;
-            /* white-space: pre-line; */
-        }
-
-        .df2 .dataframe th {
-            text-align: center;
-            /* white-space: pre; */
-        }
-
-        .df2 .dataframe th:first-child,
-        .df2 .dataframe td:first-child {
-            /* background-color: rgb(231, 139, 105);
-             */
-             display: none;
-        }
-    </style>
+    <!-- <style>
+        
+    </style> -->
 </head>
 
 <body>
@@ -55,6 +16,12 @@
     
     <h2>Resultados para la clase <span class="titulo-especial">"{{ nombre_titulo }}"</span>:</h2>
     <br>
+    <div class="filter-button">
+        <button onclick="window.location.href='/ScoreEps?filter=all'">Mostrar Todo</button>
+        <button onclick="window.location.href='/ScoreEps?filter=E_signif'">Más significativos</button>
+        <!-- <button onclick="window.location.href='/ScoreEps?filter=gt2'">Valores <|1|</button> --> 
+    </div>
+
     <center class="df1">
         <!-- <table class="df1"> -->
         {{ df_resultado | safe }}

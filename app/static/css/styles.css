@@ -127,3 +127,66 @@ textarea {
 
 
 /* ---------- */
+
+/* Estilo de las tablas: */
+.titulo-especial {
+    font-family: Arial, sans-serif; /* Cambia "Arial" al tipo de letra deseado */
+    font-style: italic; /* Aplica cursivas */
+    color: rgb(169, 169, 169); /* Cambia el color a gris claro (RGB) */
+}
+.df1 .dataframe td:nth-last-child(1),
+.df1 .dataframe td:nth-last-child(2),
+.df1 .dataframe th:nth-last-child(1),
+.df1 .dataframe th:nth-last-child(2) {
+    background-color: rgb(173, 216, 230); /* Azul claro */
+}
+.df1 .dataframe {
+width: 80%; /* Cambia el tamaño de la tabla */
+max-width: 100%; /* Asegura que no exceda el ancho del viewport */
+}
+.df1 .dataframe th {
+    text-align: left; /* Para alinear el texto */
+}
+
+.df1 .dataframe th:first-child,
+.df1 .dataframe td:first-child {
+    display: none; /* Oculta la primera columna */
+}
+
+.df2 .dataframe td {
+    text-align: left;
+    /* white-space: pre-line; */
+}
+
+.df2 .dataframe th {
+    text-align: center;
+    /* white-space: pre; */
+}
+
+.df2 .dataframe th:first-child,
+.df2 .dataframe td:first-child {
+    /* background-color: rgb(231, 139, 105);
+     */
+     display: none;
+}
+
+
+/* - Botones de filtro (Epsilon):     */
+
+.filter-button {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.filter-button button {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #49744a;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.filter-button button:hover {
+    background-color: #305031;
+}
