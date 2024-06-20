@@ -43,14 +43,7 @@ def df_construction(dict_db_var:dict, column_name:str, res:str):
 
     for db_name in dict_db_var:
         variables = dict_db_var[db_name]['__variables__']     # Esto es una lista
-        
-        # Queremos que variables tenga estructura ('_nombre_variable_1', 'nombre_variables_2') para la consulta SQL
-        if len(variables) == 1:
-            variables = "('" + str(variables[0]) + "')"
-
-        else:
-            variables = str(tuple(variables))
-
+        # print(variables)
         array_1, array_2 = retrieve_cells.recolectar_celdas(db_name, variables, res)
         
         variables_array = np.append(variables_array, array_1)
