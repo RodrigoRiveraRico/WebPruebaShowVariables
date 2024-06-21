@@ -37,11 +37,10 @@ def res_db():
 
 @main_bp.route('/process', methods=['POST'])
 def process():
-    global selected_names_res
+    global selected_names_res, res
     selected_dbS = request.form['selected_res_DB']
     list_res_db = selected_dbS.split('\r\n')
     selected_names_res = [i.split(':')[1] for i in list_res_db]
-    global res
     res = list_res_db[0].split(':')[0]
     return render_template('arbol.html', etiqueta_h=nombre_plataforma)
 
@@ -53,8 +52,7 @@ def get_tree_data():
 @main_bp.route('/select_variables', methods=['POST'])
 def select_variables():
 
-    global nombre_clase
-    global df_copia
+    global nombre_clase, df_copia
 
     selected_values1 = request.form['selectedVariables1']
     selected_values2 = request.form['selectedVariables2']
