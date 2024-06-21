@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, current_app
+from flask import Blueprint, render_template, request, jsonify, current_app, redirect, url_for
 from app.Var_Clss_Construction import dict_construction, df_construction
 from app.tree_variables_from_db import creacion_ramas_arbol
 from app.Resolucion import ditc_res_DBs_list
@@ -26,7 +26,7 @@ def index():
 @main_bp.route('/add_name', methods=['POST'])
 def add_name():
     name = request.form.get('name')
-    if name and name not in selected_names:
+    if name not in selected_names:
         selected_names.append(name)
     return jsonify(selected_names=selected_names)
 
@@ -50,17 +50,11 @@ def get_tree_data():
     tree_data = [{"id": DB, "text": DB, "children": creacion_ramas_arbol(DB)} for DB in selected_names_res]
     return jsonify(tree_data)
 
-# Para almacenar las variables que usaremos en los siguientes dos procesos de abajo:
-df_filtros = pd.DataFrame()
-df_cells = pd.DataFrame()
-nombre_clase = ''
-
 @main_bp.route('/select_variables', methods=['POST'])
 def select_variables():
 
-    global df_filtros
-    global df_cells
     global nombre_clase
+    global df_copia
 
     selected_values1 = request.form['selectedVariables1']
     selected_values2 = request.form['selectedVariables2']
@@ -89,6 +83,9 @@ def select_variables():
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
     conteos.epsilon(df_all_variables_data, N)
     conteos.score(df_all_variables_data)
+    df_copia = df_all_variables_data.to_dict(orient='records')
+    return redirect(url_for('main.ScoreEps'))
+    # return jsonify(df_all_variables_data.to_dict(orient='records'))
 
     df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['epsilon'])
     df_all_cells_data = df_all_cells_data.rename(columns={'celdas': 'celda'})
@@ -103,10 +100,6 @@ def select_variables():
     df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
     df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
 
-    # Guardamos los df para utilizarlos en el sig. proceso:
-    df_filtros = df_all_variables_data
-    df_cells = df_all_cells_data
-
     return render_template('ScEp.html', 
                            df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
                            df_resultado2=df_all_cells_data.to_html(escape=False),
@@ -116,15 +109,26 @@ def select_variables():
 #-- Rutas para poder filtrar los epsilons más significativos:
 @main_bp.route('/ScoreEps', methods=['GET', 'POST'])
 def ScoreEps():
+    df_all_variables_data = pd.DataFrame.from_dict(df_copia)
     filter_value = request.args.get('filter', 'all')
 
     if filter_value == 'E_signif':
-        filtered_df = df_filtros[df_filtros['epsilon'].abs() > 2]
-    # elif filter_value == 'gt2':  # Esto para agregar otros rangos de epsilons
-    #     filtered_df = df_filtros[df_filtros['epsilon'].abs() < 1]
-    else:
-        filtered_df = df_filtros
+        df_all_variables_data = df_all_variables_data[df_all_variables_data['epsilon'].abs() > 2]
 
-    return render_template('ScEp.html', df_resultado=filtered_df.drop(['celdas'], axis=1).to_html(), 
-                           df_resultado2=df_cells.to_html(escape=False), nombre_titulo=nombre_clase,
+    df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['epsilon'])
+    df_all_cells_data = df_all_cells_data.rename(columns={'celdas': 'celda'})
+
+    aggregations = {
+        'Covariable': '<br>'.join,
+        'score': 'sum'
+    }
+    df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
+    df_all_cells_data = df_all_cells_data.rename(columns={'Covariable': 'Covariables'})
+
+    df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
+    df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
+
+
+    return render_template('ScEp.html', df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
+                           df_resultado2=df_all_cells_data.to_html(escape=False), nombre_titulo=nombre_clase,
                            etiqueta_h=nombre_plataforma)
