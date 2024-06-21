@@ -82,7 +82,7 @@ def select_variables():
     conteos.epsilon(df_all_variables_data, N)
     conteos.score(df_all_variables_data)
     df_copia = df_all_variables_data.to_dict(orient='records')
-    return redirect(url_for('main.ScoreEps'))
+    return redirect(url_for('main.score_eps'))
     # return jsonify(df_all_variables_data.to_dict(orient='records'))
 
     df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['epsilon'])
@@ -105,10 +105,10 @@ def select_variables():
                            etiqueta_h=nombre_plataforma)
 
 #-- Rutas para poder filtrar los epsilons más significativos:
-@main_bp.route('/ScoreEps', methods=['GET', 'POST'])
-def ScoreEps():
+@main_bp.route('/score_eps', methods=['GET', 'POST'])
+def score_eps():
     df_all_variables_data = pd.DataFrame.from_dict(df_copia)
-    filter_value = request.args.get('filter', 'all')
+    filter_value = request.args.get('filter')
 
     if filter_value == 'E_signif':
         df_all_variables_data = df_all_variables_data[df_all_variables_data['epsilon'].abs() > 2]
