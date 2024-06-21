@@ -108,7 +108,7 @@ def select_variables():
 @main_bp.route('/score_eps', methods=['GET', 'POST'])
 def score_eps():
     df_all_variables_data = pd.DataFrame.from_dict(df_copia)
-    filter_value = request.args.get('filter')
+    filter_value = request.args.get('filter', None)
 
     if filter_value == 'E_signif':
         df_all_variables_data = df_all_variables_data[df_all_variables_data['epsilon'].abs() > 2]
