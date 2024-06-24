@@ -25,7 +25,7 @@ fuente_de_datos_metadatos = {
 
 query_categorias = {
     'epi_puma_censo_inegi_2020' : '''
-        select concat({lab_var},'_-_',{interval}) as nombre_variable,
+        select concat({lab_var},'_-_',{interval}) as taxonomia_variable,
         {interval} as intervalo,
 
         case 

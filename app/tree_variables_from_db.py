@@ -38,13 +38,13 @@ def creacion_ramas_arbol(DB: str):
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
-    df_taxonomia_variables = df['nombre_variable'].str.split(r"_-_", expand=True)
+    df_taxonomia_variables = df['taxonomia_variable'].str.split(r"_-_", expand=True)
     for i in df_taxonomia_variables:
         df['var_tax_'+str(i)] = df_taxonomia_variables[i]
 
     # Ordenar el DataFrame
     df = df.sort_values(
-        by=['element_count', 'metadatos', 'nombre_variable', 'intervalo']  # Ordenar primero por 'element_count'.
+        by=['element_count', 'metadatos', 'taxonomia_variable', 'intervalo']  # Ordenar primero por 'element_count'.
     ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
     print(df)
 
@@ -82,8 +82,8 @@ def creacion_ramas_arbol(DB: str):
             variable_node = add_node(DB + ' ' + path_key + ' ' + nombre_variable, nombre_variable, [])
             variables_node['children'].append(variable_node)
 
-            ser_nombre_variable = df[(df['nombre_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['nombre_variable']
-            ser_intervalo = df[(df['nombre_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['intervalo']
+            ser_nombre_variable = df[(df['taxonomia_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['taxonomia_variable']
+            ser_intervalo = df[(df['taxonomia_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['intervalo']
 
             for variable_intervalo in zip(ser_nombre_variable, ser_intervalo):
                 interval_node = add_node('__' + DB + '__' + ' ' + path_key + ' ' + str(variable_intervalo),
