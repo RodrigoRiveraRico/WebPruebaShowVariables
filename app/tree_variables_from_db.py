@@ -63,10 +63,16 @@ def creacion_ramas_arbol(DB: str):
         structure.append(new_node)
         return new_node
 
-    for path_key, value in path_dict.items():
+    for path_key in df.metadatos.unique():
+        value = df[df['metadatos'] == path_key]['var_tax_0'].unique()
         key_list = path_key.split(', ')
         id_tag = DB + ' '
         current_structure = structure_lst
+  
+    # for path_key, value in path_dict.items():
+    #     key_list = path_key.split(', ')
+    #     id_tag = DB + ' '
+    #     current_structure = structure_lst
 
         for key_idx, key in enumerate(key_list):
             id_tag += key + ' '
@@ -78,12 +84,13 @@ def creacion_ramas_arbol(DB: str):
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for var_tax_0 in value['__variables__']:
+        for var_tax_0 in value:
+            # print(df[df['var_tax_0']==var_tax_0])
             variable_node = add_node(DB + ' ' + path_key + ' ' + var_tax_0, var_tax_0, [])
             variables_node['children'].append(variable_node)
 
             ser_nombre_variable = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_0']
-            ser_intervalo = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['intervalo']
+            ser_intervalo = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_1']
 
             for variable_intervalo in zip(ser_nombre_variable, ser_intervalo):
                 interval_node = add_node('__' + DB + '__' + ' ' + path_key + ' ' + str(variable_intervalo),
@@ -91,6 +98,8 @@ def creacion_ramas_arbol(DB: str):
                 variable_node['children'].append(interval_node)
 
     return structure_lst
+
+    
 
 # Ejemplo de uso
 # creacion_ramas_arbol('Personas')
