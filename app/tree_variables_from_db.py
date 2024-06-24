@@ -2,6 +2,7 @@ import pandas as pd
 from app.arbol_function import arbol
 from flask import current_app
 from sqlalchemy import create_engine, text
+import re
 
 # Función para contar el número de elementos separados por coma
 def count_elements(metadata):
@@ -36,6 +37,10 @@ def creacion_ramas_arbol(DB: str):
 
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
+
+    df_taxonomia_variables = df['nombre_variable'].str.split(r"_-_", expand=True)
+    for i in df_taxonomia_variables:
+        df['var_tax_'+str(i)] = df_taxonomia_variables[i]
 
     # Ordenar el DataFrame
     df = df.sort_values(
