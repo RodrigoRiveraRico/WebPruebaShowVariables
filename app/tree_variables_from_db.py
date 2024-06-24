@@ -41,6 +41,7 @@ def creacion_ramas_arbol(DB: str):
     df = df.sort_values(
         by=['element_count', 'metadatos', 'nombre_variable', 'intervalo']  # Ordenar primero por 'element_count'.
     ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
+    print(df)
 
     path_dict = arbol(df)
 
