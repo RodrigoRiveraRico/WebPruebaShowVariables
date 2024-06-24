@@ -78,12 +78,12 @@ def creacion_ramas_arbol(DB: str):
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for nombre_variable in value['__variables__']:
-            variable_node = add_node(DB + ' ' + path_key + ' ' + nombre_variable, nombre_variable, [])
+        for var_tax_0 in value['__variables__']:
+            variable_node = add_node(DB + ' ' + path_key + ' ' + var_tax_0, var_tax_0, [])
             variables_node['children'].append(variable_node)
 
-            ser_nombre_variable = df[(df['taxonomia_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['taxonomia_variable']
-            ser_intervalo = df[(df['taxonomia_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['intervalo']
+            ser_nombre_variable = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_0']
+            ser_intervalo = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['intervalo']
 
             for variable_intervalo in zip(ser_nombre_variable, ser_intervalo):
                 interval_node = add_node('__' + DB + '__' + ' ' + path_key + ' ' + str(variable_intervalo),
