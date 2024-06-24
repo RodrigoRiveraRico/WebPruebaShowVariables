@@ -48,7 +48,7 @@ def creacion_ramas_arbol(DB: str):
     ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
     print(df)
 
-    path_dict = arbol(df)
+    # path_dict = arbol(df)
 
     structure_lst = []
 
@@ -64,7 +64,7 @@ def creacion_ramas_arbol(DB: str):
         return new_node
 
     for path_key in df.metadatos.unique():
-        value = df[df['metadatos'] == path_key]['var_tax_0'].unique()
+        value = df[df['metadatos'] == path_key]['var_tax_0'].unique()   # Esta línea ya no iría.
         key_list = path_key.split(', ')
         id_tag = DB + ' '
         current_structure = structure_lst
@@ -84,8 +84,7 @@ def creacion_ramas_arbol(DB: str):
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for var_tax_0 in value:
-            # print(df[df['var_tax_0']==var_tax_0])
+        for var_tax_0 in value: # value_lst = df[df['metadatos'] == path_key]['taxonomia_variable'] y aplicamos de forma análoga la creación de nodos de arriba.
             variable_node = add_node(DB + ' ' + path_key + ' ' + var_tax_0, var_tax_0, [])
             variables_node['children'].append(variable_node)
 
