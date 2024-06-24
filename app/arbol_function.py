@@ -2,7 +2,7 @@
 def arbol(df):
   """
   df : pd.dataframe
-       Columnas: | nombre_variable | metadatos
+       Columnas: | var_tax_0 | metadatos
        Nota: Ordernar las variables de forma ascendente al número de niveles en el que están ubicadas.
 
   Return : dict
@@ -26,7 +26,7 @@ def arbol(df):
 
       the_dict += str([level])
 
-      if '__variables__' in eval(the_dict) and df.loc[idx]['nombre_variable'] not in eval(the_dict)['__variables__'] and level_idx == len([df.loc[idx]['metadatos']]) - 1:
-        eval(the_dict)['__variables__'].append(df.loc[idx]['nombre_variable'])
+      if '__variables__' in eval(the_dict) and df.loc[idx]['var_tax_0'] not in eval(the_dict)['__variables__'] and level_idx == len([df.loc[idx]['metadatos']]) - 1:
+        eval(the_dict)['__variables__'].append(df.loc[idx]['var_tax_0'])
 
   return thisdict
