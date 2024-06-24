@@ -20,57 +20,12 @@ fuente_de_datos_metadatos = {
                         'state' : 'cells_state',
                         'ageb' : 'cells_ageb'
                         }
-    },
-    'epi_puma_worldclim' : {
-        'host' : 'fastdb.c3.unam.mx',
-        'user' : 'monitor',
-        'password' : 'monitor123',
-        'port' : '5433',
-        'lab_var' : 'label',
-        'interval' : 'interval',
-        'table' : 'covariable',
-        'resolution' :{'mun' : 'cells_mun',
-                        'state' : 'cells_state'
-                        }
-    },
-        'epi_puma_accidentes' : {
-        'host' : 'fastdb.c3.unam.mx',
-        'user' : 'monitor',
-        'password' : 'monitor123',
-        'port' : '5433',
-        'lab_var' : 'name',
-        'interval' : 'interval',
-        'table' : 'covariable',
-        'resolution' : {'mun' : 'cells_mun'}
-    },
-        'newspecies' : {
-        'host' : 'fastdb.c3.unam.mx',
-        'user' : 'monitor',
-        'password' : 'monitor123',
-        'port' : '5433',
-        'lab_var' : 'especievalida',
-        'interval' : 'nspn',
-        'table' : 'covariable',
-        'resolution' :{'mun' : 'cells_mun',
-                        'state' : 'cells_state'
-                        }
-    },
-        'epi_puma_hospederos' : {
-            'host' : 'fastdb.c3.unam.mx',
-            'user' : 'monitor',
-            'password' : 'monitor123',
-            'port' : '5433',
-            'lab_var' : 'nombrecientifico',
-            'interval' : 'id',
-            'table' : 'covariable',
-            'resolution' : {'mun' : 'cells_mun',
-                            'state' : 'cells_state'}
-        }
+    }
 }
 
 query_categorias = {
     'epi_puma_censo_inegi_2020' : '''
-        select {lab_var} as nombre_variable,
+        select concat({lab_var},'_-_',{interval}) as nombre_variable,
         {interval} as intervalo,
 
         case 
@@ -88,45 +43,5 @@ query_categorias = {
         ;
     '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'],
             interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['interval'],
-            table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table']),
-
-    'epi_puma_worldclim' : '''
-        select {lab_var} as nombre_variable,
-        {interval} as intervalo,
-        '"epi_puma_worldclim"' as metadatos
-        from {table}
-        ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_worldclim']['lab_var'],
-                interval = fuente_de_datos_metadatos['epi_puma_worldclim']['interval'],
-                table = fuente_de_datos_metadatos['epi_puma_worldclim']['table']),
-
-    'epi_puma_accidentes' : '''
-        select {lab_var} as nombre_variable,
-        {interval} as intervalo,
-        '"epi_puma_accidentes"' as metadatos
-        from {table}
-        ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_accidentes']['lab_var'],
-            interval = fuente_de_datos_metadatos['epi_puma_accidentes']['interval'],
-            table = fuente_de_datos_metadatos['epi_puma_accidentes']['table']),
-
-    'newspecies' : '''
-        select {lab_var} as nombre_variable,
-        {interval} as intervalo,
-        concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
-        from {table}
-        ;
-    '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
-            interval = fuente_de_datos_metadatos['newspecies']['interval'],
-            table = fuente_de_datos_metadatos['newspecies']['table']),
-
-    'epi_puma_hospederos' : '''
-        select {lab_var} as nombre_variable,
-        {interval} as intervalo,
-        concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
-        from {table}
-        ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_hospederos']['lab_var'],
-            interval = fuente_de_datos_metadatos['epi_puma_hospederos']['interval'],
-            table = fuente_de_datos_metadatos['epi_puma_hospederos']['table'])
-}
+            table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table'])
+            }
