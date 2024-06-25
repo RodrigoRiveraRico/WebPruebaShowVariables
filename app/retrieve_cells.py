@@ -31,27 +31,14 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     table = fuente_de_datos_metadatos[DB]['table']
 
     str_ = ",', ',".join(var_cols)
+    str_2 = ", ".join(var_cols)
 
     # Consulta
-    if len(var_cols) == 1:
-        sql_query = text(f'''
+    sql_query = text(f'''
         with data as (
             select concat({str_}) as variable,
             {col_cells},
-            {var_cols[0]}
-            from {table}
-            )
-        select variable, {col_cells} 
-        from data 
-        where variable in :variables;
-        ''')
-    else:
-        sql_query = text(f'''
-        with data as (
-            select concat({str_}) as variable,
-            {col_cells},
-            {var_cols[0]},
-            {var_cols[1]}
+            {str_2}
             from {table}
             )
         select variable, {col_cells} 
