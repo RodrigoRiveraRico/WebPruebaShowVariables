@@ -30,8 +30,8 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     # Nombre de la tabla
     table = fuente_de_datos_metadatos[DB]['table']
 
-    str_ = ",', ',".join(var_cols)
-    str_2 = ", ".join(var_cols)
+    str_ = ",', ',".join(var_cols)  # Cambiar nombre. son columnas donde están definida la taxonomia de la variable
+    str_2 = ", ".join(var_cols) # Cambiar nombre. 
 
     # Consulta
     sql_query = text(f'''

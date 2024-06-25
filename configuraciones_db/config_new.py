@@ -13,7 +13,7 @@ fuente_de_datos_metadatos = {
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
-        'lab_var' : ['name', 'interval'],
+        'lab_var' : ['name', 'interval'],   # Cambiar nombre de 'lab_var'
         'table' : 'covariable',
         'resolution' : {'mun' : 'cells_mun',
                         'state' : 'cells_state',

@@ -36,7 +36,7 @@ def creacion_ramas_arbol(DB: str):
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
-    df['value_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False)
+    df['value_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False)  # Revisar si es necesario usar _-_ como separador.
 
     # Ordenar el DataFrame
     df = df.sort_values(
