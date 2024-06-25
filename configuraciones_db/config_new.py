@@ -21,17 +21,29 @@ fuente_de_datos_metadatos = {
                         'ageb' : 'cells_ageb'
                         }
     },
-        'epi_puma_hospederos' : {
-            'host' : 'fastdb.c3.unam.mx',
-            'user' : 'monitor',
-            'password' : 'monitor123',
-            'port' : '5433',
-            'lab_var' : 'nombrecientifico',
-            'interval' : 'id',
-            'table' : 'covariable',
-            'resolution' : {'mun' : 'cells_mun',
-                            'state' : 'cells_state'}
-        }
+    'epi_puma_hospederos' : {
+        'host' : 'fastdb.c3.unam.mx',
+        'user' : 'monitor',
+        'password' : 'monitor123',
+        'port' : '5433',
+        'lab_var' : 'nombrecientifico',
+        'interval' : 'id',
+        'table' : 'covariable',
+        'resolution' : {'mun' : 'cells_mun',
+                        'state' : 'cells_state'}
+    },
+    'newspecies' : {
+    'host' : 'fastdb.c3.unam.mx',
+    'user' : 'monitor',
+    'password' : 'monitor123',
+    'port' : '5433',
+    'lab_var' : 'especievalida',
+    'interval' : 'nspn',
+    'table' : 'covariable',
+    'resolution' :{'mun' : 'cells_mun',
+                    'state' : 'cells_state'
+                    }
+    }     
 }
 
 query_categorias = {
@@ -64,5 +76,15 @@ query_categorias = {
         ;
     '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_hospederos']['lab_var'],
             interval = fuente_de_datos_metadatos['epi_puma_hospederos']['interval'],
-            table = fuente_de_datos_metadatos['epi_puma_hospederos']['table'])
+            table = fuente_de_datos_metadatos['epi_puma_hospederos']['table']),
+
+    'newspecies' : '''
+        select {lab_var} as taxonomia_variable,
+        {interval} as intervalo,
+        concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
+        from {table}
+        ;
+    '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
+            interval = fuente_de_datos_metadatos['newspecies']['interval'],
+            table = fuente_de_datos_metadatos['newspecies']['table'])
             }
