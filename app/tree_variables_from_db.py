@@ -1,7 +1,6 @@
 import pandas as pd
 from flask import current_app
 from sqlalchemy import create_engine, text
-import re
 
 # Función para contar el número de elementos separados por coma
 def count_elements(metadata):
