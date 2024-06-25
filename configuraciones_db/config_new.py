@@ -13,43 +13,28 @@ fuente_de_datos_metadatos = {
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
-        'lab_var' : 'name',
-        'interval' : 'interval',
+        'lab_var' : ['name', 'interval'],
         'table' : 'covariable',
         'resolution' : {'mun' : 'cells_mun',
                         'state' : 'cells_state',
                         'ageb' : 'cells_ageb'
                         }
     },
-    'epi_puma_hospederos' : {
+    'newspecies' : {
         'host' : 'fastdb.c3.unam.mx',
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
-        'lab_var' : 'nombrecientifico',
-        'interval' : 'id',
+        'lab_var' : ['especievalida'],
         'table' : 'covariable',
-        'resolution' : {'mun' : 'cells_mun',
+        'resolution' :{'mun' : 'cells_mun',
                         'state' : 'cells_state'}
-    },
-    'newspecies' : {
-    'host' : 'fastdb.c3.unam.mx',
-    'user' : 'monitor',
-    'password' : 'monitor123',
-    'port' : '5433',
-    'lab_var' : 'especievalida',
-    'interval' : 'nspn',
-    'table' : 'covariable',
-    'resolution' :{'mun' : 'cells_mun',
-                    'state' : 'cells_state'
-                    }
     }     
 }
 
 query_categorias = {
     'epi_puma_censo_inegi_2020' : '''
         select concat({lab_var},'_-_',{interval}) as taxonomia_variable,
-        {interval} as intervalo,
 
         case 
             when {lab_var} like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
@@ -64,27 +49,15 @@ query_categorias = {
 
         from {table}
         ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'],
-            interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['interval'],
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'][0],
+            interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'][1],
             table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table']),
-
-    'epi_puma_hospederos' : '''
-        select {lab_var} as taxonomia_variable,
-        {interval} as intervalo,
-        concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
-        from {table}
-        ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_hospederos']['lab_var'],
-            interval = fuente_de_datos_metadatos['epi_puma_hospederos']['interval'],
-            table = fuente_de_datos_metadatos['epi_puma_hospederos']['table']),
 
     'newspecies' : '''
         select {lab_var} as taxonomia_variable,
-        {interval} as intervalo,
         concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
         from {table}
         ;
-    '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
-            interval = fuente_de_datos_metadatos['newspecies']['interval'],
+    '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'][0],
             table = fuente_de_datos_metadatos['newspecies']['table'])
             }

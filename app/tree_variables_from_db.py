@@ -40,8 +40,8 @@ def creacion_ramas_arbol(DB: str):
 
     # Ordenar el DataFrame
     df = df.sort_values(
-        by=['element_count', 'metadatos', 'taxonomia_variable', 'intervalo']  # Ordenar primero por 'element_count'.
-    ).drop(columns=['element_count', 'intervalo'])  # Eliminar la columna temporal después de ordenar.
+        by=['element_count', 'metadatos', 'taxonomia_variable']  # Ordenar primero por 'element_count'.
+    ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
     print(df)
 
     structure_lst = []

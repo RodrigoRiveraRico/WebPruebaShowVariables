@@ -20,27 +20,44 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
 
     # Columna donde están almacenadas los nombres de las variables
-    col_names = fuente_de_datos_metadatos[DB]['lab_var']
+    # col_names = fuente_de_datos_metadatos[DB]['lab_var'][0]
 
     # Columna donde están almacenados los intervalos de las variables
-    col_interval = fuente_de_datos_metadatos[DB]['interval']
+    # col_interval = fuente_de_datos_metadatos[DB]['lab_var'][1]
+
+    var_cols = fuente_de_datos_metadatos[DB]['lab_var']
 
     # Nombre de la tabla
     table = fuente_de_datos_metadatos[DB]['table']
 
+    str_ = ",', ',".join(var_cols)
+
     # Consulta
-    sql_query = text(f'''
-    with data as (
-        select concat({col_names},', ',{col_interval}) as variable,
-        {col_cells},
-        {col_names},
-        {col_interval}
-        from {table}
-        )
-    select variable, {col_cells} 
-    from data 
-    where variable in :variables;
-    ''')
+    if len(var_cols) == 1:
+        sql_query = text(f'''
+        with data as (
+            select concat({str_}) as variable,
+            {col_cells},
+            {var_cols[0]}
+            from {table}
+            )
+        select variable, {col_cells} 
+        from data 
+        where variable in :variables;
+        ''')
+    else:
+        sql_query = text(f'''
+        with data as (
+            select concat({str_}) as variable,
+            {col_cells},
+            {var_cols[0]},
+            {var_cols[1]}
+            from {table}
+            )
+        select variable, {col_cells} 
+        from data 
+        where variable in :variables;
+        ''')
 
     # Convertir la lista de variables a una tupla
     variables_tuple = tuple(variables)
