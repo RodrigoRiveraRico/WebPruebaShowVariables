@@ -71,6 +71,7 @@ def creacion_ramas_arbol(DB: str):
         variables_node = add_node(DB + '__variables__' + path_key, 'variables', [])
         current_structure.append(variables_node)
 
+        # Agregar variables dentro del nodo de variables
         for var_lst in df[df['metadatos']==path_key]['value_lst']:
             var_tax_string = ''
             id_tag = DB + ' ' + path_key + ' '
