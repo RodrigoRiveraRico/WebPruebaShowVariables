@@ -37,10 +37,6 @@ def creacion_ramas_arbol(DB: str):
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
-    # df_taxonomia_variables = df['taxonomia_variable'].str.split(r"_-_", expand=True)
-    # for i in df_taxonomia_variables:
-    #     df['var_tax_'+str(i)] = df_taxonomia_variables[i]
-
     df['value_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False)
 
     # Ordenar el DataFrame
@@ -48,8 +44,6 @@ def creacion_ramas_arbol(DB: str):
         by=['element_count', 'metadatos', 'taxonomia_variable', 'intervalo']  # Ordenar primero por 'element_count'.
     ).drop(columns=['element_count', 'intervalo'])  # Eliminar la columna temporal después de ordenar.
     print(df)
-
-    # path_dict = arbol(df)
 
     structure_lst = []
 
@@ -68,11 +62,6 @@ def creacion_ramas_arbol(DB: str):
         key_list = path_key.split(', ')
         id_tag = DB + ' '
         current_structure = structure_lst
-  
-    # for path_key, value in path_dict.items():
-    #     key_list = path_key.split(', ')
-    #     id_tag = DB + ' '
-    #     current_structure = structure_lst
 
         for key_idx, key in enumerate(key_list):
             id_tag += key + ' '
