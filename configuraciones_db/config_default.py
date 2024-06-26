@@ -1,8 +1,10 @@
-# En plataforma se inidica un nombre para la misma
 
-# lab_var es la columna donde están los nombres de la variables
+# <<<Configuración de default>>>
+
+# En plataforma se inidica un nombre para la misma.
+
+# variable_columns es una lista de las columnas que definen a las variables.
 # resolution indica la columna donde están las celdas para cada resolución del ensamble.
-# interval es la columna donde están los intervalos
 # table es la tabla donde están almacenados los datos
 
 plataforma = {'name' : 'configuración nueva'}
@@ -13,23 +15,13 @@ fuente_de_datos_metadatos = {
         'user' : 'monitor',
         'password' : 'monitor123',
         'port' : '5433',
-        'lab_var' : ['name', 'interval'],   # Cambiar nombre de 'lab_var'
+        'variable_columns' : ['name', 'interval'],
         'table' : 'covariable',
         'resolution' : {'mun' : 'cells_mun',
                         'state' : 'cells_state',
                         'ageb' : 'cells_ageb'
                         }
-    },
-    'newspecies' : {
-        'host' : 'fastdb.c3.unam.mx',
-        'user' : 'monitor',
-        'password' : 'monitor123',
-        'port' : '5433',
-        'lab_var' : ['especievalida'],
-        'table' : 'covariable',
-        'resolution' :{'mun' : 'cells_mun',
-                        'state' : 'cells_state'}
-    }     
+    }
 }
 
 query_categorias = {
@@ -49,15 +41,7 @@ query_categorias = {
 
         from {table}
         ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'][0],
-            interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'][1],
-            table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table']),
-
-    'newspecies' : '''
-        select {lab_var} as taxonomia_variable,
-        concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
-        from {table}
-        ;
-    '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'][0],
-            table = fuente_de_datos_metadatos['newspecies']['table'])
-            }
+    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['variable_columns'][0],
+            interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['variable_columns'][1],
+            table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table'])
+}
