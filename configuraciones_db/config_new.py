@@ -5,7 +5,7 @@
 # interval es la columna donde están los intervalos
 # table es la tabla donde están almacenados los datos
 
-plataforma = {'name' : 'INEGI y especies'}
+plataforma = {'name' : 'configuración nueva'}
 
 fuente_de_datos_metadatos = {
     'epi_puma_censo_inegi_2020' : {
