@@ -36,13 +36,14 @@ def creacion_ramas_arbol(DB: str):
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
-    df['value_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False)  # Revisar si es necesario usar _-_ como separador.
+    # Crear una nueva columna con una lista de la taxonomía de la variable
+    df['taxonomia_variable_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False, regex=False)
 
     # Ordenar el DataFrame
     df = df.sort_values(
         by=['element_count', 'metadatos', 'taxonomia_variable']  # Ordenar primero por 'element_count'.
-    ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
-    print(df)
+        ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
+    # print(df)
 
     structure_lst = []
 
@@ -56,28 +57,28 @@ def creacion_ramas_arbol(DB: str):
         new_node = add_node(id_tag, text, [])
         structure.append(new_node)
         return new_node
-
-    for path_key in df.metadatos.unique():
-        key_list = path_key.split(', ')
+    
+    for path in df.metadatos.unique():
+        path_list = path.split(', ')
         id_tag = DB + ' '
         current_structure = structure_lst
 
-        for key_idx, key in enumerate(key_list):
-            id_tag += key + ' '
-            node = find_or_create_node(current_structure, id_tag, key)
+        for level in path_list:
+            id_tag += level + ' '
+            node = find_or_create_node(current_structure, id_tag, level)
             current_structure = node['children']
 
         # Agregar nodo de variables
-        variables_node = add_node(DB + '__variables__' + path_key, 'variables', [])
+        variables_node = add_node(DB + '__variables__' + path, 'variables', [])
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for var_lst in df[df['metadatos']==path_key]['value_lst']:
+        for var_tax_lst in df[df['metadatos']==path]['taxonomia_variable_lst']:
             var_tax_string = ''
-            id_tag = DB + ' ' + path_key + ' '
+            id_tag = DB + ' ' + path + ' '
             current_structure = variables_node['children']
-            for idx, var_tax in enumerate(var_lst):
-                if idx == len(var_lst) - 1:
+            for idx, var_tax in enumerate(var_tax_lst):
+                if idx == len(var_tax_lst) - 1:
                     id_tag = '__' + id_tag[:len(DB)] + '__' + id_tag[len(DB):] + var_tax
                 else:
                     id_tag += var_tax + ' '
