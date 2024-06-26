@@ -59,7 +59,7 @@ def creacion_ramas_arbol(DB: str):
         return new_node
     
     for path in df.metadatos.unique():
-        path_list = path.split(', ')
+        path_list = [x.strip() for x in path.split(',')]
         id_tag = DB + ' '
         current_structure = structure_lst
 
