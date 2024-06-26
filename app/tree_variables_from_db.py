@@ -1,5 +1,4 @@
 import pandas as pd
-from app.arbol_function import arbol
 from flask import current_app
 from sqlalchemy import create_engine, text
 
@@ -37,17 +36,14 @@ def creacion_ramas_arbol(DB: str):
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
-    df_taxonomia_variables = df['taxonomia_variable'].str.split(r"_-_", expand=True)
-    for i in df_taxonomia_variables:
-        df['var_tax_'+str(i)] = df_taxonomia_variables[i]
+    # Crear una nueva columna con una lista de la taxonomía de la variable
+    df['taxonomia_variable_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False, regex=False)
 
     # Ordenar el DataFrame
     df = df.sort_values(
-        by=['element_count', 'metadatos', 'taxonomia_variable', 'intervalo']  # Ordenar primero por 'element_count'.
-    ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
-    print(df)
-
-    # path_dict = arbol(df)
+        by=['element_count', 'metadatos', 'taxonomia_variable']  # Ordenar primero por 'element_count'.
+        ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
+    # print(df)
 
     structure_lst = []
 
@@ -61,39 +57,34 @@ def creacion_ramas_arbol(DB: str):
         new_node = add_node(id_tag, text, [])
         structure.append(new_node)
         return new_node
-
-    for path_key in df.metadatos.unique():
-        value = df[df['metadatos'] == path_key]['var_tax_0'].unique()   # Esta línea ya no iría.
-        key_list = path_key.split(', ')
+    
+    for path in df.metadatos.unique():
+        path_list = [x.strip() for x in path.split(',')]
         id_tag = DB + ' '
         current_structure = structure_lst
-  
-    # for path_key, value in path_dict.items():
-    #     key_list = path_key.split(', ')
-    #     id_tag = DB + ' '
-    #     current_structure = structure_lst
 
-        for key_idx, key in enumerate(key_list):
-            id_tag += key + ' '
-            node = find_or_create_node(current_structure, id_tag, key)
+        for level in path_list:
+            id_tag += level + ' '
+            node = find_or_create_node(current_structure, id_tag, level)
             current_structure = node['children']
 
         # Agregar nodo de variables
-        variables_node = add_node(DB + '__variables__' + path_key, 'variables', [])
+        variables_node = add_node(DB + '__variables__' + path, 'variables', [])
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for var_tax_0 in value: # value_lst = df[df['metadatos'] == path_key]['taxonomia_variable'] y aplicamos de forma análoga la creación de nodos de arriba.
-            variable_node = add_node(DB + ' ' + path_key + ' ' + var_tax_0, var_tax_0, [])
-            variables_node['children'].append(variable_node)
-
-            ser_nombre_variable = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_0']
-            ser_intervalo = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_1']
-
-            for variable_intervalo in zip(ser_nombre_variable, ser_intervalo):
-                interval_node = add_node('__' + DB + '__' + ' ' + path_key + ' ' + str(variable_intervalo),
-                                         str(variable_intervalo[0]) + ', ' + str(variable_intervalo[1]), [])
-                variable_node['children'].append(interval_node)
+        for var_tax_lst in df[df['metadatos']==path]['taxonomia_variable_lst']:
+            var_tax_string = ''
+            id_tag = DB + ' ' + path + ' '
+            current_structure = variables_node['children']
+            for idx, var_tax in enumerate(var_tax_lst):
+                if idx == len(var_tax_lst) - 1:
+                    id_tag = '__' + id_tag[:len(DB)] + '__' + id_tag[len(DB):] + var_tax
+                else:
+                    id_tag += var_tax + ' '
+                var_tax_string += var_tax + ', '
+                node = find_or_create_node(current_structure, id_tag, var_tax_string[:-2])
+                current_structure = node['children']
 
     return structure_lst
 

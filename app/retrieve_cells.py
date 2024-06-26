@@ -2,10 +2,10 @@ import pandas as pd
 from flask import current_app
 from sqlalchemy import create_engine, text
 
-# Esta función tiene como objetivo devolver una lista con las celdas
-# donde las variables seleccionadas tienen presencia.
-# Nota: una lista de celdas por cada base de datos.
 def recolectar_celdas(DB:str, variables:list, res:str):
+    '''
+    Función que obtiene, para cada variable, la lista de celdas donde hay presencia de estas.
+    '''
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
     user = fuente_de_datos_metadatos[DB]['user']
     host = fuente_de_datos_metadatos[DB]['host']
@@ -19,28 +19,26 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     # Columna donde están almacenadas las celdas
     col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
 
-    # Columna donde están almacenadas los nombres de las variables
-    col_names = fuente_de_datos_metadatos[DB]['lab_var']
+    # Lista de columnas donde está almacenada la taxonomía de las variables.
+    tax_var_cols = fuente_de_datos_metadatos[DB]['variable_columns']
 
-    # Columna donde están almacenados los intervalos de las variables
-    col_interval = fuente_de_datos_metadatos[DB]['interval']
+    # String que une la taxonomía de las variables
+    columnas_variable = ",', ',".join(tax_var_cols)
 
     # Nombre de la tabla
     table = fuente_de_datos_metadatos[DB]['table']
 
     # Consulta
     sql_query = text(f'''
-    with data as (
-        select concat({col_names},', ',{col_interval}) as variable,
-        {col_cells},
-        {col_names},
-        {col_interval}
-        from {table}
-        )
-    select variable, {col_cells} 
-    from data 
-    where variable in :variables;
-    ''')
+        WITH data AS (
+            SELECT CONCAT({columnas_variable}) AS variable,
+            {col_cells}
+            FROM {table}
+            )
+        SELECT variable, {col_cells} 
+        FROM data 
+        WHERE variable IN :variables;
+        ''')
 
     # Convertir la lista de variables a una tupla
     variables_tuple = tuple(variables)
@@ -55,7 +53,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
          
     df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
     df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
-    # print(df)
+    print(df)
 
     return df['variable'].to_numpy(), df[col_cells].to_numpy()
 
