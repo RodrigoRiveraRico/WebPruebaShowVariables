@@ -37,12 +37,17 @@ def creacion_ramas_arbol(DB: str):
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
+    df_taxonomia_variables = df['taxonomia_variable'].str.split(r"_-_", expand=True)
+    for i in df_taxonomia_variables:
+        df['var_tax_'+str(i)] = df_taxonomia_variables[i]
+
     # Ordenar el DataFrame
     df = df.sort_values(
-        by=['element_count', 'metadatos', 'nombre_variable', 'intervalo']  # Ordenar primero por 'element_count'.
+        by=['element_count', 'metadatos', 'taxonomia_variable', 'intervalo']  # Ordenar primero por 'element_count'.
     ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
+    print(df)
 
-    path_dict = arbol(df)
+    # path_dict = arbol(df)
 
     structure_lst = []
 
@@ -57,10 +62,16 @@ def creacion_ramas_arbol(DB: str):
         structure.append(new_node)
         return new_node
 
-    for path_key, value in path_dict.items():
+    for path_key in df.metadatos.unique():
+        value = df[df['metadatos'] == path_key]['var_tax_0'].unique()   # Esta línea ya no iría.
         key_list = path_key.split(', ')
         id_tag = DB + ' '
         current_structure = structure_lst
+  
+    # for path_key, value in path_dict.items():
+    #     key_list = path_key.split(', ')
+    #     id_tag = DB + ' '
+    #     current_structure = structure_lst
 
         for key_idx, key in enumerate(key_list):
             id_tag += key + ' '
@@ -72,12 +83,12 @@ def creacion_ramas_arbol(DB: str):
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for nombre_variable in value['__variables__']:
-            variable_node = add_node(DB + ' ' + path_key + ' ' + nombre_variable, nombre_variable, [])
+        for var_tax_0 in value: # value_lst = df[df['metadatos'] == path_key]['taxonomia_variable'] y aplicamos de forma análoga la creación de nodos de arriba.
+            variable_node = add_node(DB + ' ' + path_key + ' ' + var_tax_0, var_tax_0, [])
             variables_node['children'].append(variable_node)
 
-            ser_nombre_variable = df[(df['nombre_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['nombre_variable']
-            ser_intervalo = df[(df['nombre_variable'] == nombre_variable) & (df['metadatos'] == path_key)]['intervalo']
+            ser_nombre_variable = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_0']
+            ser_intervalo = df[(df['var_tax_0'] == var_tax_0) & (df['metadatos'] == path_key)]['var_tax_1']
 
             for variable_intervalo in zip(ser_nombre_variable, ser_intervalo):
                 interval_node = add_node('__' + DB + '__' + ' ' + path_key + ' ' + str(variable_intervalo),
@@ -85,6 +96,8 @@ def creacion_ramas_arbol(DB: str):
                 variable_node['children'].append(interval_node)
 
     return structure_lst
+
+    
 
 # Ejemplo de uso
 # creacion_ramas_arbol('Personas')
