@@ -7,7 +7,7 @@
 # resolution indica la columna donde están las celdas para cada resolución del ensamble.
 # table es la tabla donde están almacenados los datos
 
-plataforma = {'name' : 'configuración nueva'}
+plataforma = {'name' : 'Configuración de default (INEGI)'}
 
 fuente_de_datos_metadatos = {
     'epi_puma_censo_inegi_2020' : {
