@@ -19,31 +19,25 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     # Columna donde están almacenadas las celdas
     col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
 
-    # Columna donde están almacenadas los nombres de las variables
-    # col_names = fuente_de_datos_metadatos[DB]['lab_var'][0]
+    # Lista de columnas donde está almacenada la taxonomía de las variables.
+    tax_var_cols = fuente_de_datos_metadatos[DB]['lab_var']
 
-    # Columna donde están almacenados los intervalos de las variables
-    # col_interval = fuente_de_datos_metadatos[DB]['lab_var'][1]
-
-    var_cols = fuente_de_datos_metadatos[DB]['lab_var']
+    # String que une la taxonomía de las variables
+    columnas_variable = ",', ',".join(tax_var_cols)
 
     # Nombre de la tabla
     table = fuente_de_datos_metadatos[DB]['table']
 
-    str_ = ",', ',".join(var_cols)  # Cambiar nombre. son columnas donde están definida la taxonomia de la variable
-    str_2 = ", ".join(var_cols) # Cambiar nombre. 
-
     # Consulta
     sql_query = text(f'''
-        with data as (
-            select concat({str_}) as variable,
-            {col_cells},
-            {str_2}
-            from {table}
+        WITH data AS (
+            SELECT CONCAT({columnas_variable}) AS variable,
+            {col_cells}
+            FROM {table}
             )
-        select variable, {col_cells} 
-        from data 
-        where variable in :variables;
+        SELECT variable, {col_cells} 
+        FROM data 
+        WHERE variable IN :variables;
         ''')
 
     # Convertir la lista de variables a una tupla
