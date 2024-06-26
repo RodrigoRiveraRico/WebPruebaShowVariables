@@ -10,16 +10,13 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.before_app_request
 def setup():
-    # global data_bases, nombre_plataforma, fuente_de_datos_metadatos, plataforma
     session['fuente_de_datos_metadatos'] = current_app.config['FUENTE_DE_DATOS_METADATOS']
     session['plataforma'] = current_app.config['PLATAFORMA']
     session['data_bases'] = [db_name for db_name in session['fuente_de_datos_metadatos']]
-    # print("Bases de datos disponibles: {}".format(data_bases))
     session['nombre_plataforma'] = session['plataforma']['name']
 
 @main_bp.route('/')
 def index():
-    # global selected_names
     session['selected_names'] = []
     return render_template('index.html', selected_names=session['selected_names'], suggestions=session['data_bases'], etiqueta_h=session['nombre_plataforma'])
 
@@ -27,21 +24,34 @@ def index():
 def add_name():
     name = request.form.get('name')
     if name not in session['selected_names']:
+        session['selected_names'] = session.get('selected_names', [])
+        # session['selected_names'].append(name)
         session['selected_names'].append(name)
     return jsonify(selected_names=session['selected_names'])
 
-@main_bp.route('/res_db', methods=['POST'])
+@main_bp.route('/res_db', methods=['POST', 'GET'])
 def res_db():
-    Dict_res = ditc_res_DBs_list(session['selected_names'])
+        # El if es para no tener que volver a enviar el formulario cada vez que se cambia de página (igual en el endpoint de abajo).
+    if request.method == 'POST':
+        # Process the POST request and redirect to GET
+        Dict_res = ditc_res_DBs_list(session['selected_names'])
+        session['Dict_res'] = Dict_res
+        return redirect(url_for('main.res_db'))
+    # Handle the GET request
+    Dict_res = session.get('Dict_res', {})
     return render_template('resDB.html', Dict_res=Dict_res, etiqueta_h=session['nombre_plataforma'])
 
-@main_bp.route('/process', methods=['POST'])
+@main_bp.route('/process', methods=['POST', 'GET'])
 def process():
-    # global selected_names_res, res
-    selected_dbS = request.form['selected_res_DB']
-    list_res_db = selected_dbS.split('\r\n')
-    session['selected_names_res'] = [i.split(':')[1] for i in list_res_db]
-    session['res'] = list_res_db[0].split(':')[0]
+
+    if request.method == 'POST':
+        # Process the POST request and redirect to GET
+        selected_dbS = request.form['selected_res_DB']
+        list_res_db = selected_dbS.split('\r\n')
+        session['selected_names_res'] = [i.split(':')[1] for i in list_res_db]
+        session['res'] = list_res_db[0].split(':')[0]
+        return redirect(url_for('main.process'))
+    # Handle the GET request
     return render_template('arbol.html', etiqueta_h=session['nombre_plataforma'])
 
 @main_bp.route('/tree_data')
@@ -52,8 +62,7 @@ def get_tree_data():
 @main_bp.route('/select_variables', methods=['POST'])
 def select_variables():
 
-    # global nombre_clase, df_copia
-    global df_copia
+    global df_copia  # Se tuvo que guardas en global para que soporte tablas grandes (al hacer análisis con muchas variables y que no se guarde en el caché)
 
     selected_values1 = request.form['selectedVariables1']
     selected_values2 = request.form['selectedVariables2']
@@ -82,29 +91,9 @@ def select_variables():
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
     conteos.epsilon(df_all_variables_data, N)
     conteos.score(df_all_variables_data)
-    # session['df_copia'] = df_all_variables_data.to_dict(orient='records')
     df_copia = df_all_variables_data.to_dict(orient='records')
+
     return redirect(url_for('main.score_eps'))
-    # return jsonify(df_all_variables_data.to_dict(orient='records'))
-
-    df_all_cells_data = df_all_variables_data.explode('celdas').drop(columns=['epsilon'])
-    df_all_cells_data = df_all_cells_data.rename(columns={'celdas': 'celda'})
-
-    aggregations = {
-        'Covariable': '<br>'.join,
-        'score': 'sum'
-    }
-    df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
-    df_all_cells_data = df_all_cells_data.rename(columns={'Covariable': 'Covariables'})
-
-    df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
-    df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
-
-    return render_template('ScEp.html', 
-                           df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
-                           df_resultado2=df_all_cells_data.to_html(escape=False),
-                           nombre_titulo=nombre_clase,
-                           etiqueta_h=nombre_plataforma)
 
 #-- Rutas para poder filtrar los epsilons más significativos:
 @main_bp.route('/score_eps', methods=['GET', 'POST'])
@@ -122,12 +111,12 @@ def score_eps():
         'Covariable': '<br>'.join,
         'score': 'sum'
     }
+
     df_all_cells_data = df_all_cells_data.groupby('celda').agg(aggregations).reset_index()
     df_all_cells_data = df_all_cells_data.rename(columns={'Covariable': 'Covariables'})
 
     df_all_variables_data.sort_values(by=['Covariable'], inplace=True)
     df_all_cells_data.sort_values(by=['Covariables'], inplace=True)
-
 
     return render_template('ScEp.html', df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
                            df_resultado2=df_all_cells_data.to_html(escape=False), nombre_titulo=session['nombre_clase'],

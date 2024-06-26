@@ -11,34 +11,40 @@
     <header>    {{etiqueta_h}}     </header>
     
     <h2>Selecciona las bases de datos (DB) que vas a utilizar:</h2>
+
     <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()" >
-    <!-- <div id="suggestions"></div> -->
-    <!-- <div id="suggestions" class="suggestions-container"></div> -->
     <div id="suggestions"></div>
     <button onclick="addName()">Agregar</button>
+
     <h3>DB seleccionadas:</h3>
+
     <ul id="selectedNames">
         {% for name in selected_names %}
             <li>{{ name }}</li>
         {% endfor %}
     </ul>
+
     <form action="/res_db" method="post">
         <input type="hidden" name="selected_names" id="selectedNamesInput">
-        <button type="submit">Enviar DB seleccionadas</button>
+        <button type="submit">Enviar BD seleccionadas</button>
     </form>
+
     <script>
         var selectedNames = [];
-        var N_sg = 6   // Número de sugerencias mostradas de las bases de datos.
+        var suggestions = {{ suggestions | tojson | safe }};
+        var N_sg = 5   // Número de sugerencias mostradas de las bases de datos.
 
         function showSuggestionsClick() {
             var input = document.getElementById("nameInput");
             var value = input.value.trim().toLowerCase();
             var suggestionsContainer = document.getElementById("suggestions");
             suggestionsContainer.innerHTML = "";
-            var matches = {{ suggestions | tojson | safe }}.filter(function(suggestion) {
+        
+            var matches = suggestions.filter(function(suggestion) {
                 return suggestion.toLowerCase().startsWith(value);
-            }).slice(0, N_sg); // Limita a las primeras 3 sugerencias
+            }).slice(0, N_sg); // Limita a las primeras N_sg sugerencias
             // var matches = {{ suggestions | tojson | safe }}; // Get all suggestions
+
 
             matches.forEach(function(suggestion) {
                 var suggestionElement = document.createElement("div");
@@ -63,7 +69,7 @@
 
             var matches = {{ suggestions | tojson | safe }}.filter(function(suggestion) {
                 return suggestion.toLowerCase().startsWith(value);
-            }).slice(0, N_sg); // Limita a las primeras 3 sugerencias
+            }).slice(0, N_sg); // Limita a las primeras N_sg sugerencias
 
             matches.forEach(function(suggestion) {
                 var suggestionElement = document.createElement("div");
@@ -71,10 +77,11 @@
                 suggestionElement.onclick = function() {
                     input.value = suggestion;
                     suggestionsContainer.innerHTML = "";
+                    suggestionsContainer.style.display = 'none';
                 };
                 suggestionsContainer.appendChild(suggestionElement);
             });
-            document.getElementById('suggestions').style.display = 'block';
+            suggestionsContainer.style.display = 'block';
         }
 
         function addName() {
@@ -104,7 +111,11 @@
             xhr.open("POST", "/add_name", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {}
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    // Actualizar la lista de nombres seleccionados desde la respuesta del servidor
+                    selectedNames = JSON.parse(xhr.responseText).selected_names;
+                    updateSelectedNames();
+                }
             };
             xhr.send("name=" + encodeURIComponent(name));
         }

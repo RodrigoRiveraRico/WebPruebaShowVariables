@@ -13,16 +13,17 @@
     <form id="selectDB_re" action="/process" method="post">
 
         <label for="res_selector">Selecciona la resolución para mostrar las bases de datos: <br></label>
+        <br>
         <select name="Res_selector" id="res_selector" onchange="updateDbSelect()">
             {% for key in Dict_res.keys() %}
                 <option value="{{ key }}">{{ key }}</option>
             {% endfor %}
         </select>
-
+        <br>
         <select name="res_DB" id="res_db" multiple> 
             <!-- Mostrar el recuadro con las bases de datos para la resolución dada con JS ** -->
         </select>
-
+        <br>
         <button type="button" onclick="addSelected_res_DB()">Agregar BD</button>
         <br>
 
