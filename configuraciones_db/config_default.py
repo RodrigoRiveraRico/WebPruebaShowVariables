@@ -1,28 +1,8 @@
-
-# <<<Configuración de default>>>
-
-# En plataforma se inidica un nombre para la misma.
-
-# variable_columns es una lista de las columnas que definen a las variables.
-# resolution indica la columna donde están las celdas para cada resolución del ensamble.
-# table es la tabla donde están almacenados los datos
-
-plataforma = {'name' : 'Configuración de default (INEGI)'}
-
-fuente_de_datos_metadatos = {
-    'epi_puma_censo_inegi_2020' : {
-        'host' : 'fastdb.c3.unam.mx',
-        'user' : 'monitor',
-        'password' : 'monitor123',
-        'port' : '5433',
-        'variable_columns' : ['name', 'interval'],
-        'table' : 'covariable',
-        'resolution' : {'mun' : 'cells_mun',
-                        'state' : 'cells_state',
-                        'ageb' : 'cells_ageb'
-                        }
-    }
-}
+import yaml
+with open('configuraciones_db/config_default.yaml') as stream:
+    config_loaded = yaml.safe_load(stream)
+    plataforma = config_loaded['plataforma']
+    fuente_de_datos_metadatos = config_loaded['fuente de datos metadatos']
 
 query_categorias = {
     'epi_puma_censo_inegi_2020' : '''

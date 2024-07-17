@@ -1,0 +1,39 @@
+
+# <<<Configuración de default>>>
+
+# En plataforma se inidica un nombre para la misma.
+
+# variable_columns es una lista de las columnas que definen a las variables.
+# table es la tabla donde están almacenados los datos
+# resolution indica la columna donde están las celdas para cada resolución del ensamble.
+
+default_connection: &DEFAULT
+  host: fastdb.c3.unam.mx
+  user: monitor
+  password: monitor123
+  port: "5433"
+
+plataforma:
+  name: Configuracion de default (INEGI)
+
+fuente de datos metadatos:
+  epi_puma_censo_inegi_2020: 
+    <<: *DEFAULT
+    variable_columns:
+      - name
+      - interval
+    table: covariable
+    resolution:
+      ageb: cells_ageb
+      mun: cells_mun
+      state: cells_state
+
+  epi_puma_worldclim:
+    <<: *DEFAULT
+    variable_columns:
+      - label
+      - interval
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
