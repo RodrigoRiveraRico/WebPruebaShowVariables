@@ -29,6 +29,15 @@ fuente_de_datos_metadatos:
       ageb: cells_ageb
       mun: cells_mun
       state: cells_state
+    # categorias:
+    #   columnas:
+    #     name:
+    #       condicion 1: 
+    #         - grado 1
+    #         - grado 2
+    #         - metadato:
+    #           - estudios
+    #           - escolaridad
 
   epi_puma_worldclim:
     <<: *DEFAULT
