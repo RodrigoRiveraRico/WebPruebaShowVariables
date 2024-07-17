@@ -2,7 +2,7 @@ import yaml
 with open('configuraciones_db/config_default.yaml') as stream:
     config_loaded = yaml.safe_load(stream)
     plataforma = config_loaded['plataforma']
-    fuente_de_datos_metadatos = config_loaded['fuente de datos metadatos']
+    fuente_de_datos_metadatos = config_loaded['fuente_de_datos_metadatos']
 
 query_categorias = {
     'epi_puma_censo_inegi_2020' : '''

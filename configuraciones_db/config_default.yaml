@@ -18,7 +18,7 @@ default_connection: &DEFAULT
 plataforma:
   name: Configuracion de default (INEGI)
 
-fuente de datos metadatos:
+fuente_de_datos_metadatos:
   epi_puma_censo_inegi_2020: 
     <<: *DEFAULT
     variable_columns:
