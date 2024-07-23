@@ -53,7 +53,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
          
     df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
     df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
-    print(df)
+    # print(df)
 
     return df['variable'].to_numpy(), df[col_cells].to_numpy()
 

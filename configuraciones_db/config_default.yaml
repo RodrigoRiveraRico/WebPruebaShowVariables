@@ -13,7 +13,7 @@ default_connection: &DEFAULT
   host: fastdb.c3.unam.mx
   user: monitor
   password: monitor123
-  port: 5433 # Revisar si al dejarlo como número no se genera ningún error
+  port: 5433
 
 plataforma:
   name: Configuracion de default (INEGI)
