@@ -38,13 +38,3 @@ fuente_de_datos_metadatos:
     #         - metadato:
     #           - estudios
     #           - escolaridad
-
-  epi_puma_worldclim:
-    <<: *DEFAULT
-    variable_columns:
-      - label
-      - interval
-    table: covariable
-    resolution:
-      mun: cells_mun
-      state: cells_state
