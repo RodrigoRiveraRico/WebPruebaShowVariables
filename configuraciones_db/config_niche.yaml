@@ -24,3 +24,11 @@ fuente_de_datos_metadatos:
     table: sp_snib
     resolution:
       mun: cells_munkm_1
+    categorias:
+      columnas:
+        - reinovalido
+        - phylumdivisionvalido
+        - clasevalida
+        - ordenvalido
+        - familiavalida
+        - generovalido
