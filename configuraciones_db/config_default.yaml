@@ -8,6 +8,10 @@
 # variable_columns es una lista de las columnas que definen a las variables.
 # table es la tabla donde están almacenados los datos
 # resolution indica la columna donde están las celdas para cada resolución del ensamble.
+# categorias:
+# -> Archivo .py con sql indicando cómo agrupar las variables.
+# -> Diccionario key='columnas', value: lista indicando las columnas con las cuáles agrupar de forma ordenada.
+# -> Null en caso de no tener las dos opciones anteriores.
 
 default_connection: &DEFAULT
   host: fastdb.c3.unam.mx
