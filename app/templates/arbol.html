@@ -8,6 +8,21 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default-dark/style.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/themes/proton/style.min.css">
+    <!-- <style type="text/css">
+
+        .jstree-node .jstree-icon.jstree-ocl {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Angle_right_font_awesome.svg/512px-Angle_right_font_awesome.svg.png');
+            background-size: 22px 22px;
+            background-position: center !important;
+            background-repeat: repeat;
+            transition: all 0.3s ease;
+        }
+        .jstree-node.jstree-open .jstree-icon.jstree-ocl {
+            transform: rotate(90deg);
+        }
+
+    </style> -->
 
 </head>
 
@@ -18,18 +33,19 @@
     <h2>Selección de <span class="covariables">covariables</span> y <span class="clase">clase</span>:</h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/jstree.min.js"></script>
     <form id="selectVariablesForm" action="/select_variables" method="post">
         <div id="container_SVar">
-            <div>
+            <div id="covContainer">
                 <label>Selecciona las <span class="covariables">covariables</span>:</label>
                 <div id="tree"></div>
-                <div id="selectedNodesContainer1"></div>
+                <div id="selectedNodesContainer1" style="display: none;"></div>
                 <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly style="display: none;"></textarea>
             </div>
-            <div>
+            <div id="classContainer">
                 <label>Selecciona la <span class = "clase">clase</span>:</label>
                 <div id="tree2"></div>
-                <div id="selectedNodesContainer2"></div>
+                <div id="selectedNodesContainer2" style="display: none;"></div>
                 <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly style="display: none;"></textarea>
             </div>
         </div>
@@ -38,17 +54,26 @@
         </div>
     </form>
     <script>
+        // $.jstree.defaults.plugins = ["sort"];
+        // "plugins" : [ "sort" ];
         $(function () {
             $.getJSON('/tree_data', function (data) {
                 $('#tree').jstree({ 'core': { 'data': data, 
                                             'themes': {   /// Cambiar el tema
-                                                'name': 'default', // nombre del tema
+                                                'name': 'proton', // nombre del tema
+                                                'responsive': true,
                                                 'dots': true, // mostrar puntos entre nodos
                                                 'icons': false // mostrar iconos junto a los nodos
-                                            } } });
+                                            } },
+                                    "checkbox" : {
+                                                "keep_selected_style" : false
+                                                },
+                                    "plugins" : [ "checkbox"]
+                                });
                 $('#tree2').jstree({ 'core': { 'data': data,
                                             'themes': {   /// Cambiar el tema
-                                                'name': 'default', // nombre del tema
+                                                'name': 'proton', // nombre del tema
+                                                'responsive': true,
                                                 'dots': true, // mostrar puntos entre nodos
                                                 'icons': false // mostrar iconos junto a los nodos
                                             } } });
@@ -75,6 +100,13 @@
 
                 updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
 
+            });
+
+            // Para mostrar los nodos marcados con palomita del checkbox cada que 'cambia el arbol'
+            $('#tree').on("changed.jstree", function (e, data) {
+                var selectedNodesPP = data.selected;
+                console.log("Nodos seleccionados:", selectedNodesPP);
+                console.log("Tipo de evento:", e.type);
             });
 
             // Árbol 2 (de la clase)
