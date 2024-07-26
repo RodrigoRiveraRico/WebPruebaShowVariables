@@ -24,7 +24,7 @@ try:
     query_categorias = {}
     for db_name, db_config_values in fuente_de_datos_metadatos.items():
         if db_config_values['categorias'] == None:
-            metadatos_txt = f"'{db_name}'"
+            metadatos_txt = f"""'"{db_name}"'"""
 
         elif isinstance(db_config_values['categorias'], dict):
             metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
