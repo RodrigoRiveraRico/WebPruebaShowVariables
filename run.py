@@ -1,35 +1,70 @@
+import configuraciones_db.sql_config_construction as sql_c
 from psycopg2 import connect, OperationalError
+import yaml
 import csv
 import os
 import sys
 
 # Obtener el archivo de configuración desde la variable de entorno
-config_file = os.getenv('FLASK_CONFIG_FILE', 'configuraciones_db/config_default.py')
+config_file = os.getenv('FLASK_CONFIG_FILE', 'config_default')
+config_file = 'configuraciones_db/' + config_file + '.yaml'
 
 # Verificar si el archivo de configuración existe
 if not os.path.isfile(config_file):
     print(f"Error: El archivo de configuración '{config_file}' no existe.")
     sys.exit(1)
 
-# Ejecutar el archivo de configuración
-config_globals = {}
+# yaml
 try:
-    with open(config_file) as f:
-        exec(f.read(), config_globals)
+    with open(config_file) as stream:
+        config_loaded = yaml.safe_load(stream)
+        plataforma = config_loaded['plataforma']
+        fuente_de_datos_metadatos = config_loaded['fuente_de_datos_metadatos']
+
+    query_categorias = {}
+    for db_name, db_config_values in fuente_de_datos_metadatos.items():
+        if db_config_values['categorias'] == None:
+            metadatos_txt = f"'{db_name}'"
+
+        elif isinstance(db_config_values['categorias'], dict):
+            metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
+        
+        elif isinstance(db_config_values['categorias'], str):
+            exec("from configuraciones_db."+db_config_values['categorias'][:-3]+" import txt")
+            metadatos_txt = eval('txt')
+        
+        txt = f"""
+            SELECT 
+                CONCAT({sql_c.concatenacion_taxonomia(db_config_values)}) as taxonomia_variable,
+
+                {metadatos_txt} as metadatos
+
+            FROM {sql_c.table(db_config_values)}
+            ;
+            """
+        query_categorias.update({db_name : txt})
 except Exception as e:
-    print(f"Error al ejecutar el archivo de configuración '{config_file}': {e}")
-    sys.exit(1)
+    ...
 
-# Verificar que las variables necesarias están definidas
-required_vars = ['plataforma', 'fuente_de_datos_metadatos', 'query_categorias']
-for var in required_vars:
-    if var not in config_globals:
-        print(f"Error: La variable '{var}' no está definida en el archivo de configuración.")
-        sys.exit(1)
+# Ejecutar el archivo de configuración
+# config_globals = {}
+# try:
+#     with open(config_file) as f:
+#         exec(f.read(), config_globals)
+# except Exception as e:
+#     print(f"Error al ejecutar el archivo de configuración '{config_file}': {e}")
+#     sys.exit(1)
 
-plataforma = config_globals['plataforma']
-fuente_de_datos_metadatos = config_globals['fuente_de_datos_metadatos']
-query_categorias = config_globals['query_categorias']
+# # Verificar que las variables necesarias están definidas
+# required_vars = ['plataforma', 'fuente_de_datos_metadatos', 'query_categorias']
+# for var in required_vars:
+#     if var not in config_globals:
+#         print(f"Error: La variable '{var}' no está definida en el archivo de configuración.")
+#         sys.exit(1)
+
+# plataforma = config_globals['plataforma']
+# fuente_de_datos_metadatos = config_globals['fuente_de_datos_metadatos']
+# query_categorias = config_globals['query_categorias']
 
 # Verificar conexión
 try:

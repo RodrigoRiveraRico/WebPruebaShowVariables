@@ -1,0 +1,98 @@
+
+default_connection: &DEFAULT
+  host: fastdb.c3.unam.mx
+  user: monitor
+  password: monitor123
+  port: 5433
+
+plataforma:
+  name: Miscelaneo
+
+fuente_de_datos_metadatos:
+  epi_puma_censo_inegi_2020: 
+    <<: *DEFAULT
+    variable_columns:
+      - name
+      - interval
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
+      ageb: cells_ageb
+    categorias: epi_puma_censo_sql.py
+
+  epi_puma_worldclim:
+    <<: *DEFAULT
+    variable_columns:
+        - label
+        - interval
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
+    categorias: Null
+
+  epi_puma_accidentes:
+    <<: *DEFAULT
+    variable_columns:
+      - name
+      - interval
+    table: covariable
+    resolution:
+      mun: cells_mun
+    categorias: Null
+
+  newspecies:
+    <<: *DEFAULT
+    variable_columns:
+      - especievalida
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
+    categorias: 
+      columnas:
+      - reinovalido
+      - phylumdivisionvalido
+      - clasevalida
+      - ordenvalido
+      - familiavalida
+      - generovalido
+
+  epi_puma_hospederos:
+    <<: *DEFAULT
+    variable_columns:
+      - nombrecientifico
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
+    categorias: 
+      columnas:
+      - reino
+      - phylum
+      - clase
+      - orden
+      - familia
+      - genero
+
+  DB_Deforestacion:
+    <<: *DEFAULT
+    variable_columns:
+      - label
+      - tag
+    table: deforestacion
+    resolution:
+      mun: cells_mun
+    categorias: Null
+
+  Personas:
+    <<: *DEFAULT
+    variable_columns:
+      - nombre
+      - valor
+    table: covariable
+    resolution:
+      UNAM_1075: presencias
+    categorias: Null
+
