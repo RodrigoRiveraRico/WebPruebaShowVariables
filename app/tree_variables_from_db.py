@@ -33,8 +33,6 @@ def creacion_ramas_arbol(DB: str):
     with engine.connect() as connection:
         df = pd.read_sql(sql_query, connection)
 
-    df = df.head(100)
-
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 

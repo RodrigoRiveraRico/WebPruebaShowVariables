@@ -1,14 +1,10 @@
-def concatenacion_taxonomia(dict_db_values:dict):
-    text_concat = ''
-    for column in dict_db_values['variable_columns']:
-        text_concat += column + ', '
-    return text_concat[:-2]
+import os
 
-def concatenacion_metadatos(dict_db_values:dict):
-    text_concat = ''
-    for column in dict_db_values['categorias']['columnas']:
-        text_concat += column + ",', ', "
-    return text_concat[:-7]
+def concatenacion_taxonomia(db_config_values: dict) -> str:
+    return ",'_-_',".join(db_config_values['variable_columns'])
 
-def table(dict_db_values:dict):
-    return dict_db_values['table']
+def concatenacion_metadatos(db_config_values: dict) -> str:
+    return "', ', ".join(db_config_values['categorias']['columnas'])
+
+def table(db_config_values: dict) -> str:
+    return db_config_values['table']

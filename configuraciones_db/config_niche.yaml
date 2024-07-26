@@ -32,3 +32,4 @@ fuente_de_datos_metadatos:
         - ordenvalido
         - familiavalida
         - generovalido
+# Acomodo únicamente con columnas de la base de datos.

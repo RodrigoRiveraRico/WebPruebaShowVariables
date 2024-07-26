@@ -26,15 +26,8 @@ fuente_de_datos_metadatos:
       - interval
     table: covariable
     resolution:
-      ageb: cells_ageb
       mun: cells_mun
       state: cells_state
-    # categorias:
-    #   columnas:
-    #     name:
-    #       condicion 1: 
-    #         - grado 1
-    #         - grado 2
-    #         - metadato:
-    #           - estudios
-    #           - escolaridad
+      ageb: cells_ageb
+    categorias: epi_puma_censo_sql.py
+# Acomodo indicado en un archivo con sql

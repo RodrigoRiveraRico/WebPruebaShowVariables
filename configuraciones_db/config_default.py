@@ -1,27 +1,29 @@
 import yaml
+import configuraciones_db.sql_config_construction as sql_c
 with open('configuraciones_db/config_default.yaml') as stream:
     config_loaded = yaml.safe_load(stream)
     plataforma = config_loaded['plataforma']
     fuente_de_datos_metadatos = config_loaded['fuente_de_datos_metadatos']
 
-query_categorias = {
-    'epi_puma_censo_inegi_2020' : '''
-        select concat({lab_var},'_-_',{interval}) as taxonomia_variable,
+query_categorias = {}
+for db_name, db_config_values in fuente_de_datos_metadatos.items():
+    if db_config_values['categorias'] == None:
+        metadatos_txt = f'{db_name}'
 
-        case 
-            when {lab_var} like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
-            when {lab_var} like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
-            when {lab_var} like '%condici_n mental%' or {lab_var} like '%discapacidad%' or {lab_var} like '%limitaci_n%' then concat('salud',', ','discapacidad')
-            when {lab_var} like '%censales%referencia%' or {lab_var} like '%viviendas particulares%' or {lab_var} like '%religi_n%' or {lab_var} like '%a_os%' or {lab_var} like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
-            when {lab_var} like '%poblaci_n femeninca%' or {lab_var} like '%pobalci_n masculina' then concat('personas',', ','genero')
-            when {lab_var} like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
-            when {lab_var} like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
-            else concat('Otros')
-        end as metadatos
+    elif isinstance(db_config_values['categorias'], dict):
+        metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
+    
+    elif isinstance(db_config_values['categorias'], str):
+        exec("from configuraciones_db."+db_config_values['categorias'][:-3]+" import txt")
+        metadatos_txt = eval('txt')
+    
+    txt = f"""
+        SELECT 
+            CONCAT({sql_c.concatenacion_taxonomia(db_config_values)}) as taxonomia_variable,
 
-        from {table}
+            {metadatos_txt} as metadatos
+
+        FROM {sql_c.table(db_config_values)}
         ;
-    '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['variable_columns'][0],
-            interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['variable_columns'][1],
-            table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table'])
-}
+        """
+    query_categorias.update({db_name : txt})
