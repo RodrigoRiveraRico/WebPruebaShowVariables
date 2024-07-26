@@ -1,14 +1,14 @@
 Ejecución: 
 - WINDOWS:
   
-$ set FLASK_CONFIG_FILE=config_default
+$ set FLASK_CONFIG_FILE=config_default.yaml
 $ set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
 
 $ flask --app run run --port=4000 --host=0.0.0.0
 
 - LINUX:
 
-$ export FLASK_CONFIG_FILE=config_default
+$ export FLASK_CONFIG_FILE=config_default.yaml
 $ export SECRET_KEY='secret_key_de_tu_entorno_de_ejecucion'
 
 $ flask --app run run --port=4000 --host=0.0.0.0
