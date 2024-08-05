@@ -34,5 +34,5 @@ fuente_de_datos_metadatos:
       state: cells_state
       ageb: cells_ageb
     categorias: 
-      archivo: epi_puma_censo_sql.py # <- Indicar con diccionario que es  un archivo. Modifcar run.py también.
+      archivo: epi_puma_censo_sql.py
 # Acomodo indicado en un archivo con sql
