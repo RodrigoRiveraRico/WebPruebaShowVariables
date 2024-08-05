@@ -9,7 +9,7 @@
 # table es la tabla donde están almacenados los datos
 # resolution indica la columna donde están las celdas para cada resolución del ensamble.
 # categorias:
-# -> Archivo .py con sql indicando cómo agrupar las variables.
+# -> Diccionario key='archivo', value: file.py con sql indicando cómo agrupar las variables.
 # -> Diccionario key='columnas', value: lista indicando las columnas con las cuáles agrupar de forma ordenada.
 # -> Null en caso de no tener las dos opciones anteriores.
 
@@ -33,5 +33,6 @@ fuente_de_datos_metadatos:
       mun: cells_mun
       state: cells_state
       ageb: cells_ageb
-    categorias: epi_puma_censo_sql.py
+    categorias: 
+      archivo: epi_puma_censo_sql.py # <- Indicar con diccionario que es  un archivo. Modifcar run.py también.
 # Acomodo indicado en un archivo con sql

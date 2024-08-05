@@ -26,13 +26,14 @@ try:
         if db_config_values['categorias'] == None:
             metadatos_txt = f"""'"{db_name}"'"""
 
-        elif isinstance(db_config_values['categorias'], dict):
-            metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
-        
-        elif isinstance(db_config_values['categorias'], str):
-            exec("from configuraciones_db."+db_config_values['categorias'][:-3]+" import txt")
+        elif "archivo" in db_config_values['categorias']:
+            archivo_name = db_config_values['categorias']['archivo'][:-3]
+            exec("from configuraciones_db."+archivo_name+" import txt")
             metadatos_txt = eval('txt')
-        
+
+        elif "columnas" in db_config_values['categorias']:
+            metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
+
         txt = f"""
             SELECT 
                 CONCAT({sql_c.concatenacion_taxonomia(db_config_values)}) as taxonomia_variable,
@@ -44,7 +45,8 @@ try:
             """
         query_categorias.update({db_name : txt})
 except Exception as e:
-    ...
+    print(f"Error: {e}")
+    sys.exit(1)
 
 # Ejecutar el archivo de configuración
 # config_globals = {}
