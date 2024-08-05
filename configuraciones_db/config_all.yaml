@@ -19,7 +19,8 @@ fuente_de_datos_metadatos:
       mun: cells_mun
       state: cells_state
       ageb: cells_ageb
-    categorias: epi_puma_censo_sql.py
+    categorias: 
+      archivo: epi_puma_censo_sql.py
 
   epi_puma_worldclim:
     <<: *DEFAULT
