@@ -24,7 +24,6 @@ except Exception as e:
     print(f"Error al ejecutar el archivo de configuración '{config_file}': {e}")
     sys.exit(1)
 
-
 query_categorias = {}
 for db_name, db_config_values in fuente_de_datos_metadatos.items():
     if db_config_values['categorias'] == None:
@@ -51,7 +50,7 @@ for db_name, db_config_values in fuente_de_datos_metadatos.items():
     except Exception as e:
         print(f'Error en la configuracion de categorias de {db_name}')
         sys.exit(1)
-        
+
 # Verificar conexión
 try:
     flag = False
