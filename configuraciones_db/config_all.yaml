@@ -53,12 +53,12 @@ fuente_de_datos_metadatos:
       state: cells_state
     categorias: 
       columnas:
-      - reinovalido
-      - phylumdivisionvalido
-      - clasevalida
-      - ordenvalido
-      - familiavalida
-      - generovalido
+        - reinovalido
+        - phylumdivisionvalido
+        - clasevalida
+        - ordenvalido
+        - familiavalida
+        - generovalido
 
   epi_puma_hospederos:
     <<: *DEFAULT
@@ -70,12 +70,12 @@ fuente_de_datos_metadatos:
       state: cells_state
     categorias: 
       columnas:
-      - reino
-      - phylum
-      - clase
-      - orden
-      - familia
-      - genero
+        - reino
+        - phylum
+        - clase
+        - orden
+        - familia
+        - genero
 
   DB_Deforestacion:
     <<: *DEFAULT
