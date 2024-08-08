@@ -1,150 +1,91 @@
-Ejecución: 
-- WINDOWS:
-  
-$ set FLASK_CONFIG_FILE=config_default.yaml
-$ set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
+## Ejecución de la plataforma
 
-$ flask --app run run --port=4000 --host=0.0.0.0
+### WINDOWS
 
-- LINUX:
+```CMD
+set FLASK_CONFIG_FILE=config.yaml
+set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
 
-$ export FLASK_CONFIG_FILE=config_default.yaml
-$ export SECRET_KEY='secret_key_de_tu_entorno_de_ejecucion'
+flask --app run run --port=4000 --host=0.0.0.0
+```
 
-$ flask --app run run --port=4000 --host=0.0.0.0
+### LINUX:
 
-Ejemplo del archivo config.py
-    
-    
-    # En plataforma se inidica un nombre para la misma
-    
-    # lab_var es la columna donde están los nombres de la variables
-    # resolution indica la columna donde están las celdas para cada resolución del ensamble.
-    # interval es la columna donde están los intervalos
-    # table es la tabla donde están almacenados los datos
-    
-    plataforma = {'name' : 'Plataforma 1'}
-    
-    fuente_de_datos_metadatos = {
-        'epi_puma_censo_inegi_2020' : {
-            'host' : 'fastdb.c3.unam.mx',
-            'user' : 'monitor',
-            'password' : 'monitor123',
-            'port' : '5433',
-            'lab_var' : 'name',
-            'interval' : 'interval',
-            'table' : 'covariable',
-            'resolution' : {'mun' : 'cells_mun',
-                            'state' : 'cells_state',
-                            'ageb' : 'cells_ageb'
-                            }
-        },
-        'epi_puma_worldclim' : {
-            'host' : 'fastdb.c3.unam.mx',
-            'user' : 'monitor',
-            'password' : 'monitor123',
-            'port' : '5433',
-            'lab_var' : 'label',
-            'interval' : 'interval',
-            'table' : 'covariable',
-            'resolution' :{'mun' : 'cells_mun',
-                           'state' : 'cells_state'
-                           }
-        },
-         'epi_puma_accidentes' : {
-            'host' : 'fastdb.c3.unam.mx',
-            'user' : 'monitor',
-            'password' : 'monitor123',
-            'port' : '5433',
-            'lab_var' : 'name',
-            'interval' : 'interval',
-            'table' : 'covariable',
-            'resolution' : {'mun' : 'cells_mun'}
-        },
-         'newspecies' : {
-            'host' : 'fastdb.c3.unam.mx',
-            'user' : 'monitor',
-            'password' : 'monitor123',
-            'port' : '5433',
-            'lab_var' : 'especievalida',
-            'interval' : 'nspn',
-            'table' : 'covariable',
-            'resolution' :{'mun' : 'cells_mun',
-                           'state' : 'cells_state'
-                           }
-        },
-         'epi_puma_hospederos' : {
-             'host' : 'fastdb.c3.unam.mx',
-             'user' : 'monitor',
-             'password' : 'monitor123',
-             'port' : '5433',
-             'lab_var' : 'nombrecientifico',
-             'interval' : 'id',
-             'table' : 'covariable',
-             'resolution' : {'mun' : 'cells_mun',
-                             'state' : 'cells_state'}
-         }
-    }
-    
-    query_categorias = {
-        'epi_puma_censo_inegi_2020' : '''
-            select {lab_var} as nombre_variable,
-            {interval} as intervalo,
-    
-            case 
-                when {lab_var} like 'Grado promedio%' then concat('estudios',', ','escolaridad') 
-                when {lab_var} like '%afiliada%servicios%' then concat('salud',', ','servicios salud')
-                when {lab_var} like '%condici_n mental%' or {lab_var} like '%discapacidad%' or {lab_var} like '%limitaci_n%' then concat('salud',', ','discapacidad')
-                when {lab_var} like '%censales%referencia%' or {lab_var} like '%viviendas particulares%' or {lab_var} like '%religi_n%' or {lab_var} like '%a_os%' or {lab_var} like '%poblaci_n nacida%entidad%' then concat('personas',', ','población')
-                when {lab_var} like '%poblaci_n femeninca%' or {lab_var} like '%pobalci_n masculina' then concat('personas',', ','genero')
-                when {lab_var} like '%viviendas particulares%' then concat('vivienda',', ','vivienda1')
-                when {lab_var} like '%viviendas particulares habitadas que no%' then concat('vivienda',', ','vivienda2')
-                else concat('Otros')
-            end as metadatos
-    
-            from {table}
-            ;
-        '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['lab_var'],
-                interval = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['interval'],
-                table = fuente_de_datos_metadatos['epi_puma_censo_inegi_2020']['table']),
-    
-        'epi_puma_worldclim' : '''
-            select {lab_var} as nombre_variable,
-            {interval} as intervalo,
-            '"epi_puma_worldclim"' as metadatos
-            from {table}
-            ;
-        '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_worldclim']['lab_var'],
-                   interval = fuente_de_datos_metadatos['epi_puma_worldclim']['interval'],
-                   table = fuente_de_datos_metadatos['epi_puma_worldclim']['table']),
-    
-        'epi_puma_accidentes' : '''
-            select {lab_var} as nombre_variable,
-            {interval} as intervalo,
-            '"epi_puma_accidentes"' as metadatos
-            from {table}
-            ;
-        '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_accidentes']['lab_var'],
-                interval = fuente_de_datos_metadatos['epi_puma_accidentes']['interval'],
-                table = fuente_de_datos_metadatos['epi_puma_accidentes']['table']),
-    
-        'newspecies' : '''
-            select {lab_var} as nombre_variable,
-            {interval} as intervalo,
-            concat(reinovalido,', ', phylumdivisionvalido,', ', clasevalida,', ', ordenvalido,', ', familiavalida,', ', generovalido) as metadatos
-            from {table}
-            ;
-        '''.format(lab_var = fuente_de_datos_metadatos['newspecies']['lab_var'],
-                interval = fuente_de_datos_metadatos['newspecies']['interval'],
-                table = fuente_de_datos_metadatos['newspecies']['table']),
-    
-        'epi_puma_hospederos' : '''
-            select {lab_var} as nombre_variable,
-            {interval} as intervalo,
-            concat(reino,', ', phylum,', ', clase,', ', orden,', ', familia,', ', genero) as metadatos
-            from {table}
-            ;
-        '''.format(lab_var = fuente_de_datos_metadatos['epi_puma_hospederos']['lab_var'],
-                interval = fuente_de_datos_metadatos['epi_puma_hospederos']['interval'],
-                table = fuente_de_datos_metadatos['epi_puma_hospederos']['table'])
-    }
+```bash
+export FLASK_CONFIG_FILE=config.yaml
+export SECRET_KEY='secret_key_de_tu_entorno_de_ejecucion'
+
+flask --app run run --port=4000 --host=0.0.0.0
+```
+
+> host=0.0.0.0 para que la plataforma se pueda visualizar desde cualquier dispositivo conectado a la red del servidor donde se ejecuta la plataforma.
+
+> config.yaml debe estar ubicado en ./configuraciones_db
+
+## Ejemplo del archivo _config.yaml_
+
+* En **plataforma** se inidica un nombre para la misma.
+* **variable_columns** es una lista de las columnas que definen a las variables.
+* **table** es la tabla donde están almacenados los datos.
+* **resolution** indica la columna donde están las celdas para cada resolución del ensamble.
+* **categorias**: una de las siguientes:
+  * Diccionario key='archivo', value: file.py con sql indicando cómo agrupar las variables.
+  * Diccionario key='columnas', value: lista indicando las columnas de la base de datos con las cuáles agrupar de forma ordenada.
+  * _Null_ en caso de no tener las dos opciones anteriores.
+
+```yaml
+plataforma:
+  name: Configuracion de default (INEGI)
+
+fuente_de_datos_metadatos:
+  epi_puma_censo_inegi_2020: 
+    host: fastdb.c3.unam.mx
+    user: monitor
+    password: ****
+    port: 5433
+    variable_columns:
+      - name
+      - interval
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
+      ageb: cells_ageb
+    categorias: 
+      # archivo: file.py
+      # columnas :
+      #   - col_1
+      #   - col_2
+      # Null
+```
+
+#### Archivo _catalogo_resoluciones.csv_
+
+El archivo ubicado en ./catalogos/catalogo_resolcuones.csv debe contener el total del ensamble de la resolución en la que están registrados los datos.
+
+Una resolución ... EN CONSTRUCCIÓN
+
+
+## Ejemplo del archivo _file.py_ indicado en _config.yaml_
+
+* En la variable _col_ se indica la colmuna (de la base de datos) a tratar.
+* En _txt_ se construye la consulta SQL tal que organiza las variables según como el usario las requiera.
+
+```python
+col = 'name'
+
+txt = f'''
+CASE 
+    WHEN {col} LIKE 'Grado promedio%' THEN CONCAT('estudios',', ','escolaridad') 
+    WHEN {col} LIKE '%afiliada%servicios%' THEN CONCAT('salud',', ','servicios salud')
+    WHEN {col} LIKE '%condici_n mental%' or {col} LIKE '%discapacidad%' or {col} LIKE '%limitaci_n%' THEN CONCAT('salud',', ','discapacidad')
+    WHEN {col} LIKE '%censales%referencia%' or {col} LIKE '%viviendas particulares%' or {col} LIKE '%religi_n%' or {col} LIKE '%a_os%' or {col} LIKE '%poblaci_n nacida%entidad%' THEN CONCAT('personas',', ','población')
+    WHEN {col} LIKE '%poblaci_n femeninca%' or {col} LIKE '%pobalci_n masculina' THEN CONCAT('personas',', ','genero')
+    WHEN {col} LIKE '%viviendas particulares%' THEN CONCAT('vivienda',', ','vivienda1')
+    WHEN {col} LIKE '%viviendas particulares habitadas que no%' THEN CONCAT('vivienda',', ','vivienda2')
+    ELSE CONCAT('Otros')
+END
+'''
+```
+
+> file.py debe estar ubicado en ./configuraciones_db
