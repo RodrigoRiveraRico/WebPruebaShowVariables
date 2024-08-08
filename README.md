@@ -20,17 +20,26 @@ flask --app run run --port=4000 --host=0.0.0.0
 
 > host=0.0.0.0 para que la plataforma se pueda visualizar desde cualquier dispositivo conectado a la red del servidor donde se ejecuta la plataforma.
 
-> config.yaml debe estar ubicado en ./configuraciones_db
+> _config.yaml_ debe estar ubicado en _./configuraciones_db_
 
 ## Ejemplo del archivo _config.yaml_
 
 * En **plataforma** se inidica un nombre para la misma.
+  
 * **variable_columns** es una lista de las columnas que definen a las variables.
+  
 * **table** es la tabla donde están almacenados los datos.
+  
 * **resolution** indica la columna donde están las celdas para cada resolución del ensamble.
+  
+  La llave correspondiente a la columna donde están las celdas debe estar igualmente indicada en el archivo _./catalogos/catalogo_resoluciones.csv_ con el total del ensamble.
+  
 * **categorias**: una de las siguientes:
+  
   * Diccionario key='archivo', value: file.py con sql indicando cómo agrupar las variables.
+    
   * Diccionario key='columnas', value: lista indicando las columnas de la base de datos con las cuáles agrupar de forma ordenada.
+  
   * _Null_ en caso de no tener las dos opciones anteriores.
 
 ```yaml
@@ -39,10 +48,10 @@ plataforma:
 
 fuente_de_datos_metadatos:
   epi_puma_censo_inegi_2020: 
-    host: fastdb.c3.unam.mx
-    user: monitor
+    host: ****
+    user: ****
     password: ****
-    port: 5433
+    port: ****
     variable_columns:
       - name
       - interval
@@ -59,16 +68,12 @@ fuente_de_datos_metadatos:
       # Null
 ```
 
-#### Archivo _catalogo_resoluciones.csv_
-
-El archivo ubicado en ./catalogos/catalogo_resolcuones.csv debe contener el total del ensamble de la resolución en la que están registrados los datos.
-
-Una resolución ... EN CONSTRUCCIÓN
-
-
 ## Ejemplo del archivo _file.py_ indicado en _config.yaml_
 
+* _file.py_ debe estar ubicado en _./configuraciones_db_
+
 * En la variable _col_ se indica la colmuna (de la base de datos) a tratar.
+  
 * En _txt_ se construye la consulta SQL tal que organiza las variables según como el usario las requiera.
 
 ```python
@@ -87,5 +92,3 @@ CASE
 END
 '''
 ```
-
-> file.py debe estar ubicado en ./configuraciones_db
