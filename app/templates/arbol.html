@@ -4,130 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleccion de covariables</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default-dark/style.min.css" />
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/themes/proton/style.min.css">
 </head>
 
 <body>
 
     <header>    {{etiqueta_h}}     </header>  
-
+    <!-- <div class="card d-inline-block">
+        <div class="card-body">
+            <h2>Selección de <span class="covariables">covariables</span> y <span class="clase">clase</span>:</h2>
+        </div>
+    </div> -->
+    <br>
     <h2>Selección de <span class="covariables">covariables</span> y <span class="clase">clase</span>:</h2>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/jstree.min.js"></script>
+    <!-- Form con todos los elementos: -->
     <form id="selectVariablesForm" action="/select_variables" method="post">
+        <br>
         <div id="container_SVar">
-            <div>
+            <div id="covContainer">
                 <label>Selecciona las <span class="covariables">covariables</span>:</label>
                 <div id="tree"></div>
-                <div id="selectedNodesContainer1"></div>
-                <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly style="display: none;"></textarea>
+                <!-- <div id="selectedNodesContainer1" style="display: none;"></div>
+                <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly style="display: none;"></textarea> -->
             </div>
-            <div>
+            <div id="classContainer">
                 <label>Selecciona la <span class = "clase">clase</span>:</label>
                 <div id="tree2"></div>
-                <div id="selectedNodesContainer2"></div>
-                <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly style="display: none;"></textarea>
+                <!-- <div id="selectedNodesContainer2" style="display: none;"></div> Este es el que ya no me va a servir  -->
+                <!-- <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly style="display: none;"></textarea> -->
             </div>
         </div>
         <div id="buttonContainer">
-        <button id="sendButton" style="display:none;" type="submit">Enviar covariables y clase seleccionadas</button>
+        <button id="sendButton" type="submit" class="btn btn-lg btn-primary">Enviar covariables y clase seleccionadas</button>
         </div>
     </form>
+
     <script>
+        // Aquí se construyen los dos árboles (#tree de las variables y #tree2 para seleccionar la clase): 
         $(function () {
             $.getJSON('/tree_data', function (data) {
                 $('#tree').jstree({ 'core': { 'data': data, 
                                             'themes': {   /// Cambiar el tema
-                                                'name': 'default', // nombre del tema
+                                                'name': 'proton', // nombre del tema
+                                                'responsive': true,
                                                 'dots': true, // mostrar puntos entre nodos
                                                 'icons': false // mostrar iconos junto a los nodos
-                                            } } });
+                                            } },
+                                    "checkbox" : {
+                                                "keep_selected_style" : false,
+                                                },
+                                    "plugins" : [ "checkbox"]
+                                });
                 $('#tree2').jstree({ 'core': { 'data': data,
                                             'themes': {   /// Cambiar el tema
-                                                'name': 'default', // nombre del tema
+                                                'name': 'proton', // nombre del tema
+                                                'responsive': true,
                                                 'dots': true, // mostrar puntos entre nodos
                                                 'icons': false // mostrar iconos junto a los nodos
-                                            } } });
+                                            },
+                                            // "multiple": false,
+                                            // "check_callback": true,
+                                            },
+                                    "checkbox" :{
+                                                "tie_selection": false,
+                                                // "keep_selected_style" : true
+                                                "three_state": false, // desactiva checkboxes tri-estados
+                                                "cascade": "none" // evita la selección automática de nodos hijos/padres
+                                                },
+                                    "plugins" : ["checkbox"]
+                                });
             });
         });
 
+        $('#tree2').on("click.jstree", ".jstree-anchor", function (event) {
+            // Evita que el checkbox se seleccione si el clic no es en el checkbox
+            if (!$(event.target).hasClass('jstree-checkbox')) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            }
+        });
 
-
+        // En esta función se maneja la interacción con los árboles: 
         $(function () {
-            let selectedNodes = new Set();
-            let selectedNodes2 = new Set();
 
-            // Árbol 1 (de las covariables)
-            $('#tree').on('select_node.jstree', function (e, data) {
+            // Con checkbox:
+            var selectedNodes = []
+            var selectedNodes2 = []
 
-                let node = data.node;
-                let tree = $('#tree').jstree();
+            //// Manejar cuando los cambios de selección en cada árbol:
 
-                // Medir el tiempo de ejecución de la función processNode:
-                let startTime = performance.now();
-                    processNode(node, tree, selectedNodes);
-                let endTime = performance.now();
-                console.log('Tiempo de ejecución de processNode:', endTime - startTime, 'ms');
-
-                updateSelectedNodesContainer('#selectedNodesContainer1', selectedNodes, '#selectedVariables1');
-
+            // Árbol 1 (de las variables)
+            $('#tree').on("changed.jstree", function (e, data) {   // e = evento ("changed" en este caso)
+                selectedNodes = filtrarYTransformar(data.selected); // Actualiza la lista con los nodos seleccionados
             });
+
 
             // Árbol 2 (de la clase)
-            $('#tree2').on('select_node.jstree', function (e, data) {
-                // var node = data.node;
-                var node = data.node
-                var tree = $('#tree2').jstree()
 
-                if (!node.children.length) {
-                    var fullName = getFullName(node, tree)
+            let isHandlingEvent = false;
+            $('#tree2').on("check_node.jstree uncheck_node.jstree", function (e, data) {
+                if (isHandlingEvent) return;  // Evitar recursión de la llamada de la función checknode y uncheck all.
+                isHandlingEvent = true;
 
-                    if (selectedNodes2.size < 1) {   // Para que solo se pueda agregar una clase, por ahora.
-                        selectedNodes2.add(fullName);
-                        updateSelectedNodesContainer('#selectedNodesContainer2', selectedNodes2, '#selectedVariables2');
-                    }
+                if (e.type === 'check_node') {
+                    $('#tree2').jstree(true).uncheck_all(); // Deselecciona todos los nodos
+                    $('#tree2').jstree(true).check_node(data.node.id); // Selecciona el nodo actual
                 }
+
+                let checkedNodes = $('#tree2').jstree("get_checked", true) // Obtiene los nodos checkeados
+                    .map(node => node.id); // Extrae los IDs de los nodos
+
+                selectedNodes2 = filtrarYTransformar(checkedNodes); // Filtra y transforma los IDs, actualizando la lista
+
+                isHandlingEvent = false;
             });
+
+            // Envío de las listas:
+
+            document.getElementById('selectVariablesForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Convertir las listas un array para enviarlo como JSON
+                selectedNodes = Array.from(selectedNodes);
+                selectedNodes2 = Array.from(selectedNodes2);
+
+                // Enviar el Array mediante AJAX
+                fetch('/select_variables', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ selectedNodes: selectedNodes, selectedNodes2: selectedNodes2 })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = data.redirect;  // Redirige a la nueva URL
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
 
             // Funciones:
 
-            function processNode(node, tree, selectedNodes) {  // Renombramiento de 'cualquier_rama()'--
-                if (!node.children.length) {
-                    let fullName = getFullName(node, tree);
-                    selectedNodes.add(fullName);
-                } else {
-                    node.children.forEach(function (childId) {
-                        let childNode = tree.get_node(childId);
-                        processNode(childNode, tree, selectedNodes);
-                    });
+            function transformarCadena(cadena) {
+                var regex = /__(.*?)__/g;
+                var match;
+                var fragmentos = [];
+
+                // Recorremos todas las coincidencias de la expresión regular en la cadena
+                while ((match = regex.exec(cadena)) !== null) {
+                    // match[1] contiene el fragmento entre __
+                    fragmentos.push(match[1]);
                 }
+
+                // Se unen todos los fragmentos con ':'
+                return fragmentos.join(':');
             }
 
-            
-            function getFullName(node, tree, n2 = node) {
-                let Id_n = node.id;
-                let mainNodeName = Id_n.match("__(.+)__")[1];
-                return mainNodeName + ':' + n2.text;
-            }
-
-
-            function updateSelectedNodesContainer(containerSelector, selectedNodes, inputSelector) {
-                let container = $(containerSelector);
-                container.empty();
-                selectedNodes.forEach(function (node, index) {
-                    let item = $('<div class="selected-item"></div>').text(node);
-                    let button = $('<button class="remove-button">x</button>').click(function () {
-                        selectedNodes.delete(node);
-                        updateSelectedNodesContainer(containerSelector, selectedNodes, inputSelector);
-                    });
-                    item.append(button);
-                    container.append(item);
-                });
-                $(inputSelector).val(Array.from(selectedNodes).join('\n'));
+            // Función para filtrar y transformar IDs
+            function filtrarYTransformar(nodes) {
+                return nodes
+                    .filter(cadena => cadena.startsWith("__"))   // Con esto obtiene el nombre de la base de datos y de las variables.
+                    .map(transformarCadena);   // Transforma la sintaxis de los ids a la que utilizamos en la ruta de python.
             }
 
             $('#sendButton').show();

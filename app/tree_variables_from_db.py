@@ -79,9 +79,9 @@ def creacion_ramas_arbol(DB: str):
             current_structure = variables_node['children']
             for idx, var_tax in enumerate(var_tax_lst):
                 if idx == len(var_tax_lst) - 1:
-                    id_tag = '__' + id_tag[:len(DB)] + '__' + id_tag[len(DB):] + var_tax
+                    id_tag = '__' + id_tag[:len(DB)] + '__' + id_tag[len(DB):-1] + ', ' + var_tax + '__'
                 else:
-                    id_tag += var_tax + ' '
+                    id_tag += '__' + var_tax + ' '
                 var_tax_string += var_tax + ', '
                 node = find_or_create_node(current_structure, id_tag, var_tax_string[:-2])
                 current_structure = node['children']
