@@ -64,11 +64,8 @@ def select_variables():
 
     global df_copia  # Se tuvo que guardas en global para que soporte tablas grandes (al hacer análisis con muchas variables y que no se guarde en el caché)
 
-    selected_values1 = request.form['selectedVariables1']
-    selected_values2 = request.form['selectedVariables2']
-
-    list_db_var = selected_values1.split('\r\n')
-    list_db_clss = selected_values2.split('\r\n')
+    list_db_var = request.get_json().get('selectedNodes', [])
+    list_db_clss = request.get_json().get('selectedNodes2',[])
 
     dict_db_variables = dict_construction(list_db_var)
     dict_db_class = dict_construction(list_db_clss)
@@ -93,7 +90,8 @@ def select_variables():
     conteos.score(df_all_variables_data)
     df_copia = df_all_variables_data.to_dict(orient='records')
 
-    return redirect(url_for('main.score_eps'))
+    # return redirect(url_for('main.score_eps'))   # esta linea también funciona, si queremos redigir solamente, sin necesitar la respuesta json.
+    return jsonify({'status': 'success', 'redirect': url_for('main.score_eps')}) # Esto es para manejar la respuesta json de la solicitud AJAX utilizada de JS y adicionalmente proporciona la redirección.
 
 #-- Rutas para poder filtrar los epsilons más significativos:
 @main_bp.route('/score_eps', methods=['GET', 'POST'])
