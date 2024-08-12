@@ -47,20 +47,20 @@ def epsilon(df_var: pd.DataFrame, N: int):
     df_var['epsilon'] = df_var.apply(calcular_epsilon, axis=1)
     return None
 
-def calcular_score(row):
-    '''
-    Función que se aplicará a cada fila del DataFrame para calcular el score.
-    '''
-    if row['N_v'] == row['N_vnc'] or row['N_vnc'] == 0:  # Evitar división por cero o que el argumento de log sea cero.
-        return float('inf')  # O algún valor que se considere adecuado para este caso.
-    
-    score = math.log(row['N_vnc'] / (row['N_v'] - row['N_vnc']))
-    return round(score, 2)
-
-def score(df_var:pd.DataFrame):
+def score(df_var:pd.DataFrame, N: int):
     '''
     Aplica la función 'calcular_score' a cada fila del DataFrame.
     Se modifica el DataFrame original, por lo que se regresa None.
     '''
+    def calcular_score(row):
+        '''
+        Función que se aplicará a cada fila del DataFrame para calcular el score.
+        '''
+        if row['N_v'] == row['N_vnc'] or row['N_vnc'] == 0:  # Evitar división por cero o que el argumento de log sea cero.
+            return float('inf')  # O algún valor que se considere adecuado para este caso.
+        
+        score = math.log(row['N_vnc'] * (N - row['N_c']) / (row['N_c'] * (row['N_v'] - row['N_vnc'])))
+        return round(score, 2)
+
     df_var['score'] = df_var.apply(calcular_score, axis=1)
     return None

@@ -87,7 +87,7 @@ def select_variables():
 
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
     conteos.epsilon(df_all_variables_data, N)
-    conteos.score(df_all_variables_data)
+    conteos.score(df_all_variables_data, N)
     df_copia = df_all_variables_data.to_dict(orient='records')
 
     # return redirect(url_for('main.score_eps'))   # esta linea también funciona, si queremos redigir solamente, sin necesitar la respuesta json.
