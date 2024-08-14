@@ -101,4 +101,4 @@ from app import create_app
 app = create_app(plataforma, fuente_de_datos_metadatos, query_categorias)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8000, debug=True)
