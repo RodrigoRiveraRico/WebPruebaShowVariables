@@ -41,8 +41,22 @@ def creacion_ramas_arbol(DB: str):
 
         return df
     
-    
-    df = conexion_psql()
+    def conexion_endpoint():
+        import requests
+        api_url = 'http://127.0.0.1:5000/variables'
+        response = requests.get(api_url).json()
+        df_response = pd.json_normalize(response)
+        df_response.rename(columns={'name':'taxonomia_variable'}, inplace=True)
+        df_response['metadatos'] = DB   # Aparecerá 2 veces el nombre de la base en el árbol
+        df = df_response[['id', 'taxonomia_variable', 'metadatos']]
+        return df
+        ...
+
+    df = conexion_endpoint()
+    # print(df)
+
+    # df = conexion_psql()
+    # print(df)
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
