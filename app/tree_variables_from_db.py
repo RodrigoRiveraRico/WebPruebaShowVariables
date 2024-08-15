@@ -17,22 +17,32 @@ def creacion_ramas_arbol(DB: str):
     
     Return : lst Lista para generar el árbol HTML
     '''
-    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-    query_categorias = current_app.config['QUERY_CATEGORIAS']
-    user = fuente_de_datos_metadatos[DB]['user']
-    host = fuente_de_datos_metadatos[DB]['host']
-    password = fuente_de_datos_metadatos[DB]['password']
-    port = fuente_de_datos_metadatos[DB]['port']
-    database = DB
-    database_url = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
+    def conexion_psql():
+        '''
+        Función que hace la conexión a postgresql.
 
-    engine = create_engine(database_url)
+        Return : DataFrame
+        '''
+        fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
+        query_categorias = current_app.config['QUERY_CATEGORIAS']
+        user = fuente_de_datos_metadatos[DB]['user']
+        host = fuente_de_datos_metadatos[DB]['host']
+        password = fuente_de_datos_metadatos[DB]['password']
+        port = fuente_de_datos_metadatos[DB]['port']
+        database = DB
+        database_url = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
 
-    sql_query = text(query_categorias[DB])
+        engine = create_engine(database_url)
 
-    with engine.connect() as connection:
-        df = pd.read_sql(sql_query, connection)
+        sql_query = text(query_categorias[DB])
 
+        with engine.connect() as connection:
+            df = pd.read_sql(sql_query, connection)
+
+        return df
+    
+    
+    df = conexion_psql()
     # Crear una nueva columna temporal con el conteo de elementos.
     df['element_count'] = df['metadatos'].apply(count_elements)
 
