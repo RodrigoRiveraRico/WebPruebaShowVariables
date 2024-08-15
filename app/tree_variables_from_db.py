@@ -50,7 +50,6 @@ def creacion_ramas_arbol(DB: str):
         df_response['metadatos'] = DB   # Aparecerá 2 veces el nombre de la base en el árbol
         df = df_response[['id', 'taxonomia_variable', 'metadatos']]
         return df
-        ...
 
     df = conexion_endpoint()
     # print(df)
@@ -110,7 +109,7 @@ def creacion_ramas_arbol(DB: str):
                 node = find_or_create_node(current_structure, id_tag, var_tax_string[:-2])
                 current_structure = node['children']
 
-    return structure_lst
+    return structure_lst[0]['children'] # Regresamos este 'children' para no mostrar dos veces el nombre de la base de datos en el árbol
 
     
 
