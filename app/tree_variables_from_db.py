@@ -96,15 +96,18 @@ def creacion_ramas_arbol(DB: str):
         current_structure.append(variables_node)
 
         # Agregar variables dentro del nodo de variables
-        for var_tax_lst in df[df['metadatos']==path]['taxonomia_variable_lst']:
+        var_tax_lst_ser = df[df['metadatos']==path]['taxonomia_variable_lst']
+        var_tax_idx_ser = df[df['metadatos']==path]['id']
+
+        for var_tax_idx, var_tax_lst in zip(var_tax_idx_ser, var_tax_lst_ser):
             var_tax_string = ''
             id_tag = DB + ' ' + path + ' '
             current_structure = variables_node['children']
             for idx, var_tax in enumerate(var_tax_lst):
                 if idx == len(var_tax_lst) - 1:
-                    id_tag = '__' + id_tag[:len(DB)] + '__' + id_tag[len(DB):-1] + ', ' + var_tax + '__'
+                    id_tag = '__' + DB + '__ ' + path + ' __' + str(var_tax_idx)  + '__'
                 else:
-                    id_tag += '__' + var_tax + ' '
+                    id_tag += var_tax + ', '
                 var_tax_string += var_tax + ', '
                 node = find_or_create_node(current_structure, id_tag, var_tax_string[:-2])
                 current_structure = node['children']
