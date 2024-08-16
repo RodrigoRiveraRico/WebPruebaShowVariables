@@ -6,56 +6,78 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     '''
     Función que obtiene, para cada variable, la lista de celdas donde hay presencia de estas.
     '''
-    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-    user = fuente_de_datos_metadatos[DB]['user']
-    host = fuente_de_datos_metadatos[DB]['host']
-    password = fuente_de_datos_metadatos[DB]['password']
-    port = fuente_de_datos_metadatos[DB]['port']
-    database = DB
-    database_url = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
+    def conexion_psql():
+        '''
+        Función que hace la conexión a postgresql.
 
-    engine = create_engine(database_url)
-    
-    # Columna donde están almacenadas las celdas
-    col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
+        Return : DataFrame
+        '''
+        fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
+        user = fuente_de_datos_metadatos[DB]['user']
+        host = fuente_de_datos_metadatos[DB]['host']
+        password = fuente_de_datos_metadatos[DB]['password']
+        port = fuente_de_datos_metadatos[DB]['port']
+        database = DB
+        database_url = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
 
-    # Lista de columnas donde está almacenada la taxonomía de las variables.
-    tax_var_cols = fuente_de_datos_metadatos[DB]['variable_columns']
+        engine = create_engine(database_url)
+        
+        # Columna donde están almacenadas las celdas
+        col_cells = fuente_de_datos_metadatos[DB]['resolution'][res]
 
-    # String que une la taxonomía de las variables
-    columnas_variable = ",', ',".join(tax_var_cols)
+        # Lista de columnas donde está almacenada la taxonomía de las variables.
+        tax_var_cols = fuente_de_datos_metadatos[DB]['variable_columns']
 
-    # Nombre de la tabla
-    table = fuente_de_datos_metadatos[DB]['table']
+        # String que une la taxonomía de las variables
+        columnas_variable = ",', ',".join(tax_var_cols)
 
-    # Consulta
-    sql_query = text(f'''
-        WITH data AS (
-            SELECT CONCAT({columnas_variable}) AS variable,
-            {col_cells}
-            FROM {table}
-            )
-        SELECT variable, {col_cells} 
-        FROM data 
-        WHERE variable IN :variables;
-        ''')
+        # Nombre de la tabla
+        table = fuente_de_datos_metadatos[DB]['table']
 
-    # Convertir la lista de variables a una tupla
-    variables_tuple = tuple(variables)
+        # Consulta
+        sql_query = text(f'''
+            WITH data AS (
+                SELECT CONCAT({columnas_variable}) AS variable,
+                {col_cells}
+                FROM {table}
+                )
+            SELECT variable, {col_cells} 
+            FROM data 
+            WHERE variable IN :variables;
+            ''')
 
-    # Imprimir la consulta SQL y los parámetros
-    # print("Consulta SQL:", sql_query)
-    # print("Parámetros:", {'variables': variables_tuple})
+        # Convertir la lista de variables a una tupla
+        variables_tuple = tuple(variables)
 
-    # Ejecutar la consulta y leer los resultados en un DataFrame
-    with engine.connect() as connection:
-        df = pd.read_sql(sql_query, connection, params={'variables': variables_tuple}) # Cada registro del df es una lista de celdas
-         
-    df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
-    df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
-    # print(df)
+        # Imprimir la consulta SQL y los parámetros
+        # print("Consulta SQL:", sql_query)
+        # print("Parámetros:", {'variables': variables_tuple})
 
-    return df['variable'].to_numpy(), df[col_cells].to_numpy()
+        # Ejecutar la consulta y leer los resultados en un DataFrame
+        with engine.connect() as connection:
+            df = pd.read_sql(sql_query, connection, params={'variables': variables_tuple}) # Cada registro del df es una lista de celdas
+            
+        df[col_cells] = df[col_cells].astype(str)   # Aseguramos que la columna de celdas sea un string
+        df[col_cells] = df[col_cells].str.findall(r'\d+') # Con findall obtenemos una lista de strings
+        # print(df)
+
+        return df['variable'].to_numpy(), df[col_cells].to_numpy()
+
+    def conexion_endpoint():
+        import requests
+        data = []
+        for idx in variables:
+            api_url = f'http://127.0.0.1:5000/get-data/{idx}?grid_id=mun'
+            response = requests.get(api_url).json()[0]
+            data.append({'id':str(response['id']), 'cells':response['cells']})
+        df_response = pd.json_normalize(data)
+        df_response['cells'] = df_response['cells'].astype(str)
+        df_response['cells'] = df_response['cells'].str.findall(r'\d+')
+        # print(df_response)
+        return df_response['id'].to_numpy(), df_response['cells'].to_numpy()
+
+    # print(conexion_endpoint())
+    return conexion_endpoint()
 
 # Ejemplo de uso
 # variables = ['Annual Mean Temperature, 13.525:15.225', 'Annual Mean Temperature, 15.225:16.146', ...]
