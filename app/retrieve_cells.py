@@ -74,7 +74,17 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         df_response['cells'] = df_response['cells'].astype(str)
         df_response['cells'] = df_response['cells'].str.findall(r'\d+')
         # print(df_response)
-        return df_response['id'].to_numpy(), df_response['cells'].to_numpy()
+
+        variables_url = 'http://127.0.0.1:5000/variables'
+        variables_response = requests.get(variables_url).json()
+        df_variables_response = pd.json_normalize(variables_response)[['id', 'name']]
+        df_variables_response['id'] = df_variables_response['id'].astype(str)
+
+        df_joined = df_variables_response.join(df_response.set_index('id'), on='id', how='inner')
+        # print(df_joined)
+
+        return df_joined['name'].to_numpy(), df_joined['cells'].to_numpy()
+        # return df_response['id'].to_numpy(), df_response['cells'].to_numpy()
 
     # print(conexion_endpoint())
     return conexion_endpoint()
