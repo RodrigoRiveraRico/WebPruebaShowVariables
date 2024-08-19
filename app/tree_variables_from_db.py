@@ -43,7 +43,8 @@ def creacion_ramas_arbol(DB: str):
     
     def conexion_endpoint():
         import requests
-        api_url = 'http://127.0.0.1:5000/variables'
+        # api_url = 'http://127.0.0.1:5000/variables'  # local
+        api_url = 'http://chilamdev.c3.unam.mx:5000/variables' # con el servidor
         response = requests.get(api_url).json()
         df_response = pd.json_normalize(response)
         df_response.rename(columns={'name':'taxonomia_variable'}, inplace=True)
