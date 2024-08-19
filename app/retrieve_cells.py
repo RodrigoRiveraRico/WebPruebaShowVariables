@@ -67,7 +67,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         import requests
         data = []
         for idx in variables:
-            api_url = f'http://10.90.0.83:5000/get-data/{idx}?grid_id=mun' # con el servidor
+            api_url = f'http://chilamdev.c3.unam.mx:5000/get-data/{idx}?grid_id=mun' # con el servidor
             # api_url = f'http://127.0.0.1:5000/get-data/{idx}?grid_id=mun' # local
             response = requests.get(api_url).json()[0]
             data.append({'id':str(response['id']), 'cells':response['cells']})
