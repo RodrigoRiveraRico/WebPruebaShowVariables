@@ -11,7 +11,11 @@ def ditc_res_DBs_list(bases):
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
     
     def with_psql():
+        '''
+        Función que emplea la configuración para conectar bases de datos.
 
+        Return: Diccionario.
+        '''
         for db in bases:    # Para cada base de las seleccionadas
             res_dict = fuente_de_datos_metadatos[db]['resolution']  # Se asigna el diccionario de resolucion de cada base
             for key in res_dict.keys(): # Cada key es una resolución
@@ -21,6 +25,12 @@ def ditc_res_DBs_list(bases):
         return dic
     
     def with_endpoint():
+        '''
+        Función para obtener desde el catálogo de resoluciones, las resoluciones para cada base de datos.
+        Función que extrae información desde endpoint.
+
+        Return: Diccionario.
+        '''
         db = bases[0]
         dic = {'mun':[db]}  
 
