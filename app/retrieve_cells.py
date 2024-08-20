@@ -10,7 +10,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         '''
         Función que hace la conexión a postgresql.
 
-        Return : DataFrame
+        Return : Tupla de Series
         '''
         fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
         user = fuente_de_datos_metadatos[DB]['user']
