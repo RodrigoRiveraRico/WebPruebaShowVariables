@@ -65,10 +65,11 @@ def recolectar_celdas(DB:str, variables:list, res:str):
 
     def conexion_endpoint():
         import requests
+        fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
         data = []
         for idx in variables:
-            api_url = f'http://chilamdev.c3.unam.mx:5000/get-data/{idx}?grid_id=mun' # con el servidor
-            # api_url = f'http://127.0.0.1:5000/get-data/{idx}?grid_id=mun' # local
+            api_url = fuente_de_datos_metadatos[DB]['get_data']
+            api_url = api_url + '/' + str(idx) + '?grid_id=mun'
             response = requests.get(api_url).json()[0]
             data.append({'id':str(response['id']), 'cells':response['cells']})
         df_response = pd.json_normalize(data)
@@ -76,7 +77,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         df_response['cells'] = df_response['cells'].str.findall(r'\d+')
         # print(df_response)
 
-        variables_url = 'http://chilamdev.c3.unam.mx:5000/variables'
+        variables_url = fuente_de_datos_metadatos[DB]['variables']
         variables_response = requests.get(variables_url).json()
         df_variables_response = pd.json_normalize(variables_response)[['id', 'name']]
         df_variables_response['id'] = df_variables_response['id'].astype(str)

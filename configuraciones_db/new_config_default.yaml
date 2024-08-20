@@ -11,6 +11,6 @@ plataforma:
   name: Configuracion de default (INEGI)
 
 fuente_de_datos_metadatos:  # Cambiar nombre
-  INEGI:
-    - http://chilamdev.c3.unam.mx:2112/variables
-    - http://chilamdev.c3.unam.mx:2112/get-data
+  INEGI:  # Nombre a elegir al gusto
+    variables: http://chilamdev.c3.unam.mx:2112/variables
+    get_data: http://chilamdev.c3.unam.mx:2112/get-data
