@@ -1,0 +1,16 @@
+
+# https://camel.readthedocs.io/en/latest/yamlref.html
+
+# <<<Configuración de default>>>
+
+# En plataforma se inidica un nombre para la misma.
+
+# En fuente_de_datos_metadatos se indica un nombre a la base de datos y los endpoints enlistados.
+
+plataforma:
+  name: Configuracion de default (INEGI)
+
+fuente_de_datos_metadatos:  # Cambiar nombre
+  INEGI:
+    - http://chilamdev.c3.unam.mx:2112/variables
+    - http://chilamdev.c3.unam.mx:2112/get-data

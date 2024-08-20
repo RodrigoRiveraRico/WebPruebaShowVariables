@@ -76,7 +76,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         df_response['cells'] = df_response['cells'].str.findall(r'\d+')
         # print(df_response)
 
-        variables_url = 'http://127.0.0.1:5000/variables'
+        variables_url = 'http://chilamdev.c3.unam.mx:5000/variables'
         variables_response = requests.get(variables_url).json()
         df_variables_response = pd.json_normalize(variables_response)[['id', 'name']]
         df_variables_response['id'] = df_variables_response['id'].astype(str)
