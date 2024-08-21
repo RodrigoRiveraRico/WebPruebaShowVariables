@@ -19,23 +19,6 @@ body {
     /* font-family: 'Arial', sans-serif; */
   }
 
-/* .suggestions-container {
-    display: none;
-    border: 1px solid #ccc;
-    max-height: 150px;
-    overflow-y: auto;
-    background-color: #fff;
-    position: absolute;
-    z-index: 1000;
-}
-.suggestions-container div {
-    padding: 8px;
-    cursor: pointer;
-}
-.suggestions-container div:hover {
-    background-color: #f0f0f0;
-} */
-
 
 .suggestions-container {
     max-height: 100px; /* Ajusta la altura máxima según sea necesario */
@@ -74,25 +57,33 @@ textarea {
     margin-bottom: 15px;
 }
 
-/* Estilos para arbol.html */
+/* Estilos para arbol.html: */
+
+.ArbolTitle {
+    font-family: 'Times New Roman OS Bold';
+    /* font-family: 'Shonar Bangla Bold'; */
+    font-weight: bold;
+    font-size: 35px;
+}
 
 #container_SVar {
     display: flex; /* Usa flexbox para el contenedor */
     height: 100%; /* Asegura que el contenedor principal ocupe toda la altura de la ventana */
     width: 100%;
-    border-top: 1px solid rgb(212, 212, 212);
-    border-bottom: 1px solid rgb(212, 212, 212);
+    border-top: 5px double #a1bfd3;
+    border-bottom: 5px double #a1bfd3;
 }
 
 #covContainer{
     flex : 1;
-    border-right: 1px solid rgb(212, 212, 212);
+    border-right: 5px solid #a1bfd3;
+    border-left: 8px solid #a1bfd3;
     padding: 15px;
 }
 
 #classContainer{
     flex: 1;
-    border-left: 1px solid rgb(212, 212, 212);
+    border-left: 5px solid #a1bfd3;
     padding: 15px;
 }
 
@@ -103,6 +94,24 @@ textarea {
     place-items: center; /* Centra horizontal y verticalmente */
 }
 
+#sendButton {
+    background-color: #326fe0d7; /* Color de fondo */
+    color: rgb(255, 244, 244); /* Color del texto */
+    border-color: #326fe0d7; /* Color del borde */
+    /* font-size: 18px; Tamaño del texto */
+    /* padding: 10px 20px; Tamaño del botón */
+}
+
+#sendButton:hover {
+    background-color: #1253ccd7; /* Color de fondo cuando se pasa el cursor */
+    border-color: #1253ccd7; /* Color del borde cuando se pasa el cursor */
+}
+
+/* Para mostrar solo los checkboxes de los nodos hijos para la clase:  */
+#classContainer .jstree li.jstree-open > a.jstree-anchor > i.jstree-checkbox, 
+#classContainer .jstree li.jstree-closed > a.jstree-anchor > i.jstree-checkbox { 
+    display:none; 
+}
 
 /* ---------- */
 
@@ -167,10 +176,4 @@ max-width: 100%; /* Asegura que no exceda el ancho del viewport */
 
 .filter-button button:hover {
     background-color: #305031;
-}
-
-/* Para mostrar solo los checkboxes de los nodos hijos para la clase:  */
-#classContainer .jstree li.jstree-open > a.jstree-anchor > i.jstree-checkbox, 
-#classContainer .jstree li.jstree-closed > a.jstree-anchor > i.jstree-checkbox { 
-    display:none; 
 }
