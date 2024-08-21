@@ -1,25 +1,18 @@
+import requests
 import pandas as pd
 from flask import current_app
 from sqlalchemy import create_engine, text
 
-# Función para contar el número de elementos separados por coma
-def count_elements(metadata):
-    '''
-    La columna 'metadatos' tiene a las categorías separadas por coma.
-    Categorías más internas tienen más elementos.
-    Categorías menos internas tienen menos elementos.
-    '''
-    return len(metadata.split(','))
-
 def creacion_ramas_arbol(DB: str):
     '''
-    DB : str Nombre de la base de datos
+    DB: str Nombre de la fuente de datos (base de datos).
     
-    Return : lst Lista para generar el árbol HTML
+    Return: list Lista para generar el árbol HTML
     '''
     def conexion_psql():
         '''
-        Función que hace la conexión a postgresql.
+        Función que se emplea con la configuración para conectar bases de datos en postgresql.
+        Esta función hace la conexión a postgresql.
 
         Return : DataFrame
         '''
@@ -42,7 +35,12 @@ def creacion_ramas_arbol(DB: str):
         return df
     
     def conexion_endpoint():
-        import requests
+        '''
+        Función que se emplea con la configuración para conectar endpoints.
+        Esta función hace la conexión a un endpoint.
+
+        Return: DataFrame
+        '''
         fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
         api_url = fuente_de_datos_metadatos[DB]['variables']
         response = requests.get(api_url).json()
@@ -52,22 +50,17 @@ def creacion_ramas_arbol(DB: str):
         df = df_response[['id', 'taxonomia_variable', 'metadatos']]
         return df
 
+    # Creamos el DataFrame con las función de conexión elegida.
     df = conexion_endpoint()
     # print(df)
-
-    # df = conexion_psql()
-    # print(df)
-    # Crear una nueva columna temporal con el conteo de elementos.
-    df['element_count'] = df['metadatos'].apply(count_elements)
 
     # Crear una nueva columna con una lista de la taxonomía de la variable
     df['taxonomia_variable_lst'] = df['taxonomia_variable'].str.split(r"_-_", expand=False, regex=False)
 
     # Ordenar el DataFrame
     df = df.sort_values(
-        by=['element_count', 'metadatos', 'taxonomia_variable']  # Ordenar primero por 'element_count'.
-        ).drop(columns=['element_count'])  # Eliminar la columna temporal después de ordenar.
-    # print(df)
+        by=['metadatos', 'taxonomia_variable']  # Ordenar primero por 'metadatos'.
+        )
 
     structure_lst = []
 

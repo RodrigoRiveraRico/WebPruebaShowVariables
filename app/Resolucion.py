@@ -2,20 +2,18 @@ from flask import current_app
 
 def ditc_res_DBs_list(bases):
     '''
-    bases : lst Lista de bases de datos
-
+    bases : list Lista de bases de datos.
 
     Return : dict {'resolución1' : [DB1, DB2,], 'resolución2' : [DB1, DB3,],}
     '''
-    dic = {}    # Diccionario a construir.
-    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-    
     def with_psql():
         '''
-        Función que emplea la configuración para conectar bases de datos.
+        Función que se emplea con la configuración para conectar bases de datos en postgresql.
 
         Return: Diccionario.
         '''
+        dic = {}    # Diccionario a construir.
+        fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
         for db in bases:    # Para cada base de las seleccionadas
             res_dict = fuente_de_datos_metadatos[db]['resolution']  # Se asigna el diccionario de resolucion de cada base
             for key in res_dict.keys(): # Cada key es una resolución
@@ -26,8 +24,9 @@ def ditc_res_DBs_list(bases):
     
     def with_endpoint():
         '''
-        Función para obtener desde el catálogo de resoluciones, las resoluciones para cada base de datos.
-        Función que extrae información desde endpoint.
+        Función que se emplea con la configuración para conectar endpoints.
+        Esta función obtiene las resoluciones para cada fuente de datos desde un endpoint.
+        NOTA: Falta incorporar dicho endpoint.
 
         Return: Diccionario.
         '''
@@ -36,6 +35,4 @@ def ditc_res_DBs_list(bases):
 
         return dic
 
-    dic = with_endpoint()
-    # print(dic)
-    return dic
+    return with_endpoint()

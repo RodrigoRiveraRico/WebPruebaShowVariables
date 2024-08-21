@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, current_app, session, redirect, url_for, g
+from flask import Blueprint, render_template, request, jsonify, current_app, session, redirect, url_for
 from app.Var_Clss_Construction import dict_construction, df_construction
 from app.tree_variables_from_db import creacion_ramas_arbol
 from app.Resolucion import ditc_res_DBs_list

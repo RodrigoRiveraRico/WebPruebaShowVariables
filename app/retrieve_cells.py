@@ -1,3 +1,4 @@
+import requests
 import pandas as pd
 from flask import current_app
 from sqlalchemy import create_engine, text
@@ -5,12 +6,20 @@ from sqlalchemy import create_engine, text
 def recolectar_celdas(DB:str, variables:list, res:str):
     '''
     Función que obtiene, para cada variable, la lista de celdas donde hay presencia de estas.
+    DB: str Nombre de la fuente de datos.
+    variables: list Lista de variables.
+    res: str Resolución.
+
+    Return: Resultado de la función conexion_psql o de la función conexion_endpoint.
+    NOTA: Ambas funciones regresan una tupla de arreglos numpy.
     '''
     def conexion_psql():
         '''
-        Función que hace la conexión a postgresql.
+        Función que se emplea con la configuración para conectar bases de datos en postgresql.
+        Esta función hace la conexión a postgresql.
+        
 
-        Return : Tupla de Series
+        Return : Tupla de arreglos numpy
         '''
         fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
         user = fuente_de_datos_metadatos[DB]['user']
@@ -64,14 +73,19 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         return df['variable'].to_numpy(), df[col_cells].to_numpy()
 
     def conexion_endpoint():
-        import requests
+        '''
+        Función que se emplea con la configuración para conectar endpoints.
+        Esta función hace la conexión a un endpoint.
+
+        Return: Tupla de arreglos numpy
+        '''
         fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
         data = []
         for idx in variables:
             api_url = fuente_de_datos_metadatos[DB]['get_data']
-            api_url = api_url + '/' + str(idx) + '?grid_id=mun'
+            api_url = api_url + '/' + str(idx) + '?grid_id=' + res
             response = requests.get(api_url).json()[0]
-            data.append({'id':str(response['id']), 'cells':response['cells']})
+            data.append({'id': str(response['id']), 'cells': response['cells']})
         df_response = pd.json_normalize(data)
         df_response['cells'] = df_response['cells'].astype(str)
         df_response['cells'] = df_response['cells'].str.findall(r'\d+')
@@ -86,12 +100,11 @@ def recolectar_celdas(DB:str, variables:list, res:str):
         # print(df_joined)
 
         return df_joined['name'].to_numpy(), df_joined['cells'].to_numpy()
-        # return df_response['id'].to_numpy(), df_response['cells'].to_numpy()
 
     # print(conexion_endpoint())
     return conexion_endpoint()
 
-# Ejemplo de uso
+# Ejemplo de uso (con conexion_psql())
 # variables = ['Annual Mean Temperature, 13.525:15.225', 'Annual Mean Temperature, 15.225:16.146', ...]
 # recolectar_celdas('Personas', variables, 'UNAM_1057')
 # recolectar_celdas('epi_puma_worldclim', variables, 'mun')
