@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resolución BD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/themes/default-dark/style.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/themes/proton/style.min.css">
 </head>
 <body>
     <header>    {{etiqueta_h}}     </header>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/jstree.min.js"></script>
     
     <h1>Resolución de las BD</h1>
     <form id="selectDB_re" action="/process" method="post">
 
-        <label for="res_selector">Selecciona la resolución para mostrar las bases de datos: <br></label>
+        <label for="res_selector">Selecciona la resolución para mostrar las bases de datos con dicha resolución: <br></label>
         <br>
         <select name="Res_selector" id="res_selector" onchange="updateDbSelect()">
             {% for key in Dict_res.keys() %}
@@ -20,78 +28,111 @@
             {% endfor %}
         </select>
         <br>
-        <select name="res_DB" id="res_db" multiple> 
+        <!-- <select name="res_DB" id="res_db" multiple>  -->
             <!-- Mostrar el recuadro con las bases de datos para la resolución dada con JS ** -->
-        </select>
+        <!-- </select> -->
+        <div id="Res_tree"></div>
         <br>
-        <button type="button" onclick="addSelected_res_DB()">Agregar BD</button>
-        <br>
+        <!-- <button type="button" onclick="addSelected_res_DB()">Agregar BD</button>
+        <br> -->
 
-        <div id="DBSelected_w_res"></div>
-        <textarea name="selected_res_DB" id="selected_res_DB" rows="4" cols="50" readonly></textarea><!-- style="display: none;" -->
+        <!-- <div id="DBSelected_w_res"></div> -->
+        <!-- <textarea name="selected_res_DB" id="selected_res_DB" rows="4" cols="50" readonly></textarea>style="display: none;" -->
         
 
-        <input type="hidden" name="selectedRes" id="selectedRes1">
+        <!-- <input type="hidden" name="selectedRes" id="selectedRes1"> -->
 
         <!-- Botón de envío -->
-        <button type="submit">Enviar bases de datos seleccionadas</button>
+        <!-- <button type="submit">Enviar bases de datos seleccionadas</button> -->
+        <button id="sendButton" type="submit" class="btn btn-sm btn-primary">Continuar con el análisis con las bases de datos seleccionadas</button>
     </form>
 
 
     <script>
-        // Esto es para que se carguen las opciones desde que se carga la página --
-        document.addEventListener('DOMContentLoaded', (event) => {
-        updateDbSelect();
-        });
-        //--
-        var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
-        var K = 0;  // contador aux.
-
-        function updateDbSelect() {
-            var selectedKey = document.getElementById("res_selector").value;
-
-            var variablesSelect = document.getElementById("res_db");
-            variablesSelect.innerHTML = "";
-
-            Dict_res[selectedKey].forEach(function(variable) {   // Esto muestra las BD de cada resolución elegida (selectedKey) **
-                var option = document.createElement("option");
-                option.value = variable;
-                option.text = variable;
-                variablesSelect.appendChild(option);
+        // Construcción del jstree de un solo nivel:
+        $(function () {
+            $.getJSON('/res_tree_data', function (data) {
+                $('#Res_tree').jstree({ 'core': { 'data': data, 
+                                            'themes': {   /// Cambiar el tema
+                                                'name': 'proton', // nombre del tema
+                                                'responsive': true,
+                                                'dots': true, // mostrar puntos entre nodos
+                                                'icons': false, // mostrar iconos junto a los nodos
+                                                'state': { checked: true }
+                                            } },
+                                    "checkbox" : {
+                                                "keep_selected_style" : false,
+                                                },
+                                    "plugins" : [ "checkbox"]
+                                });
             });
-        }
+        });
+
+        let selected_DBs_res = [];
+        // Checar aquíiii esta parte:
+
+        $('#Res_tree').on("check_node.jstree uncheck_node.jstree", function (e, data) {   // e = evento ("changed" en este caso)
+                let checkedNodes = $('#Res_tree').jstree("get_checked", true) // Obtiene los nodos checkeados
+                        .map(node => node.id); // Extrae los IDs de los nodos
+                console.log(checkedNodes)
+                // selected_DBs_res = ; // Actualiza la lista con los nodos seleccionados
+            });
+
+        // -------
+
+        // // Esto es para que se carguen las opciones desde que se carga la página --
+        // document.addEventListener('DOMContentLoaded', (event) => {
+        // updateDbSelect();
+        // });
+        // //--
+        // var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
+        // var K = 0;  // contador aux.
+
+        // function updateDbSelect() {
+        //     var selectedKey = document.getElementById("res_selector").value;
+
+        //     var variablesSelect = document.getElementById("res_db");
+        //     variablesSelect.innerHTML = "";
+
+        //     Dict_res[selectedKey].forEach(function(variable) {   // Esto muestra las BD de cada resolución elegida (selectedKey) **
+        //         var option = document.createElement("option");
+        //         option.value = variable;
+        //         option.text = variable;
+        //         variablesSelect.appendChild(option);
+        //     });
+        // }
 
 
-        function addSelected_res_DB(){
-            var selectedKey = document.getElementById("res_selector").value;
-            var variablesSelect = document.getElementById("res_db");
-            var selectedVariables = [];
+        // function addSelected_res_DB(){
+        //     var selectedKey = document.getElementById("res_selector").value;
+        //     var variablesSelect = document.getElementById("res_db");
+        //     var selectedVariables = [];
 
-            for (var i = 0; i < variablesSelect.options.length; i++) {
-                if (variablesSelect.options[i].selected) {
-                    selectedVariables.push(variablesSelect.options[i].value);
-                }
-            }
-            console.log('Lista:', selectedVariables);
+        //     for (var i = 0; i < variablesSelect.options.length; i++) {
+        //         if (variablesSelect.options[i].selected) {
+        //             selectedVariables.push(variablesSelect.options[i].value);
+        //         }
+        //     }
+        //     console.log('Lista:', selectedVariables);
 
-            var selectedValuesTextarea = document.getElementById("selected_res_DB");
-            var currentValue = selectedValuesTextarea.value;
+        //     var selectedValuesTextarea = document.getElementById("selected_res_DB");
+        //     var currentValue = selectedValuesTextarea.value;
 
-            if (K < 1 || currentValue.includes(selectedKey)){  // Esto es para que se puedan seleccionar bases de datos de una sola resolución una vez escogido el primero.
-                new_element = selectedKey + ":" + selectedVariables[0]//.join(", ")
-                if (currentValue) {            // En esta parte se van agregando las bases de datos con su resolución al hacer click el botón de "Agregar BD".
-                currentValue += "\n";
-                }
-                if(!currentValue.includes(new_element)){
-                    K +=1;
-                    currentValue += new_element;
-                    selectedValuesTextarea.value = currentValue;
-                }
-            }
-            else{
-                alert(`No puedes mezclar resoluciones distintas, intentalo de nuevo.`)
-            }
-        }
+        //     if (K < 1 || currentValue.includes(selectedKey)){  // Esto es para que se puedan seleccionar bases de datos de una sola resolución una vez escogido el primero.
+        //         new_element = selectedKey + ":" + selectedVariables[0]//.join(", ")
+        //         if (currentValue) {            // En esta parte se van agregando las bases de datos con su resolución al hacer click el botón de "Agregar BD".
+        //         currentValue += "\n";
+        //         }
+        //         if(!currentValue.includes(new_element)){
+        //             K +=1;
+        //             currentValue += new_element;
+        //             selectedValuesTextarea.value = currentValue;
+        //         }
+        //     }
+        //     else{
+        //         alert(`No puedes mezclar resoluciones distintas, intentalo de nuevo.`)
+        //     }
+        // }
 
     </script>
 
