@@ -29,12 +29,6 @@ def add_name():
         session['selected_names'].append(name)
     return jsonify(selected_names=session['selected_names'])
 
-
-@main_bp.route('/res_tree_data')
-def get_res_tree_data():
-    res_tree_data = [{"id": DB, "text": DB} for DB in session['selected_names_res'] ]
-    return jsonify(res_tree_data)
-
 @main_bp.route('/res_db', methods=['POST', 'GET'])
 def res_db():
         # El if es para no tener que volver a enviar el formulario cada vez que se cambia de página (igual en el endpoint de abajo).
