@@ -5,10 +5,14 @@
 
 # En plataforma se inidica un nombre para la misma.
 
+# En conexion se indica si la plataforma trabajará con las fuentes de datos desde postgresql o desde endpoints
+
 # En fuente_de_datos_metadatos se indica un nombre a la base de datos y los endpoints enlistados.
 
 plataforma:
   name: Configuracion de default (INEGI)
+
+conexion: endpoints
 
 fuente_de_datos_metadatos:  # Cambiar nombre
   INEGI:  # Nombre a elegir al gusto

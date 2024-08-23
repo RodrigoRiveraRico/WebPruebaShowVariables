@@ -19,6 +19,7 @@ try:
     with open(config_file) as stream:
         config_loaded = yaml.safe_load(stream)
         plataforma = config_loaded['plataforma']
+        conexion = config_loaded['conexion']
         fuente_de_datos_metadatos = config_loaded['fuente_de_datos_metadatos']
 except Exception as e:
     print(f"Error al ejecutar el archivo de configuración '{config_file}': {e}")
@@ -98,7 +99,7 @@ query_categorias = {}
 from app import create_app
 
 # Crear la aplicación Flask
-app = create_app(plataforma, fuente_de_datos_metadatos, query_categorias)
+app = create_app(plataforma, fuente_de_datos_metadatos, query_categorias, conexion)
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)

@@ -1,7 +1,4 @@
-import requests
-import pandas as pd
 from flask import current_app
-from sqlalchemy import create_engine, text
 
 def creacion_ramas_arbol(DB: str):
     '''
@@ -9,49 +6,19 @@ def creacion_ramas_arbol(DB: str):
     
     Return: list Lista para generar el árbol HTML
     '''
-    def conexion_psql():
-        '''
-        Función que se emplea con la configuración para conectar bases de datos en postgresql.
-        Esta función hace la conexión a postgresql.
+    fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
+    query_categorias = current_app.config['QUERY_CATEGORIAS']
+    conexion = current_app.config['CONEXION']
 
-        Return : DataFrame
-        '''
-        fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-        query_categorias = current_app.config['QUERY_CATEGORIAS']
-        user = fuente_de_datos_metadatos[DB]['user']
-        host = fuente_de_datos_metadatos[DB]['host']
-        password = fuente_de_datos_metadatos[DB]['password']
-        port = fuente_de_datos_metadatos[DB]['port']
-        database = DB
-        database_url = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
+    if conexion == 'postgresql':
+        from app.conexion_postgresql import tree_from_psql
+    elif conexion == 'endpoints':
+        from app.conexion_endpoints import tree_from_endpoint
 
-        engine = create_engine(database_url)
-
-        sql_query = text(query_categorias[DB])
-
-        with engine.connect() as connection:
-            df = pd.read_sql(sql_query, connection)
-
-        return df
-    
-    def conexion_endpoint():
-        '''
-        Función que se emplea con la configuración para conectar endpoints.
-        Esta función hace la conexión a un endpoint.
-
-        Return: DataFrame
-        '''
-        fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-        api_url = fuente_de_datos_metadatos[DB]['variables']
-        response = requests.get(api_url).json()
-        df_response = pd.json_normalize(response)
-        df_response.rename(columns={'name':'taxonomia_variable'}, inplace=True)
-        df_response['metadatos'] = DB   # Aparecerá 2 veces el nombre de la base en el árbol
-        df = df_response[['id', 'taxonomia_variable', 'metadatos']]
-        return df
-
-    # Creamos el DataFrame con las función de conexión elegida.
-    df = conexion_endpoint()
+    if conexion == 'postgresql':
+        df = tree_from_psql(DB, fuente_de_datos_metadatos, query_categorias)
+    elif conexion == 'endpoints':
+        df = tree_from_endpoint(DB, fuente_de_datos_metadatos)
     # print(df)
 
     # Crear una nueva columna con una lista de la taxonomía de la variable
