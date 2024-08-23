@@ -1,5 +1,4 @@
 from flask import current_app
-from sqlalchemy import create_engine, text
 
 def recolectar_celdas(DB:str, variables:list, res:str):
     '''
