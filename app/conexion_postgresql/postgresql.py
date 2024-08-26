@@ -53,16 +53,20 @@ def cells_from_psql(DB: str, variables: list, res: str, fuente_de_datos_metadato
     # Nombre de la tabla
     table = fuente_de_datos_metadatos[DB]['table']
 
+    # Columna de id's
+    id_column = fuente_de_datos_metadatos[DB]['id_column']
+
     # Consulta
     sql_query = text(f'''
         WITH data AS (
-            SELECT CONCAT({columnas_variable}) AS variable,
+            SELECT {id_column} AS id_variable,
+            CONCAT({columnas_variable}) AS variable,
             {col_cells}
             FROM {table}
             )
-        SELECT variable, {col_cells} 
+        SELECT id_variable, variable, {col_cells} 
         FROM data 
-        WHERE variable IN :variables;
+        WHERE id_variable IN :variables;
         ''')
 
     # Convertir la lista de variables a una tupla
