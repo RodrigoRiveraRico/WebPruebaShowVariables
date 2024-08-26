@@ -6,7 +6,7 @@ import os
 import sys
 
 # Obtener el archivo de configuración desde la variable de entorno
-config_file = os.getenv('FLASK_CONFIG_FILE', 'config_default.yaml')
+config_file = os.getenv('FLASK_CONFIG_FILE', 'new_config_default.yaml')
 config_file = 'configuraciones_db/' + config_file
 
 # Verificar si el archivo de configuración existe
@@ -43,6 +43,7 @@ if conexion == 'postgresql':
             txt = f"""
                 SELECT 
                     {db_config_values['id_column']} as id,
+                    
                     CONCAT({sql_c.concatenacion_taxonomia(db_config_values)}) as taxonomia_variable,
 
                     {metadatos_txt} as metadatos
