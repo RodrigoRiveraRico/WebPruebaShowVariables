@@ -39,7 +39,7 @@ def cells_from_endpoint(DB: str, variables: list, res: str, fuente_de_datos_meta
     variables_response = requests.get(variables_url).json()
     df_variables_response = pd.json_normalize(variables_response)[['id', 'name']]
     df_variables_response['id'] = df_variables_response['id'].astype(str)
-    df_variables_response['name'] = df_variables_response['name'].str.replace('_-_', ', ')
+    df_variables_response['name'] = df_variables_response['name'].str.replace('_-_', ', ')  # nombrevariable_-_intervalo
 
     df_joined = df_variables_response.join(df_response.set_index('id'), on='id', how='inner')
     # print(df_joined)
