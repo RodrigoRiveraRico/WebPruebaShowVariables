@@ -1,0 +1,29 @@
+default_connection: &DEFAULT
+  host: fastdb.c3.unam.mx
+  user: monitor
+  password: monitor123
+  port: 5433
+
+plataforma:
+  name: Newspecies_data
+
+conexion: postgresql
+
+fuente_de_datos_metadatos:
+  newspecies:
+    <<: *DEFAULT
+    id_column: id
+    variable_columns:
+      - especievalida
+    table: covariable
+    resolution:
+      mun: cells_mun
+      state: cells_state
+    categorias: 
+      columnas:
+        - reinovalido
+        - phylumdivisionvalido
+        - clasevalida
+        - ordenvalido
+        - familiavalida
+        - generovalido
