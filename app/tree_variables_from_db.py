@@ -74,6 +74,7 @@ def creacion_ramas_arbol(DB: str):
                 current_structure = node['children']
 
     return structure_lst[0]['children'] # Regresamos este 'children' para no mostrar dos veces el nombre de la base de datos en el árbol
+                                        # Esto elimmina las categorías de postgres INEGI
 
     
 
