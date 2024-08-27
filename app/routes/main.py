@@ -46,11 +46,11 @@ def process():
 
     if request.method == 'POST':
         # Process the POST request and redirect to GET
-        selected_dbS = request.form['selected_res_DB']
-        list_res_db = selected_dbS.split('\r\n')
-        session['selected_names_res'] = [i.split(':')[1] for i in list_res_db]
-        session['res'] = list_res_db[0].split(':')[0]
-        return redirect(url_for('main.process'))
+        session['selected_names_res'] = request.get_json().get('DBs_selected_res', [])
+        session['res'] = request.get_json().get('res', '')
+        print(session['selected_names_res'], session['res'])
+
+        return jsonify(status='success', redirect=url_for('main.process'))
     # Handle the GET request
     return render_template('arbol.html', etiqueta_h=session['nombre_plataforma'])
 

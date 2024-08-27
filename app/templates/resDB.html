@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/jstree.min.js"></script>
     
     <h1>Resolución de las BD</h1>
-    <form id="selectDB_re" action="/process" method="post">
+    <form id="selectDB_res" action="/process" method="post">
 
         <label for="res_selector">Selecciona la resolución para mostrar las bases de datos con dicha resolución: <br></label>
         <br>
@@ -28,20 +28,8 @@
             {% endfor %}
         </select>
         <br>
-        <!-- <select name="res_DB" id="res_db" multiple>  -->
-            <!-- Mostrar el recuadro con las bases de datos para la resolución dada con JS ** -->
-        <!-- </select> -->
         <div id="Res_tree"></div>
         <br>
-        <!-- <button type="button" onclick="addSelected_res_DB()">Agregar BD</button>
-        <br> -->
-
-        <!-- <div id="DBSelected_w_res"></div> -->
-        <!-- <textarea name="selected_res_DB" id="selected_res_DB" rows="4" cols="50" readonly></textarea>style="display: none;" -->
-        
-
-        <!-- <input type="hidden" name="selectedRes" id="selectedRes1"> -->
-
         <!-- Botón de envío -->
         <!-- <button type="submit">Enviar bases de datos seleccionadas</button> -->
         <button id="sendButton" type="submit" class="btn btn-sm btn-primary">Continuar el análisis con las bases de datos seleccionadas</button>
@@ -51,11 +39,11 @@
     <script>
         // Construcción del jstree de un solo nivel:
         function updateDBSelect(){
-
-            let DBs_selected_res = []; // Lista de bases de datos corresponcientes a la resolución seleccionda.
-            let selectedKey = document.getElementById("res_selector").value;   // String con el nombre de la resolución selecionada.
+            var res = ''
+            var DBs_selected_res = []; // Lista de bases de datos corresponcientes a la resolución seleccionda.
+            res = document.getElementById("res_selector").value;   // String con el nombre de la resolución selecionada.            
             var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
-            let DBs_res = Dict_res[selectedKey];
+            let DBs_res = Dict_res[res];
 
             let nodos = DBs_res.map((item, index)=> ({
                 "text": item, // El texto del nodo
@@ -76,7 +64,7 @@
                                                     'name': 'proton', // nombre del tema
                                                     'responsive': true,
                                                     'dots': true, // mostrar puntos entre nodos
-                                                    'icons': false, // mostrar iconos junto a los nodos
+                                                    'icons': true, // mostrar iconos junto a los nodos
                                                     'state': { checked: true }
                                                 } },
                                         "checkbox" : {  // habilitar los checkboxes
@@ -86,112 +74,48 @@
                                     });
         
 
-            // $(function () {
-            //     $.getJSON('/res_tree_data', function (data) {
-            //         $('#Res_tree').jstree({ 'core': { 'data': data, 
-            //                                     'themes': {   /// Cambiar el tema
-            //                                         'name': 'proton', // nombre del tema
-            //                                         'responsive': true,
-            //                                         'dots': true, // mostrar puntos entre nodos
-            //                                         'icons': false, // mostrar iconos junto a los nodos
-            //                                         'state': { checked: true }
-            //                                     } },
-            //                             "checkbox" : {
-            //                                         "keep_selected_style" : false,
-            //                                         },
-            //                             "plugins" : [ "checkbox"]
-            //                         });
-            //     });
-            // });
-
-            // $('#Res_tree').on("check_node.jstree uncheck_node.jstree", function (e, data) {   // e = evento ("changed" en este caso)
-            //     let checkedNodes = $('#Res_tree').jstree("get_checked", true) // Obtiene los nodos checkeados
-            //             .map(node => node.id); // Extrae los IDs de los nodos
-            //     console.log(checkedNodes)
-            //     console.log('hola')
-            //     // selected_DBs_res = ; // Actualiza la lista con los nodos seleccionados
-            // });
-
-
             $('#Res_tree').on("changed.jstree", function (e, data) {   // e = evento ("changed" en este caso)
-    
                 DBs_selected_res = data.selected.map(function(node_id) { //data.selected es una lista de los IDs de los nodos seleccionados.
                     return data.instance.get_node(node_id).text;
                 });; // Actualiza la lista con los nodos seleccionados (toma los texts a partir de los IDs de los nodos seleccionados.)
                 console.log(DBs_selected_res)
-
             });
+            console.log('fuera del changed:',DBs_selected_res)
+
+
+            // Enviar DBs_selected_res y res al main:
+            document.getElementById('selectDB_res').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Convertir las listas un array para enviarlo como JSON
+                DBs_selected_res = Array.from(DBs_selected_res);
+
+                // Enviar el Array mediante AJAX
+                fetch('/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ DBs_selected_res: DBs_selected_res, res : res})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.href = data.redirect;  // Redirige a la nueva URL
+                    } else {
+                        console.error('Error:', data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
         };
 
-        
-        // Checar aquíiii esta parte:
-
-        // $('#Res_tree').on("check_node.jstree uncheck_node.jstree", function (e, data) {   // e = evento ("changed" en este caso)
-        //         let checkedNodes = $('#Res_tree').jstree("get_checked", true) // Obtiene los nodos checkeados
-        //                 .map(node => node.id); // Extrae los IDs de los nodos
-        //         console.log(checkedNodes)
-        //         // selected_DBs_res = ; // Actualiza la lista con los nodos seleccionados
-        //     });
-
-        // -------
-
         // Esto es para que se carguen las opciones desde que se carga la página --
-        // document.addEventListener('DOMContentLoaded', (event) => {
-        // updateDBSelect();
-        // });
-        // //--
-
-
-
-
-        // var Dict_res = {{ Dict_res | tojson | safe }};  // Pasamos el diccionario a Json para JS.
-        // var K = 0;  // contador aux.
-
-        // function updateDbSelect() {
-        //     var selectedKey = document.getElementById("res_selector").value;
-
-        //     var variablesSelect = document.getElementById("res_db");
-        //     variablesSelect.innerHTML = "";
-
-        //     Dict_res[selectedKey].forEach(function(variable) {   // Esto muestra las BD de cada resolución elegida (selectedKey) **
-        //         var option = document.createElement("option");
-        //         option.value = variable;
-        //         option.text = variable;
-        //         variablesSelect.appendChild(option);
-        //     });
-        // }
-
-
-        // function addSelected_res_DB(){
-        //     var selectedKey = document.getElementById("res_selector").value;
-        //     var variablesSelect = document.getElementById("res_db");
-        //     var selectedVariables = [];
-
-        //     for (var i = 0; i < variablesSelect.options.length; i++) {
-        //         if (variablesSelect.options[i].selected) {
-        //             selectedVariables.push(variablesSelect.options[i].value);
-        //         }
-        //     }
-        //     console.log('Lista:', selectedVariables);
-
-        //     var selectedValuesTextarea = document.getElementById("selected_res_DB");
-        //     var currentValue = selectedValuesTextarea.value;
-
-        //     if (K < 1 || currentValue.includes(selectedKey)){  // Esto es para que se puedan seleccionar bases de datos de una sola resolución una vez escogido el primero.
-        //         new_element = selectedKey + ":" + selectedVariables[0]//.join(", ")
-        //         if (currentValue) {            // En esta parte se van agregando las bases de datos con su resolución al hacer click el botón de "Agregar BD".
-        //         currentValue += "\n";
-        //         }
-        //         if(!currentValue.includes(new_element)){
-        //             K +=1;
-        //             currentValue += new_element;
-        //             selectedValuesTextarea.value = currentValue;
-        //         }
-        //     }
-        //     else{
-        //         alert(`No puedes mezclar resoluciones distintas, intentalo de nuevo.`)
-        //     }
-        // }
+        document.addEventListener('DOMContentLoaded', (event) => {
+        updateDBSelect();
+        });
+        // --
 
     </script>
 

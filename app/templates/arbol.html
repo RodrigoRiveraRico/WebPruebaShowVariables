@@ -121,9 +121,7 @@
 
                 let checkedNodes = $('#tree2').jstree("get_checked", true) // Obtiene los nodos checkeados
                     .map(node => node.id); // Extrae los IDs de los nodos
-
-                selectedNodes2 = filtrarYTransformar(checkedNodes); // Filtra y transforma los IDs, actualizando la lista
-
+                selectedNodes2 = filtrarYTransformar(checkedNodes); // Filtra y transforma los IDs, actualizando la lista                                
                 isHandlingEvent = false;
             });
 
