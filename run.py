@@ -6,7 +6,7 @@ import os
 import sys
 
 # Obtener el archivo de configuración desde la variable de entorno
-config_file = os.getenv('FLASK_CONFIG_FILE', 'new_config_default.yaml')
+config_file = os.getenv('FLASK_CONFIG_FILE', 'config_default.yaml')
 config_file = 'configuraciones_db/' + config_file
 
 # Verificar si el archivo de configuración existe
