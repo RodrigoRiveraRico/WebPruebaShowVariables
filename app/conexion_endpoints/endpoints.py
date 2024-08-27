@@ -1,6 +1,19 @@
 import requests
 import pandas as pd
 
+def resolution_from_endpoint(bases, fuente_de_datos_metadatos):
+    '''
+    Función que se emplea con la configuración para conectar endpoints.
+    Esta función obtiene las resoluciones para cada fuente de datos desde un endpoint.
+    NOTA: Falta incorporar dicho endpoint.
+
+    Return: Diccionario.
+    '''
+    db = bases[0]
+    dic = {'mun':[db]}  
+
+    return dic
+
 def tree_from_endpoint(DB: str, fuente_de_datos_metadatos: dict):
     '''
     Función que se emplea con la configuración para conectar endpoints.

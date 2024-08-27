@@ -1,6 +1,21 @@
 import pandas as pd
 from sqlalchemy import create_engine, text
 
+def resolution_from_psql(bases, fuente_de_datos_metadatos):
+    '''
+    Función que se emplea con la configuración para conectar bases de datos en postgresql.
+
+    Return: Diccionario.
+    '''
+    dic = {}    # Diccionario a construir.
+    for db in bases:    # Para cada base de las seleccionadas
+        res_dict = fuente_de_datos_metadatos[db]['resolution']  # Se asigna el diccionario de resolucion de cada base
+        for key in res_dict.keys(): # Cada key es una resolución
+            if key not in dic:  # Si la resolucion no está en el diccionario
+                dic.update({key:[]})    # Agregamos la resolución faltante cuyos valores será una lista de bases de datos
+            dic[key].append(db) # Añadimos la base de datos a la resolución
+    return dic
+
 def tree_from_psql(DB: str, fuente_de_datos_metadatos: dict, query_categorias):
     '''
     Función que se emplea con la configuración para conectar bases de datos en postgresql.
