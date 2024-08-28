@@ -16,9 +16,12 @@ default_connection: &DEFAULT
 plataforma:
   name: niche_integration
 
+conexion: postgresql
+
 fuente_de_datos_metadatos:
   niche_integration: 
     <<: *DEFAULT
+    id_column: spid
     variable_columns:
       - especievalidabusqueda
     table: sp_snib
