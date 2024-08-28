@@ -8,9 +8,12 @@ default_connection: &DEFAULT
 plataforma:
   name: Miscelaneo
 
+conexion: postgresql
+
 fuente_de_datos_metadatos:
   epi_puma_censo_inegi_2020: 
     <<: *DEFAULT
+    id_column: id
     variable_columns:
       - name
       - interval
@@ -24,6 +27,7 @@ fuente_de_datos_metadatos:
 
   epi_puma_worldclim:
     <<: *DEFAULT
+    id_column: id
     variable_columns:
         - label
         - interval
@@ -35,6 +39,7 @@ fuente_de_datos_metadatos:
 
   epi_puma_accidentes:
     <<: *DEFAULT
+    id_column: id
     variable_columns:
       - name
       - interval
@@ -45,6 +50,7 @@ fuente_de_datos_metadatos:
 
   newspecies:
     <<: *DEFAULT
+    id_column: id
     variable_columns:
       - especievalida
     table: covariable
@@ -62,6 +68,7 @@ fuente_de_datos_metadatos:
 
   epi_puma_hospederos:
     <<: *DEFAULT
+    id_column: id
     variable_columns:
       - nombrecientifico
     table: covariable
@@ -76,24 +83,4 @@ fuente_de_datos_metadatos:
         - orden
         - familia
         - genero
-
-  DB_Deforestacion:
-    <<: *DEFAULT
-    variable_columns:
-      - label
-      - tag
-    table: deforestacion
-    resolution:
-      mun: cells_mun
-    categorias: Null
-
-  Personas:
-    <<: *DEFAULT
-    variable_columns:
-      - nombre
-      - valor
-    table: covariable
-    resolution:
-      UNAM_1075: presencias
-    categorias: Null
 
