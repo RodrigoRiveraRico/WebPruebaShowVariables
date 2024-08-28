@@ -8,7 +8,7 @@ def creacion_ramas_arbol(DB: str):
     '''
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
     query_categorias = current_app.config['QUERY_CATEGORIAS']
-    conexion = current_app.config['CONEXION']
+    conexion = fuente_de_datos_metadatos[DB]['conexion']
 
     if conexion == 'postgresql':
         from app.conexion_postgresql import tree_from_psql
@@ -73,7 +73,8 @@ def creacion_ramas_arbol(DB: str):
                 node = find_or_create_node(current_structure, id_tag, var_tax_string[:-2])
                 current_structure = node['children']
 
-    return structure_lst[0]['children'] # Regresamos este 'children' para no mostrar dos veces el nombre de la base de datos en el árbol
+    return structure_lst
+    # return structure_lst[0]['children'] # Regresamos este 'children' para no mostrar dos veces el nombre de la base de datos en el árbol
 
     
 

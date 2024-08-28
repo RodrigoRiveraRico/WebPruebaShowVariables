@@ -23,11 +23,10 @@ default_connection: &DEFAULT
 plataforma:
   name: Configuracion de default (INEGI)
 
-conexion: postgresql
-
 fuente_de_datos_metadatos:
   epi_puma_censo_inegi_2020: 
     <<: *DEFAULT
+    conexion: postgresql
     id_column: id
     variable_columns:
       - name
