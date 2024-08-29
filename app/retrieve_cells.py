@@ -11,7 +11,7 @@ def recolectar_celdas(DB:str, variables:list, res:str):
     NOTA: Ambas funciones regresan una tupla de arreglos numpy.
     '''
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-    conexion = current_app.config['CONEXION']
+    conexion = fuente_de_datos_metadatos[DB]['conexion']
 
     if conexion == 'postgresql':
         from app.conexion_postgresql import cells_from_psql

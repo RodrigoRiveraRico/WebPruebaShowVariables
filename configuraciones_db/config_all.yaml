@@ -1,4 +1,6 @@
 
+# <<<Configuración con todas las fuentes de datos disponibles (postgresql & endpoints)>>>
+
 default_connection: &DEFAULT
   host: fastdb.c3.unam.mx
   user: monitor
@@ -11,6 +13,8 @@ plataforma:
 fuente_de_datos_metadatos:
   epi_puma_censo_inegi_2020: 
     <<: *DEFAULT
+    conexion: postgresql
+    id_column: id
     variable_columns:
       - name
       - interval
@@ -21,9 +25,16 @@ fuente_de_datos_metadatos:
       ageb: cells_ageb
     categorias: 
       archivo: epi_puma_censo_sql.py
+  
+  INEGI (endpoints):
+    conexion: endpoints
+    variables: http://chilamdev.c3.unam.mx:2112/variables
+    get_data: http://chilamdev.c3.unam.mx:2112/get-data
 
   epi_puma_worldclim:
     <<: *DEFAULT
+    conexion: postgresql
+    id_column: id
     variable_columns:
         - label
         - interval
@@ -35,6 +46,8 @@ fuente_de_datos_metadatos:
 
   epi_puma_accidentes:
     <<: *DEFAULT
+    conexion: postgresql
+    id_column: id
     variable_columns:
       - name
       - interval
@@ -45,6 +58,8 @@ fuente_de_datos_metadatos:
 
   newspecies:
     <<: *DEFAULT
+    conexion: postgresql
+    id_column: id
     variable_columns:
       - especievalida
     table: covariable
@@ -62,6 +77,8 @@ fuente_de_datos_metadatos:
 
   epi_puma_hospederos:
     <<: *DEFAULT
+    conexion: postgresql
+    id_column: id
     variable_columns:
       - nombrecientifico
     table: covariable
@@ -76,24 +93,4 @@ fuente_de_datos_metadatos:
         - orden
         - familia
         - genero
-
-  DB_Deforestacion:
-    <<: *DEFAULT
-    variable_columns:
-      - label
-      - tag
-    table: deforestacion
-    resolution:
-      mun: cells_mun
-    categorias: Null
-
-  Personas:
-    <<: *DEFAULT
-    variable_columns:
-      - nombre
-      - valor
-    table: covariable
-    resolution:
-      UNAM_1075: presencias
-    categorias: Null
 

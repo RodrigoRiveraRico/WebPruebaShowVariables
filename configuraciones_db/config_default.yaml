@@ -5,6 +5,11 @@
 
 # En plataforma se inidica un nombre para la misma.
 
+# Llaves del diccionario fuente_de_datos_metadatos: Es el nombre de la fuente de datos.
+# En caso de que el servidor sea postgresql: El nombre de la fuente de datos se indica con el nombre de la base de datos.
+# En caso de que el servidor sea endpoints: Se puede escoger el nombre para identificar dicha fuente de datos.
+
+# conexion es el servidor de donde se extraen los datos: postgresql o endpoints.
 # id_column es la columna donde está los id's de las variables.
 # variable_columns es una lista de las columnas que definen a las variables.
 # table es la tabla donde están almacenados los datos
@@ -23,11 +28,10 @@ default_connection: &DEFAULT
 plataforma:
   name: Configuracion de default (INEGI)
 
-conexion: postgresql
-
 fuente_de_datos_metadatos:
   epi_puma_censo_inegi_2020: 
     <<: *DEFAULT
+    conexion: postgresql
     id_column: id
     variable_columns:
       - name
