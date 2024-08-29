@@ -1,11 +1,5 @@
 
-# <<<Configuración de niche_integration>>>
-
-# En plataforma se inidica un nombre para la misma.
-
-# variable_columns es una lista de las columnas que definen a las variables.
-# table es la tabla donde están almacenados los datos
-# resolution indica la columna donde están las celdas para cada resolución del ensamble.
+# <<<Configuración de niche_integration (postgresql)>>>
 
 default_connection: &DEFAULT
   host: fastdb.c3.unam.mx
@@ -16,11 +10,10 @@ default_connection: &DEFAULT
 plataforma:
   name: niche_integration
 
-conexion: postgresql
-
 fuente_de_datos_metadatos:
   niche_integration: 
     <<: *DEFAULT
+    conexion: postgresql
     id_column: spid
     variable_columns:
       - especievalidabusqueda

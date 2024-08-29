@@ -6,7 +6,7 @@ import os
 import sys
 
 # Obtener el archivo de configuración desde la variable de entorno
-config_file = os.getenv('FLASK_CONFIG_FILE', 'config_inegi_ps_ep.yaml')
+config_file = os.getenv('FLASK_CONFIG_FILE', 'config_default.yaml')
 config_file = 'configuraciones_db/' + config_file
 
 # Verificar si el archivo de configuración existe
@@ -107,7 +107,7 @@ for db_name, db_config_values in fuente_de_datos_metadatos.items():
 from app import create_app
 
 # Crear la aplicación Flask
-app = create_app(plataforma, fuente_de_datos_metadatos, query_categorias, ...)
+app = create_app(plataforma, fuente_de_datos_metadatos, query_categorias)
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)

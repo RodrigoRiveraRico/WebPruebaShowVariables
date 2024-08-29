@@ -1,3 +1,6 @@
+
+# <<<Configuración base de datos newspecies (postgresql)>>>
+
 default_connection: &DEFAULT
   host: fastdb.c3.unam.mx
   user: monitor
@@ -7,11 +10,10 @@ default_connection: &DEFAULT
 plataforma:
   name: Newspecies_data
 
-conexion: postgresql
-
 fuente_de_datos_metadatos:
   newspecies:
     <<: *DEFAULT
+    conexion: postgresql
     id_column: id
     variable_columns:
       - especievalida

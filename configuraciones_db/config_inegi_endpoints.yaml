@@ -1,0 +1,11 @@
+
+# <<<Configuración INEGI (endpoints)>>>
+
+plataforma:
+  name: Configuracion de default (INEGI)
+
+fuente_de_datos_metadatos:
+  INEGI:  # Nombre a elegir al gusto
+    conexion: endpoints
+    variables: http://chilamdev.c3.unam.mx:2112/variables
+    get_data: http://chilamdev.c3.unam.mx:2112/get-data
