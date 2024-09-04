@@ -94,3 +94,15 @@ fuente_de_datos_metadatos:
         - familia
         - genero
 
+  Personas:
+    <<: *DEFAULT
+    conexion: postgresql
+    id_column: id
+    variable_columns:
+      - valor
+    table: covariable
+    resolution:
+      UNAM_1075: presencias
+    categorias:
+      columnas:
+        - nombre
