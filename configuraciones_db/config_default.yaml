@@ -29,7 +29,7 @@ plataforma:
   name: Configuracion de default (INEGI)
 
 fuente_de_datos_metadatos:
-  epi_puma_censo_inegi_2020: 
+  epi_puma_censo_inegi_2020_monitor: 
     <<: *DEFAULT
     conexion: postgresql
     id_column: id
@@ -40,7 +40,6 @@ fuente_de_datos_metadatos:
     resolution:
       mun: cells_mun
       state: cells_state
-      ageb: cells_ageb
-    categorias: 
+    categorias:
       archivo: epi_puma_censo_sql.py
 # Acomodo indicado en un archivo con sql

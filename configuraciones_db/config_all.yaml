@@ -11,7 +11,7 @@ plataforma:
   name: Miscelaneo
 
 fuente_de_datos_metadatos:
-  epi_puma_censo_inegi_2020: 
+  epi_puma_censo_inegi_2020_monitor: 
     <<: *DEFAULT
     conexion: postgresql
     id_column: id
@@ -22,7 +22,6 @@ fuente_de_datos_metadatos:
     resolution:
       mun: cells_mun
       state: cells_state
-      ageb: cells_ageb
     categorias: 
       archivo: epi_puma_censo_sql.py
   
@@ -41,7 +40,6 @@ fuente_de_datos_metadatos:
     table: covariable
     resolution:
       mun: cells_mun
-      state: cells_state
     categorias: Null
 
   epi_puma_accidentes:
