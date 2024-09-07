@@ -48,7 +48,7 @@ def process():
         # Process the POST request and redirect to GET
         session['selected_names_res'] = request.get_json().get('DBs_selected_res', [])
         session['res'] = request.get_json().get('res', '')
-        print(session['selected_names_res'], session['res'])
+        # print(session['selected_names_res'], session['res'])
 
         return jsonify(status='success', redirect=url_for('main.process'))
     # Handle the GET request
@@ -56,7 +56,7 @@ def process():
 
 @main_bp.route('/tree_data')
 def get_tree_data():
-    tree_data = [{"id": DB, "text": DB, "children": creacion_ramas_arbol(DB)} for DB in session['selected_names_res'] ]
+    tree_data = [{"id": DB, "text": DB, "children": creacion_ramas_arbol(DB, session['res'])} for DB in session['selected_names_res'] ]
     return jsonify(tree_data)
 
 @main_bp.route('/select_variables', methods=['POST'])

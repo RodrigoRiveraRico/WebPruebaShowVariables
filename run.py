@@ -25,37 +25,6 @@ except Exception as e:
     print(f"Error al ejecutar el archivo de configuración '{config_file}': {e}")
     sys.exit(1)
 # --------------------------------------------------------------------------
-query_categorias = {}
-
-for db_name, db_config_values in fuente_de_datos_metadatos.items():
-    if db_config_values['conexion'] == 'postgresql':
-
-        if db_config_values['categorias'] == None:
-            metadatos_txt = f"""'"{db_name}"'"""
-
-        elif "archivo" in db_config_values['categorias']:
-            archivo_name = db_config_values['categorias']['archivo'][:-3]
-            exec("from configuraciones_db."+archivo_name+" import txt")
-            metadatos_txt = eval('txt')
-
-        elif "columnas" in db_config_values['categorias']:
-            metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
-        try: 
-            txt = f"""
-                SELECT 
-                    {db_config_values['id_column']} as id,
-                    
-                    CONCAT({sql_c.concatenacion_taxonomia(db_config_values)}) as taxonomia_variable,
-
-                    {metadatos_txt} as metadatos
-
-                FROM {sql_c.table(db_config_values)}
-                ;
-                """
-            query_categorias.update({db_name : txt})
-        except Exception as e:
-            print(f'Error en la configuracion de categorias de {db_name}')
-            sys.exit(1)
 
 #         # Verificar conexión
 #         try:
@@ -107,7 +76,7 @@ for db_name, db_config_values in fuente_de_datos_metadatos.items():
 from app import create_app
 
 # Crear la aplicación Flask
-app = create_app(plataforma, fuente_de_datos_metadatos, query_categorias)
+app = create_app(plataforma, fuente_de_datos_metadatos)
 
 if __name__ == '__main__':
     app.run(port=8000, debug=True)

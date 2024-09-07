@@ -1,13 +1,13 @@
 from flask import current_app
 
-def creacion_ramas_arbol(DB: str):
+def creacion_ramas_arbol(DB: str, res: str):
     '''
     DB: str Nombre de la fuente de datos (base de datos).
+    res: str Resolución del mallado.
     
     Return: list Lista para generar el árbol HTML
     '''
     fuente_de_datos_metadatos = current_app.config['FUENTE_DE_DATOS_METADATOS']
-    query_categorias = current_app.config['QUERY_CATEGORIAS']
     conexion = fuente_de_datos_metadatos[DB]['conexion']
 
     if conexion == 'postgresql':
@@ -16,7 +16,7 @@ def creacion_ramas_arbol(DB: str):
         from app.conexion_endpoints import tree_from_endpoint
 
     if conexion == 'postgresql':
-        df = tree_from_psql(DB, fuente_de_datos_metadatos, query_categorias)
+        df = tree_from_psql(DB, fuente_de_datos_metadatos, res)
     elif conexion == 'endpoints':
         df = tree_from_endpoint(DB, fuente_de_datos_metadatos)
     # print(df)

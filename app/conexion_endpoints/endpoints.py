@@ -10,7 +10,8 @@ def resolution_from_endpoint(bases, fuente_de_datos_metadatos):
     Return: Diccionario.
     '''
     db = bases[0]
-    dic = {'mun':[db]}  
+    dic = {'mun':[db],
+           'state': [db]}  
 
     return dic
 

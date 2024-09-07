@@ -1,4 +1,5 @@
 import pandas as pd
+import configuraciones_db.sql_config_construction as sql_c
 from sqlalchemy import create_engine, text
 
 def resolution_from_psql(bases, fuente_de_datos_metadatos):
@@ -16,7 +17,7 @@ def resolution_from_psql(bases, fuente_de_datos_metadatos):
             dic[key].append(db) # Añadimos la base de datos a la resolución
     return dic
 
-def tree_from_psql(DB: str, fuente_de_datos_metadatos: dict, query_categorias):
+def tree_from_psql(DB: str, fuente_de_datos_metadatos: dict, res: str):
     '''
     Función que se emplea con la configuración para conectar bases de datos en postgresql.
     Esta función hace la conexión a postgresql.
@@ -32,7 +33,37 @@ def tree_from_psql(DB: str, fuente_de_datos_metadatos: dict, query_categorias):
 
     engine = create_engine(database_url)
 
-    sql_query = text(query_categorias[DB])
+    def sql_query():
+        db_config_values = fuente_de_datos_metadatos[DB]
+
+        if db_config_values['categorias'] == None:
+            metadatos_txt = f"""'"{DB}"'"""
+
+        elif "archivo" in db_config_values['categorias']:
+            archivo_name = db_config_values['categorias']['archivo'][:-3]
+            exec(f"import configuraciones_db.{archivo_name} as sql_txt")
+            metadatos_txt = eval('sql_txt.txt')
+
+        elif "columnas" in db_config_values['categorias']:
+            metadatos_txt = f'CONCAT({sql_c.concatenacion_metadatos(db_config_values)})'
+
+        txt = f"""
+                SELECT 
+                    {db_config_values['id_column']} as id,
+                    
+                    CONCAT({sql_c.concatenacion_taxonomia(db_config_values)}) as taxonomia_variable,
+
+                    {metadatos_txt} as metadatos
+
+                FROM {sql_c.table(db_config_values)}
+
+                WHERE {db_config_values['resolution'][res]} IS NOT NULL
+                ;
+                """
+        
+        return text(txt)
+
+    sql_query = sql_query()
 
     with engine.connect() as connection:
         df = pd.read_sql(sql_query, connection)
