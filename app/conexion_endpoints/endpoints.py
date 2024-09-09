@@ -10,12 +10,16 @@ def resolution_from_endpoint(bases, fuente_de_datos_metadatos):
     Return: Diccionario.
     '''
     db = bases[0]
-    dic = {'mun':[db],
-           'state': [db]}  
+    dic = {'mun':[db], 
+           'state': [db]
+           }  
+    
+    # Nota: Se está escribiendo HardCode 'mun' y 'state' a falta del endpoint que contiene las resoluciones
+    # disponibles para cada fuente de datos.
 
     return dic
 
-def tree_from_endpoint(DB: str, fuente_de_datos_metadatos: dict):
+def tree_from_endpoint(DB: str, fuente_de_datos_metadatos: dict, res: str):
     '''
     Función que se emplea con la configuración para conectar endpoints.
     Esta función hace la conexión a un endpoint.
@@ -25,6 +29,7 @@ def tree_from_endpoint(DB: str, fuente_de_datos_metadatos: dict):
     api_url = fuente_de_datos_metadatos[DB]['variables']
     response = requests.get(api_url).json()
     df_response = pd.json_normalize(response)
+    df_response = df_response[df_response['available_grids'].map(lambda x: res in x)]
     df_response.rename(columns={'name':'taxonomia_variable'}, inplace=True)
     df_response['metadatos'] = DB   # Aparecerá 2 veces el nombre de la base en el árbol
     df = df_response[['id', 'taxonomia_variable', 'metadatos']]

@@ -18,7 +18,7 @@ def creacion_ramas_arbol(DB: str, res: str):
     if conexion == 'postgresql':
         df = tree_from_psql(DB, fuente_de_datos_metadatos, res)
     elif conexion == 'endpoints':
-        df = tree_from_endpoint(DB, fuente_de_datos_metadatos)
+        df = tree_from_endpoint(DB, fuente_de_datos_metadatos, res)
     # print(df)
 
     # Crear una nueva columna con una lista de la taxonomía de la variable
