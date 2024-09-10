@@ -19,21 +19,16 @@
     <div class="filter-button">
         <button onclick="window.location.href='/score_eps'">Mostrar Todo</button>
         <button onclick="window.location.href='/score_eps?filter=E_signif'">Más significativos</button>
-        <!-- <button onclick="window.location.href='/ScoreEps?filter=gt2'">Valores <|1|</button> --> 
     </div>
 
     <center class="df1">
-        <!-- <table class="df1"> -->
         {{ df_resultado | safe }}
-        <!-- </table> -->
     </center>
     <br>
     <h2>Covariables por celdas:</h2>
     <br>
     <center class="df2">
-        <!-- <table class="df2"> -->
         {{ df_resultado2 | safe }}
-        <!-- </table> -->
     </center>
 </body>
 </html>
