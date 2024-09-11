@@ -57,7 +57,7 @@ flask --app run run --port=4000 --host=0.0.0.0
             - # variable_column_name
             - # variable_column_name
           table: # table
-          resoluction:
+          resolution:
             res_1:  # resolution_column_name
             res_2:  # resolution_column_name
           categorias:
