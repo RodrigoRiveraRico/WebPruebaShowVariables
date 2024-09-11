@@ -3,17 +3,18 @@ function updateDBSelect(){
     var res = ''
     var DBs_selected_res = []; // Lista de bases de datos corresponcientes a la resolución seleccionda.
     res = document.getElementById("res_selector").value;   // String con el nombre de la resolución selecionada.            
-    let DBs_res = Dict_res[res];
+    let DBs_res = Dict_res[res]; 
 
-    let nodos = DBs_res.map((item, index)=> ({
+    let nodos = DBs_res.map((item, index)=> ({  // Se construyen los nodos con los nombres de las BD correspondientes a la resolución seleccionada.
         "text": item, // El texto del nodo
         "id": `nodo_${index + 1}`, // Asignar un id único
+        "state": { "selected": true } // Marcar como seleccionado desde el inicio
     }));
 
     console.log(DBs_res);
 
     // Destruir el jstree antes de volverlo a inicializar (si es que ya se inicializó anteriormente)
-    if ($('#Res_tree').jstree(true)) {
+    if ($('#Res_tree').jstree(true)) {   // Este if es para actualizar el arbol cuando se selecciona una resolución distinta.
         $('#Res_tree').jstree(true).destroy();
     }
 
@@ -29,6 +30,7 @@ function updateDBSelect(){
                                         } },
                                 "checkbox" : {  // habilitar los checkboxes
                                             "keep_selected_style" : false,
+                                            "selected" : true 
                                             },
                                 "plugins" : [ "checkbox"]
                             });
@@ -43,7 +45,7 @@ function updateDBSelect(){
     console.log('fuera del changed:',DBs_selected_res)
 
 
-    // Enviar DBs_selected_res y res al main:
+    // Enviar DBs_selected_res y res al main.py:
     document.getElementById('selectDB_res').addEventListener('submit', function(event) {
         event.preventDefault();
         
