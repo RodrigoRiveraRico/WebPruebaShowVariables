@@ -1,3 +1,23 @@
+## Tabla de contenido
+
+* [Ejecución de la plataforma](#ejecución-de-la-plataforma)
+
+  * [WINDOWS](#windows)
+
+  * [LINUX](#linux)
+
+* [Descripción del archivo config.yaml](#descripción-del-archivo-configyaml)
+
+* [Ejemplo del archivo config.yaml](#ejemplo-del-archivo-configyaml)
+
+* [Estructura de los datos almacenados en postgreSQL](#estructura-de-los-datos-almacenados-en-postgresql)
+
+* [Estructura de los datos almacenados en endpoints](#estructura-de-los-datos-almacenados-en-endpoints)
+
+* [Ejemplo del archivo file.py indicado en config.yaml](#ejemplo-del-archivo-filepy-indicado-en-configyaml)
+
+* [Ejemplo del archivo catalogo_resoluciones.csv](#ejemplo-del-archivo-catalogo_resolucionescsv)
+
 ## Ejecución de la plataforma
 La platforma requiere de Python 3.12 para ser ejecutada.
 
@@ -21,9 +41,9 @@ flask --app run run --port=4000 --host=0.0.0.0
 
 > host=0.0.0.0 para que la plataforma se pueda visualizar desde cualquier dispositivo conectado a la red del servidor donde se ejecuta la plataforma.
 
-> _config.yaml_ debe estar ubicado en _./configuraciones_db_
-
 ## Descripción del archivo _config.yaml_
+
+* El archivo _config.yaml_ debe estar ubicado en _./configuraciones_db_
 
 * En **plataforma** se indica un nombre para la misma.
 
@@ -156,6 +176,51 @@ fuente_de_datos_metadatos:
     get_data: http://.../get-data
 ```
 
+## Estructura de los datos almacenados en `postgreSQL`
+
+Las siguientes tablas ejemplifican cómo se estructuran esencialmente los datos en `postgreSQL` para incorporarlos en la plataforma.
+
+* Tipo de dato:
+
+  | id | name | interval | cells_mun | cells_state |
+  |:--:|:--:|:--:|:--:|:--:|
+  | integer not null | text | text | character varying[] | character varying[] |
+
+* Estructura:
+
+  | id | name | interval | cells_mun | cells_state |
+  |:--:|:--:|:--:|:--:|:--:|
+  | 1 | Población Total | 100:200 | [01432, 02345, 04112] | [01, 02, 04] | 
+  | 2 | Población Total | 200:300 | [02243, 10353, 11221] | [02, 10, 11] | 
+  | 3 | Población Total | 300:400 | [10013, 10111, 10222] | [10] | 
+
+En el archivo _config.yaml_ se colocan los siguientes parámetros para el caso de la tabla anterior con nombre _covariable_:
+
+```yaml
+id_column: id
+variable_columns:
+  - name
+  - interval
+table: covariable
+resolution:
+  mun: cells_mun
+  state: cells_state
+```
+
+Las llaves en el diccionario _resolution_ son:
+
+* **mun**, que hace referencia a una resolución municipal.
+
+* **state**, que hace referencia una resolución estatal.
+
+Estas llaves tienen que estar indicadas en el archivo _./catalogos/catalogo_resoluciones.csv_ [(Ver ejemplo)](#ejemplo-del-archivo-catalogo_resolucionescsv)
+
+## Estructura de los datos almacenados en `endpoints`
+
+Los datos almacenados en `endpoints` siguen la estructura definida en este [GitHub][conabio].
+
+[conabio]: https://github.com/CONABIO/species_v3.0
+
 ## Ejemplo del archivo _file.py_ indicado en _config.yaml_
 
 * _file.py_ debe estar ubicado en _./configuraciones_db_
@@ -180,3 +245,23 @@ CASE
 END
 '''
 ```
+
+## Ejemplo del archivo _catalogo\_resoluciones.csv_ 
+
+* Este archivo debe estar ubicado en _./catalogos_
+
+* Contiene las resoluciones indicadas en _config.yaml_ para conexiones con `postgreSQL`.
+
+* Contiene también las resoluciones definidas en los `endpoints`.
+
+```
+resolution,N
+mun,2446
+state,32
+```
+
+En el ejemplo anterior se tiene la resolución _mun_ (que hace referencia a resoluciones municipales) y _state_ (que hace referencia a resoluciones estatales) con su respectivo total de celdas.
+
+* La resolución _mun_ tiene un total de N = 2446 celdas.
+
+* La resolución _state_ tiene un total de N = 32 celdas.
