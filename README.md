@@ -1,4 +1,5 @@
 ## Ejecución de la plataforma
+La platforma requiere de Python 3.12 para ser ejecutada.
 
 ### WINDOWS
 
@@ -22,36 +23,123 @@ flask --app run run --port=4000 --host=0.0.0.0
 
 > _config.yaml_ debe estar ubicado en _./configuraciones_db_
 
+## Descripción del archivo _config.yaml_
+
+* En **plataforma** se indica un nombre para la misma.
+
+  ```yaml
+  plataforma:
+    name: # Nombre de la plataforma
+  ```
+
+* **fuente_de_datos_metadatos** tiene los datos de conexión y parámetros para la consulta de datos.
+  
+  * Cada llave del diccionario **fuente_de_datos_metadatos** es el nombre de la fuente de datos.
+  
+    * En caso de que el servidor sea `postgreSQL`: El nombre de la fuente de datos se indica con el nombre de la base de datos.
+    
+    * En caso de que el servidor sea `endpoints`: Se puede escoger cualquier nombre para identificar dicha fuente de datos.
+
+  * **conexion** es el servidor de donde se extraen los datos: _postgresql_ o _endpoints_.
+ 
+    * Para conexiones con `postgreSQL`:
+      
+      ```yaml
+      fuente_de_datos_metadatos:
+        db_name_1:
+          conexion: postgresql
+          host: # host
+          user: # user
+          password: # password
+          port: # port
+          id_column: # id_column_name
+          variable_columns:
+            - # variable_column_name
+            - # variable_column_name
+          table: # table
+          resoluction:
+            res_1:  # resolution_table_name
+            res_2:  # resolution_table_name
+          categorias:
+            ###
+      
+        db_name_2:
+          ###
+      ```
+     
+      * **id_column** es la columna donde está los id's de las variables.
+     
+      * **variable_columns** es una lista de las columnas que definen a las variables.
+        
+        El primer elemento de la lista (primera columna) se usará como primer elemento para definir las variables, y así sucesivamente con los demás elementos.
+
+      * **table** es la tabla donde están almacenados los datos.
+
+      * **resolution** es un diccionario que indica la columna donde están las celdas para cada resolución del ensamble.
+
+         La llave correspondiente a la columna donde están las celdas debe estar igualmente indicada en el archivo _./catalogos/catalogo_resoluciones.csv_ con el total de celdas del ensamble.
+
+      * **categorias** es un diccionario con una de las siguientes opciones:
+
+        ```yaml
+        categorias:
+          archivo: # file.py
+        ```
+        
+        > _file.py_ con script SQL indicando cómo agrupar las variables.
+
+        ```yaml
+        categorias:
+          columnas:
+            - #
+            - #
+            - #
+        ```
+        > Lista indicando las columnas con las cuáles agrupar las variables.
+        
+        > El primer elemento de la lista (primera columna) se usará como primer elemento para agrupar las variables, y así sucesivamente con los demás elementos.
+
+        ```yaml
+        categorias:
+          Null
+        ```
+        
+        > _Null_ en caso de no tener las dos opciones anteriores.
+
+    * Para conexiones con `endpoints`:
+   
+      ```yaml
+      fuente_de_datos_metadatos:
+        data_source_name_1:
+          conexion: endponits
+          variables: # url
+          get_data: # url
+
+        data_source_name_2:
+          ###
+      ```
+ 
+      * En **variables** se indica la URL al endpoint _/variables_
+
+      * En **get_data** se indica la URL al endpoint _/gat-data_
+  
+
 ## Ejemplo del archivo _config.yaml_
 
-* En **plataforma** se inidica un nombre para la misma.
-  
-* **variable_columns** es una lista de las columnas que definen a las variables.
-  
-* **table** es la tabla donde están almacenados los datos.
-  
-* **resolution** indica la columna donde están las celdas para cada resolución del ensamble.
-  
-  La llave correspondiente a la columna donde están las celdas debe estar igualmente indicada en el archivo _./catalogos/catalogo_resoluciones.csv_ con el total del ensamble.
-  
-* **categorias**: una de las siguientes:
-  
-  * Diccionario key='archivo', value: file.py con sql indicando cómo agrupar las variables.
-    
-  * Diccionario key='columnas', value: lista indicando las columnas de la base de datos con las cuáles agrupar de forma ordenada.
-  
-  * _Null_ en caso de no tener las dos opciones anteriores.
+A continuación se tiene un ejemplo de cómo escribir el archivo de configuración `yaml` con una fuente de datos de `postgreSQL` y otra en `endpoints`, mostrando así que se pueden combinar fuentes de datos provenientes de diferentes servidores en la misma plataforma.
 
 ```yaml
 plataforma:
-  name: Configuracion de default (INEGI)
+  name: Configuracion de ejemplo
 
 fuente_de_datos_metadatos:
-  epi_puma_censo_inegi_2020: 
+  inegi_db: 
+    conexion: postgresql
     host: ****
     user: ****
     password: ****
     port: ****
+    id_column: id
     variable_columns:
       - name
       - interval
@@ -59,13 +147,13 @@ fuente_de_datos_metadatos:
     resolution:
       mun: cells_mun
       state: cells_state
-      ageb: cells_ageb
-    categorias: 
-      # archivo: file.py
-      # columnas :
-      #   - col_1
-      #   - col_2
-      # Null
+    categorias:
+      archivo: inegi_db_sql.py
+
+  INEGI (endpoints):
+    conexion: endpoints
+    variables: http://.../variables
+    get_data: http://.../get-data
 ```
 
 ## Ejemplo del archivo _file.py_ indicado en _config.yaml_
