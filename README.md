@@ -182,9 +182,13 @@ Las siguientes tablas ejemplifican cómo se estructuran esencialmente los datos 
 
 * Tipo de dato:
 
-  | id | name | interval | cells_mun | cells_state |
-  |:--:|:--:|:--:|:--:|:--:|
-  | integer not null | text | text | character varying[] | character varying[] |
+  | columna | tipo |
+  |:--:|:--:|
+  | **id** | integer not null |
+  | **name** | text |
+  | **interval** | text |
+  | **cells_mun** | character varying[] |
+  | **cells_state** | character varying[] |
 
 * Estructura:
 
