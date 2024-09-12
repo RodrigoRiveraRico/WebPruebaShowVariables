@@ -1,4 +1,4 @@
-## Tabla de contenido
+## Contenido
 
 * [Ejecución de la plataforma](#ejecución-de-la-plataforma)
 
