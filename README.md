@@ -1,4 +1,23 @@
-## Tabla de contenido
+<style>
+
+h1 {text-align: center;}
+
+.C3 {text-align: center;}
+
+</style>
+
+<h1>Chilam Project</h1>
+
+<p class="C3">~ Centro de Ciencias de la Complejidad, UNAM ~</p>
+
+***
+
+**Para leer la descripción del proyecto, entrar [aquí](Description.md).**
+
+A continuación se detallan los aspectos técnicos de la plataforma.
+
+
+## Contenido
 
 * [Ejecución de la plataforma](#ejecución-de-la-plataforma)
 
@@ -22,7 +41,7 @@
 
 La plataforma fue probada con Python 3.11
 
-### WINDOWS:
+### WINDOWS
 
 ```CMD
 set FLASK_CONFIG_FILE=config.yaml
@@ -31,7 +50,7 @@ set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
 flask --app run run --port=4000 --host=0.0.0.0
 ```
 
-### LINUX:
+### LINUX
 
 ```bash
 export FLASK_CONFIG_FILE=config.yaml
@@ -183,9 +202,13 @@ Las siguientes tablas ejemplifican cómo se estructuran esencialmente los datos 
 
 * Tipo de dato:
 
-  | id | name | interval | cells_mun | cells_state |
-  |:--:|:--:|:--:|:--:|:--:|
-  | integer not null | text | text | character varying[] | character varying[] |
+  | columna | tipo |
+  |:--:|:--:|
+  | **id** | integer not null |
+  | **name** | text |
+  | **interval** | text |
+  | **cells_mun** | character varying[] |
+  | **cells_state** | character varying[] |
 
 * Estructura:
 
