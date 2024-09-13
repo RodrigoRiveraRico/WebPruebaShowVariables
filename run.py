@@ -6,7 +6,11 @@ import os
 import sys
 
 if sys.version_info[0:2] != (3, 11):
-    raise Exception('Requires python 3.11')
+    print("\n\t==== IMPORTANTE ====")
+    print(f"Versión de Python del sistema: {sys.version_info[0]}.{sys.version_info[1]}")
+    print("La plataforma fue probada con una versión de Python 3.11")
+    print("\t====================\n")
+    # raise Exception('Requires python 3.11')
 
 # Obtener el archivo de configuración desde la variable de entorno
 config_file = os.getenv('FLASK_CONFIG_FILE', 'config_default.yaml')
