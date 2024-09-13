@@ -35,16 +35,16 @@ $(function () {
 });
 
 
-// Función para realizar la búsqueda en el árbol
+// === Funciones para realizar la búsqueda en los árboles
 $('#search-input').on('keyup', function() {
     var searchString = $(this).val();  // Obtener el valor del input
     $('#tree').jstree('search', searchString);  // Ejecutar la búsqueda
 });
-
 $('#search-input2').on('keyup', function() {
     var searchString = $(this).val();  // Obtener el valor del input
     $('#tree2').jstree('search', searchString);  // Ejecutar la búsqueda
 });
+// ===.
 
 
 $('#tree2').on("click.jstree", ".jstree-anchor", function (event) {

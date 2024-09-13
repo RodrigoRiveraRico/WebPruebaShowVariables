@@ -21,7 +21,7 @@
         </div>
     </div> -->
     <br>
-    <h1 class="Titles">Selección de <span class="covariables">covariables</span> y <span class="clase">clase</span>:</h1>
+    <h1 class="Titles">Selección de covariables y la clase:</h1>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/jstree.min.js"></script>
@@ -31,21 +31,17 @@
         <div id="container_SVar">
             <div id="covContainer">
                 <h3 class="center-variables-titles">Covariables</h3>
-                <!-- <label>Selecciona las <span class="covariables">covariables</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> -->
-                <hr>
-                <input type="text" id="search-input" placeholder="Buscar en el árbol">
+                <hr class="custom-variables-hr">
+                <input type="text" id="search-input" placeholder="Buscar en el árbol"> <!-- Input para buscar dentro del arbol de las covariables. -->
                 <div id="tree"></div>
-                <!-- <div id="selectedNodesContainer1" style="display: none;"></div>
-                <textarea name="selectedVariables1" id="selectedVariables1" rows="4" cols="50" readonly style="display: none;"></textarea> -->
             </div>
+            
             <div id="classContainer">
                 <h3 class="center-variables-titles">Clase</h3>
-                <!-- <label>Selecciona la <span class = "clase">clase</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> -->
-                <hr>
-                <input type="text" id="search-input2" placeholder="Buscar en el árbol">
+                <hr class="custom-variables-hr">
+                <input type="text" id="search-input2" placeholder="Buscar en el árbol"> <!-- Input para buscar dentro del arbol de la clase. -->
+                <div id="tree"></div>
                 <div id="tree2"></div>
-                <!-- <div id="selectedNodesContainer2" style="display: none;"></div> Este es el que ya no me va a servir  -->
-                <!-- <textarea name="selectedVariables2" id="selectedVariables2" rows="4" cols="50" readonly style="display: none;"></textarea> -->
             </div>
         </div>
         <div id="buttonContainer">
