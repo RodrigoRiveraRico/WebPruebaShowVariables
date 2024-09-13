@@ -9,6 +9,7 @@ header {
 }
 
 body {
+    margin: 8px;
     background-image: url("imgC3.png");
     background-repeat: no-repeat;
     background-size: 62px;
@@ -59,11 +60,16 @@ textarea {
 
 /* Estilos para arbol.html: */
 
-.ArbolTitle {
-    font-family: 'Times New Roman OS Bold';
-    /* font-family: 'Shonar Bangla Bold'; */
+.Titles {
+    /* font-family: 'Times New Roman OS Bold'; */
+    font-family: 'Shonar Bangla Bold';
     font-weight: bold;
-    font-size: 35px;
+    font-size: 25px;
+}
+
+.center-variables-titles {
+    text-align: center;
+    font-family: 'Formula serial';
 }
 
 #container_SVar {
