@@ -1,3 +1,22 @@
+<style>
+
+h1 {text-align: center;}
+
+.C3 {text-align: center;}
+
+</style>
+
+<h1>Chilam Project</h1>
+
+<p class="C3">~ Centro de Ciencias de la Complejidad, UNAM ~</p>
+
+***
+
+**Para leer la descripción del proyecto, entrar [aquí](Description.md).**
+
+A continuación se detallan los aspectos técnicos de la plataforma.
+
+
 ## Contenido
 
 * [Ejecución de la plataforma](#ejecución-de-la-plataforma)
@@ -21,7 +40,7 @@
 ## Ejecución de la plataforma
 La platforma requiere de Python 3.12 para ser ejecutada.
 
-### WINDOWS:
+### WINDOWS
 
 ```CMD
 set FLASK_CONFIG_FILE=config.yaml
@@ -30,7 +49,7 @@ set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
 flask --app run run --port=4000 --host=0.0.0.0
 ```
 
-### LINUX:
+### LINUX
 
 ```bash
 export FLASK_CONFIG_FILE=config.yaml
