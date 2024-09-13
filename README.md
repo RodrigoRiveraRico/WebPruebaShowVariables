@@ -1,16 +1,8 @@
-<style>
+<h1 align="center">Chilam Project</h1>
 
-h1 {text-align: center;}
+<p align="center">~ Centro de Ciencias de la Complejidad, UNAM ~</p>
 
-.C3 {text-align: center;}
-
-</style>
-
-<h1>Chilam Project</h1>
-
-<p class="C3">~ Centro de Ciencias de la Complejidad, UNAM ~</p>
-
-***
+<br/>
 
 **Para leer la descripción del proyecto, entrar [aquí](Description.md).**
 
