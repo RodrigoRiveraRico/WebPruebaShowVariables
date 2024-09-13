@@ -11,7 +11,7 @@ $(function () {
                             "checkbox" : {
                                         "keep_selected_style" : false,
                                         },
-                            "plugins" : [ "checkbox"]
+                            "plugins" : [ "checkbox", "search"]
                         });
         $('#tree2').jstree({ 'core': { 'data': data,   // Arbol de la clase.
                                     'themes': {   /// Cambiar el tema
@@ -29,10 +29,23 @@ $(function () {
                                         "three_state": false, // desactiva checkboxes tri-estados
                                         "cascade": "none" // evita la selección automática de nodos hijos/padres
                                         },
-                            "plugins" : ["checkbox"]
+                            "plugins" : ["checkbox", "search"]
                         });
     });
 });
+
+
+// Función para realizar la búsqueda en el árbol
+$('#search-input').on('keyup', function() {
+    var searchString = $(this).val();  // Obtener el valor del input
+    $('#tree').jstree('search', searchString);  // Ejecutar la búsqueda
+});
+
+$('#search-input2').on('keyup', function() {
+    var searchString = $(this).val();  // Obtener el valor del input
+    $('#tree2').jstree('search', searchString);  // Ejecutar la búsqueda
+});
+
 
 $('#tree2').on("click.jstree", ".jstree-anchor", function (event) {
     // Evita que el checkbox se seleccione si el clic no es en el checkbox
