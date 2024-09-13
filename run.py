@@ -5,8 +5,8 @@ import csv
 import os
 import sys
 
-if sys.version_info[0:2] != (3, 12):
-    raise Exception('Requires python 3.12')
+if sys.version_info[0:2] != (3, 11):
+    raise Exception('Requires python 3.11')
 
 # Obtener el archivo de configuración desde la variable de entorno
 config_file = os.getenv('FLASK_CONFIG_FILE', 'config_default.yaml')
