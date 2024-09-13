@@ -13,4 +13,51 @@ En donde, $N_{c\cap v}$ es la cantidad de conteos (de la resolución escogida) e
 
 
 ## Interfaz de la plataforma:
-Asimismo, se integra un prototipo de interfaz gráfica para el usuario en donde se puede realizar dicho análisis de manera intuitiva mediante la selección de las bases de datos a utilizar, la resolución, así como la clase y las variables a analizar, para finalmente obtener los valores de Score y Épsilon de cada variable en relación a la clase, así como los valores de estas métricas para cada unidad de la resolución elegida (e.g. para cada estado).
+Asimismo, se integra un prototipo de interfaz gráfica para el usuario en donde se puede realizar dicho análisis de manera intuitiva mediante la selección de las bases de datos a utilizar dada una cierta resolución, para posteriormente elegir la clase y las variables a analizar. Finalmente se obtienen los valores de Score y Épsilon de cada variable en relación a la clase [1], así como los valores de estas métricas para cada unidad de la resolución elegida (e.g. para cada municipio) [2].
+
+### Ejemplo de las tablas de resultados obtenidas en la plataforma:
+
+1.-<table style="border-collapse: collapse; width: 50%; margin-left: auto; margin-right: auto;">
+<tr>
+    <th colspan="3" style="font-family: Arial;">Métricas (por variable) para la clase: "class_1"</th>
+</tr>
+<tr>
+    <th style="border: 1px solid gray;">Variable</th>
+    <th style="border: 1px solid gray;">Score</th>
+    <th style="border: 1px solid gray;">Épsilon</th>
+</tr>
+<tr>
+    <td style="border: 1px solid gray;">var_1</td>
+    <td style="border: 1px solid gray;">##</td>
+    <td style="border: 1px solid gray;">##</td>
+</tr>
+<tr>
+    <td style="border: 1px solid gray;">var_2</td>
+    <td style="border: 1px solid gray;">##</td>
+    <td style="border: 1px solid gray;">##</td>
+</tr>
+</table>
+
+
+2.-<table style="border-collapse: collapse; width: 60%; margin-left: auto; margin-right: auto;">
+<tr>
+    <th colspan="3" style="font-family: Arial;">Métricas (por municipio, por ejemplo) para la clase: "class_1"</th>
+</tr>
+<tr>
+    <th style="border: 1px solid gray;">Municipio</th>
+    <th style="border: 1px solid gray;">Score</th>
+    <th style="border: 1px solid gray;">Épsilon</th>
+</tr>
+<tr>
+    <td style="border: 1px solid gray;">mun_1</td>
+    <td style="border: 1px solid gray;">##</td>
+    <td style="border: 1px solid gray;">##</td>
+</tr>
+<tr>
+    <td style="border: 1px solid gray;">mun_2</td>
+    <td style="border: 1px solid gray;">##</td>
+    <td style="border: 1px solid gray;">##</td>
+</tr>
+</table>
+
+Adicionalmente, es posible mostrar solo los resultados más significativos mediante un botón que aplica un filtro, eliminando los resultados con un épsilon menor a 2 en valor absoluto.
