@@ -19,7 +19,8 @@
 * [Ejemplo del archivo catalogo_resoluciones.csv](#ejemplo-del-archivo-catalogo_resolucionescsv)
 
 ## Ejecución de la plataforma
-La platforma requiere de Python 3.12 para ser ejecutada.
+
+La plataforma fue probada con Python 3.11
 
 ### WINDOWS:
 
