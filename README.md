@@ -21,7 +21,7 @@
 ## Ejecución de la plataforma
 La platforma requiere de Python 3.12 para ser ejecutada.
 
-### WINDOWS
+### WINDOWS:
 
 ```CMD
 set FLASK_CONFIG_FILE=config.yaml
