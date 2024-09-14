@@ -35,7 +35,7 @@ $(function () {
 });
 
 
-// === Funciones para realizar la búsqueda en los árboles
+// === Funciones para realizar la búsqueda en los árboles  !!!(Comentar este bloque de código si se quiere deshabilitar esa función).
 $('#search-input').on('keyup', function() {
     var searchString = $(this).val();  // Obtener el valor del input
     $('#tree').jstree('search', searchString);  // Ejecutar la búsqueda
