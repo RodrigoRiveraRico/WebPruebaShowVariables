@@ -35,9 +35,9 @@ La plataforma fue probada con Python 3.11
 
 ### WINDOWS
 
-```CMD
+```cmd
 set FLASK_CONFIG_FILE=config.yaml
-set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
+REM set SECRET_KEY=secret_key_de_tu_entorno_de_ejecucion
 
 flask --app run run --port=4000 --host=0.0.0.0
 ```
@@ -46,12 +46,22 @@ flask --app run run --port=4000 --host=0.0.0.0
 
 ```bash
 export FLASK_CONFIG_FILE=config.yaml
-export SECRET_KEY='secret_key_de_tu_entorno_de_ejecucion'
+# export SECRET_KEY='secret_key_de_tu_entorno_de_ejecucion'
 
 flask --app run run --port=4000 --host=0.0.0.0
 ```
 
 > host=0.0.0.0 para que la plataforma se pueda visualizar desde cualquier dispositivo conectado a la red del servidor donde se ejecuta la plataforma.
+
+> En FLASK_CONFIG_FILE se indica el archivo de configuración `yaml` a utilizar. _config.yaml_ debe estar ubicado en _./configuraciones_db_
+> 
+> Si esta variable de entorno es vacía o no se modifica, se utiliza una configuración establecida por default en el programa.
+
+> En SECRET_KEY se indica la llave de entorno de ejecución para habilitar las sesiones en _Flask_.
+>
+> Si esta variable de entorno es vacía o no se modifica, se utiliza una llave de entorno establecida por default en el programa.
+>
+> La plataforma puede funcionar sin ejecutar la línea que modifica esta variable de entorno.
 
 ## Descripción del archivo _config.yaml_
 
