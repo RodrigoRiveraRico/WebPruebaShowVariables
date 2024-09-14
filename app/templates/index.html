@@ -23,9 +23,13 @@
     <h3 class="Titles">BD seleccionadas:</h3>
 
     <ul id="selectedNames">
+        {% if selected_names %}
         {% for name in selected_names %}
             <li>{{ name }}</li>
         {% endfor %}
+        {% else %}
+            <p>No se han seleccionado bases de datos</p>
+        {% endif %}
     </ul>
 
     <form action="/res_db" method="post">

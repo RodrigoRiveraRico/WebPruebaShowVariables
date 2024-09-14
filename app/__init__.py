@@ -3,7 +3,7 @@ import os
 
 def create_app(plataforma, fuente_de_datos_metadatos):
     app = Flask(__name__)
-    app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key###')
+    app.secret_key = os.environ.get('SECRET_KEY', 'b_5#y2L"F4Q8z')
     # print(app.secret_key)
 
     # Cargar configuraciones

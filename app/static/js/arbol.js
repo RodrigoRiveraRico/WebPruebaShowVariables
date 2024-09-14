@@ -117,7 +117,7 @@ $(function () {
     });
 
 
-    // Funciones:
+    // Funciones auxiliares:
 
     function transformarCadena(cadena) {
         /**
