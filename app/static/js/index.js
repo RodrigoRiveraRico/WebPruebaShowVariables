@@ -59,6 +59,12 @@ function addName() {
     nameInput.value = "";
 }
 
+function except_fun(){
+    if (selectedNames.length == 0){
+        alert('No se han seleccionado bases de datos.')
+    }
+}
+
 function updateSelectedNames() {
     var selectedNamesList = document.getElementById("selectedNames");
     selectedNamesList.innerHTML = "";
