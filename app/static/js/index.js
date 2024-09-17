@@ -62,7 +62,9 @@ function addName() {
 function except_fun(){
     if (selectedNames.length == 0){
         alert('No se han seleccionado bases de datos.')
+        return false
     }
+    return true
 }
 
 function updateSelectedNames() {
