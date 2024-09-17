@@ -22,9 +22,9 @@
     <hr>
     <h2 class="Titles">Resultados para la clase <span class="titulo-especial">"{{ nombre_titulo }}"</span>:</h2>
     <br>
-    <div class="filter-button"> <!-- Se muestran los botones para filtrar con épsilons mayores a |2|: -->
+    <div class="filter-button"> <!-- Se muestran los botones para filtrar con |épsilons| mayores a 2: -->
         <button onclick="window.location.href='/score_eps'">Mostrar Todo</button>
-        <button onclick="window.location.href='/score_eps?filter=E_signif'">Más significativos</button>
+        <button onclick="window.location.href='/score_eps?filter=E_signif'">Más significativos*</button>
     </div>
 
     <!-- Sistema de pestañas -->
@@ -43,11 +43,12 @@
         <!-- Contenido de la primera pestaña (Tabla df1) -->
         <div class="tab-pane fade show active" id="df1" role="tabpanel" aria-labelledby="df1-tab">
                 <tab class="df1">
-                    {{ df_resultado | safe }}
-                    <br><br><hr>
-                    <caption style="text-align: left;">Donde: <br><span style="font-family: Helvetica; font-weight: bold;">N_v: </span> Es el número de celdas en las que tiene presencia la covariable. <br>
+                    <caption style="text-align: left;"><span style="font-family: Helvetica; font-weight: bold;">N_v: </span> Es el número de celdas en las que tiene presencia la covariable. <br>
                     <span style="font-family: Helvetica; font-weight: bold;">N_c: </span> Es el número de celdas donde tiene presencia la clase. <br>
                     <span style="font-family: Helvetica; font-weight: bold;">N_vnc: </span> Es el número de celdas donde tienen presencia las covariables y la clase al mismo tiempo.</caption>
+                    <hr>
+                    {{ df_resultado | safe }}
+                    <br><br><hr>
                 </tab>
         </div>
         
@@ -57,6 +58,8 @@
                     {{ df_resultado2 | safe }}
                 </tab>
         </div>
+        <p style="text-align: right; font-weight: small;">*Los más significativos corresponden a <br>
+            aquellas covariables con un |épsilon| > 2.</p>
     </div>
 </body>
 
