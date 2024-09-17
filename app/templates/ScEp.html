@@ -4,31 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados - {{ nombre_titulo }}</title>
+
+    <!-- Bootstrap CSS and JS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- <style>
-        
-    </style> -->
 </head>
 
 <body>
 
     <header>    {{etiqueta_h}}     </header>
-    
-    <h2>Resultados para la clase <span class="titulo-especial">"{{ nombre_titulo }}"</span>:</h2>
     <br>
-    <div class="filter-button">
+    <h2 class="Titles" style="font-size: 18px; text-align: right;">Resolución elegida: <span class="titulo-especial">"{{ resolution }}"</span> <br> 
+        Total de celdas para la resolución elegida (N): <span class="titulo-especial">"{{ N }}"</span> </span> </h2>
+    <hr>
+    <h2 class="Titles">Resultados para la clase <span class="titulo-especial">"{{ nombre_titulo }}"</span>:</h2>
+    <br>
+    <div class="filter-button"> <!-- Se muestran los botones para filtrar con |épsilons| mayores a 2: -->
         <button onclick="window.location.href='/score_eps'">Mostrar Todo</button>
-        <button onclick="window.location.href='/score_eps?filter=E_signif'">Más significativos</button>
+        <button onclick="window.location.href='/score_eps?filter=E_signif'">Más significativos*</button>
     </div>
 
-    <center class="df1">
-        {{ df_resultado | safe }}
-    </center>
+    <!-- Sistema de pestañas -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="df1-tab" data-toggle="tab" href="#df1" role="tab" aria-controls="df1" aria-selected="true">Score y Épsilon por covariable</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="df2-tab" data-toggle="tab" href="#df2" role="tab" aria-controls="df2" aria-selected="false">Score por celda</a>
+        </li>
+    </ul>
+
     <br>
-    <h2>Covariables por celdas:</h2>
-    <br>
-    <center class="df2">
-        {{ df_resultado2 | safe }}
-    </center>
+
+    <div class="tab-content" id="myTabContent"></div>
+        <!-- Contenido de la primera pestaña (Tabla df1) -->
+        <div class="tab-pane fade show active" id="df1" role="tabpanel" aria-labelledby="df1-tab">
+                <tab class="df1">
+                    <caption style="text-align: left;"><span style="font-family: Helvetica; font-weight: bold;">N_v: </span> Es el número de celdas en las que tiene presencia la covariable. <br>
+                    <span style="font-family: Helvetica; font-weight: bold;">N_c: </span> Es el número de celdas donde tiene presencia la clase. <br>
+                    <span style="font-family: Helvetica; font-weight: bold;">N_vnc: </span> Es el número de celdas donde tienen presencia las covariables y la clase al mismo tiempo.</caption>
+                    <hr>
+                    {{ df_resultado | safe }}
+                    <br><br><hr>
+                </tab>
+        </div>
+        
+        <!-- Contenido de la segunda pestaña (Tabla df2) -->
+        <div class="tab-pane fade" id="df2" role="tabpanel" aria-labelledby="df2-tab">
+                <tab class="df2">
+                    {{ df_resultado2 | safe }}
+                </tab>
+        </div>
+        <p style="text-align: right; font-weight: small;">*Los más significativos corresponden a <br>
+            aquellas covariables con un |épsilon| > 2.</p>
+    </div>
 </body>
+
 </html>

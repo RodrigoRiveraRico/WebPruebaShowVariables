@@ -11,7 +11,6 @@ function updateDBSelect(){
         "state": { "selected": true } // Marcar como seleccionado desde el inicio
     }));
 
-    console.log(DBs_res);
 
     // Destruir el jstree antes de volverlo a inicializar (si es que ya se inicializó anteriormente)
     if ($('#Res_tree').jstree(true)) {   // Este if es para actualizar el arbol cuando se selecciona una resolución distinta.

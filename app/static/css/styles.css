@@ -9,6 +9,7 @@ header {
 }
 
 body {
+    margin: 8px;
     background-image: url("imgC3.png");
     background-repeat: no-repeat;
     background-size: 62px;
@@ -59,11 +60,22 @@ textarea {
 
 /* Estilos para arbol.html: */
 
-.ArbolTitle {
-    font-family: 'Times New Roman OS Bold';
-    /* font-family: 'Shonar Bangla Bold'; */
+.Titles {
+    /* font-family: 'Times New Roman OS Bold'; */
+    font-family: 'Shonar Bangla Bold';
     font-weight: bold;
-    font-size: 35px;
+    font-size: 25px;
+}
+
+.center-variables-titles {
+    text-align: center;
+    font-family: 'Formula serial';
+}
+
+.custom-variables-hr {
+    border: none; /* Elimina el borde predeterminado */
+    border-top: 4px solid #333; /* Ajusta el grosor y el color (más oscuro) */
+    margin: 20px 0; /* Ajusta el margen superior e inferior según sea necesario */
 }
 
 #container_SVar {
@@ -98,8 +110,6 @@ textarea {
     background-color: #326fe0d7; /* Color de fondo */
     color: rgb(255, 244, 244); /* Color del texto */
     border-color: #326fe0d7; /* Color del borde */
-    /* font-size: 18px; Tamaño del texto */
-    /* padding: 10px 20px; Tamaño del botón */
 }
 
 #sendButton:hover {
@@ -128,8 +138,9 @@ textarea {
     background-color: rgb(173, 216, 230); /* Azul claro */
 }
 .df1 .dataframe {
-width: 80%; /* Cambia el tamaño de la tabla */
-max-width: 100%; /* Asegura que no exceda el ancho del viewport */
+    width: 80%; /* Cambia el tamaño de la tabla */
+    max-width: 100%; /* Asegura que no exceda el ancho del viewport */
+    margin: 0 auto;  /* Centra la tabla. */
 }
 .df1 .dataframe th {
     text-align: left; /* Para alinear el texto */
@@ -140,21 +151,44 @@ max-width: 100%; /* Asegura que no exceda el ancho del viewport */
     display: none; /* Oculta la primera columna */
 }
 
+
+.df2 .dataframe td:nth-last-child(1),
+.df2 .dataframe th:nth-last-child(1) {
+    background-color: rgb(173, 216, 230); /* Azul claro */
+}
+
 .df2 .dataframe td {
     text-align: left;
-    /* white-space: pre-line; */
 }
 
 .df2 .dataframe th {
-    text-align: center;
-    /* white-space: pre; */
+    text-align: left;
 }
 
 .df2 .dataframe th:first-child,
 .df2 .dataframe td:first-child {
-    /* background-color: rgb(231, 139, 105);
-     */
      display: none;
+}
+
+.df2 .dataframe {
+    width: 60%; /* Cambia el tamaño de la tabla */
+    max-width: 100%; /* Asegura que no exceda el ancho del viewport */
+    margin: 0 auto;  /* Centra la tabla. */
+    }
+
+/* Esto evita el espacio en blanco al cambiar de pestañas */
+.tab-pane {
+    display: none; /* Oculta todas las pestañas por defecto */
+}
+
+.tab-pane.active {
+    display: block; /* Solo muestra la pestaña activa */
+}
+
+/* Elimina la animación de desvanecimiento para una transición más rápida */ 
+.tab-pane.fade {
+    opacity: 1;
+    transition: none;
 }
 
 

@@ -84,6 +84,7 @@ def select_variables():
     csv_path = os.path.join(os.path.dirname(__file__), '..', '..', 'catalogos', 'catalogo_resoluciones.csv')
     df_resolutions = pd.read_csv(csv_path).set_index('resolution')
     N = df_resolutions.loc[session['res']]['N']
+    session['N'] = str(N)  # para mostrar la N en la página de resultados finales.
 
     conteos.df_count_cells(df_all_variables_data, df_all_class_data)
     conteos.epsilon(df_all_variables_data, N)
@@ -118,4 +119,4 @@ def score_eps():
 
     return render_template('ScEp.html', df_resultado=df_all_variables_data.drop(['celdas'], axis=1).to_html(), 
                            df_resultado2=df_all_cells_data.to_html(escape=False), nombre_titulo=session['nombre_clase'],
-                           etiqueta_h=session['nombre_plataforma'])
+                           etiqueta_h=session['nombre_plataforma'], resolution = session['res'], N = session['N'])

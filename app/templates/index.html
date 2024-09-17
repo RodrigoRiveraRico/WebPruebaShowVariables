@@ -4,29 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selección -bases de datos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
+
 <body>
-
     <header>    {{etiqueta_h}}     </header>
-    
-    <h2>Selecciona las bases de datos (DB) que vas a utilizar:</h2>
+    <script src="https://cdn.jsdelivr.net/npm/jstree-bootstrap-theme@1.0.1/dist/jstree.min.js"></script>
+    <br>
+    <h2 class="Titles">Selecciona las bases de datos (BD) que vas a utilizar:</h2>
 
-    <input type="text" id="nameInput" placeholder="Nombre DB" oninput="showSuggestions()" onclick="showSuggestionsClick()" >
+    <input type="text" id="nameInput" placeholder="Buscar BD" oninput="showSuggestions()" onclick="showSuggestionsClick()" >
     <div id="suggestions"></div>
     <button onclick="addName()">Agregar</button>
 
-    <h3>DB seleccionadas:</h3>
+    <br>
+    <br>
+    <h3 class="Titles">BD seleccionadas:</h3>
 
     <ul id="selectedNames">
+        {% if selected_names %}
         {% for name in selected_names %}
             <li>{{ name }}</li>
         {% endfor %}
+        {% else %}
+            <p>No se han seleccionado bases de datos</p>
+        {% endif %}
     </ul>
 
     <form action="/res_db" method="post">
         <input type="hidden" name="selected_names" id="selectedNamesInput">
-        <button type="submit">Enviar BD seleccionadas</button>
+        <button onclick="return except_fun()" type="submit">Enviar BD seleccionadas</button>  
     </form>
 
     <script>
