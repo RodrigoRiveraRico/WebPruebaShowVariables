@@ -1,5 +1,4 @@
 var selectedNames = [];
-var N_sg = 5; // Número de sugerencias mostradas de las bases de datos.
 
 function showSuggestionsClick() {
     var input = document.getElementById("nameInput");
@@ -9,7 +8,7 @@ function showSuggestionsClick() {
     
     var matches = suggestions.filter(function(suggestion) {
         return suggestion.toLowerCase().startsWith(value);
-    }).slice(0, N_sg); // Limita a las primeras N_sg sugerencias
+    });
 
     matches.forEach(function(suggestion) {
         var suggestionElement = document.createElement("div");
@@ -33,7 +32,7 @@ function showSuggestions() {
 
     var matches = suggestions.filter(function(suggestion) {
         return suggestion.toLowerCase().startsWith(value);
-    }).slice(0, N_sg); // Limita a las primeras N_sg sugerencias
+    });
 
     matches.forEach(function(suggestion) {
         var suggestionElement = document.createElement("div");
