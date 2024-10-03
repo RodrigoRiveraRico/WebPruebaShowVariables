@@ -94,6 +94,7 @@ def select_variables():
     # return redirect(url_for('main.score_eps'))   # esta linea también funciona, si queremos redigir solamente, sin necesitar la respuesta json.
     return jsonify({'status': 'success', 'redirect': url_for('main.score_eps')}) # Esto es para manejar la respuesta json de la solicitud AJAX utilizada de JS y adicionalmente proporciona la redirección.
 
+# kolaa
 #-- Rutas para poder filtrar los epsilons más significativos:
 @main_bp.route('/score_eps', methods=['GET', 'POST'])
 def score_eps():
